@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#121A2C">
+<meta name="robots" content="noindex">
+<title>Лупа — аслӣ ё қалбакӣ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wdth,wght@62.5..100,400..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E9EDF3; --card:#FFFFFF; --ink:#121A2C; --ink2:#4A5468; --line:#CBD3DF;
+  --rose:#E23D6A; --rose-bg:#FDE7EE; --teal:#0F8A70; --teal-bg:#DDF3EC; --mark:#FFE14D;
+  --sans:"Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "Roboto Mono", Menlo, monospace;
+  --r:14px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;min-height:100vh;
+  background-image:radial-gradient(var(--line) 1px, transparent 1px);background-size:22px 22px;padding-bottom:96px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px}
+
+header{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-stretch:62.5%;font-weight:900;font-size:26px;letter-spacing:.04em;text-transform:uppercase}
+.logo svg{width:30px;height:30px}
+.lang{display:flex;border:2px solid #fff;border-radius:999px;overflow:hidden}
+.lang button{min-height:44px;min-width:52px;padding:0 12px;font-family:var(--mono);font-weight:700;font-size:14px;color:#fff}
+.lang button[aria-pressed="true"]{background:var(--mark);color:var(--ink)}
+
+.eyebrow{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
+h1,h2{font-stretch:62.5%;font-weight:900;line-height:1.02;text-transform:uppercase;letter-spacing:.01em}
+h1{font-size:46px}
+h2{font-size:34px}
+h3{font-size:19px;font-weight:800;line-height:1.25}
+.lead{font-size:17px;color:var(--ink2)}
+.hlt{background:linear-gradient(transparent 55%, var(--mark) 55%);padding:0 2px}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--mark);color:var(--ink);text-transform:uppercase}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;padding:12px 18px;border-radius:var(--r);
+  font-weight:800;font-size:17px;text-align:center;transition:transform .15s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.55}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-line{background:var(--card);border:2px solid var(--ink)}
+.btn-real{background:var(--teal);color:#fff}
+.btn-fake{background:var(--rose);color:#fff}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stack>*+*{margin-top:12px}
+section.screen{padding:22px 0 24px;animation:enter .3s var(--ease) both}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.help{position:fixed;right:12px;bottom:max(12px, env(safe-area-inset-bottom));z-index:30;min-height:52px;padding:0 18px;border-radius:999px;
+  background:var(--rose);color:#fff;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(18,26,44,.28);display:flex;align-items:center;gap:8px}
+.help svg{width:20px;height:20px}
+
+.hero-spec{position:relative;margin:22px 0 8px;height:170px}
+.hero-spec .mini{position:absolute;background:var(--card);border-radius:12px;box-shadow:0 4px 0 var(--ink);border:2px solid var(--ink);padding:10px;width:62%}
+.hero-spec .m1{left:0;top:6px;transform:rotate(-4deg)}
+.hero-spec .m2{right:0;top:40px;transform:rotate(3deg)}
+.hero-spec .loupe{position:absolute;left:40%;top:52px;width:96px;height:96px;transform:rotate(-10deg)}
+.mini .l{height:9px;border-radius:5px;background:var(--line);margin-top:7px}
+.mini .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#F7B7C8,#B9C6FF)}
+.home-note{font-size:14px;color:var(--ink2);display:flex;gap:8px;align-items:flex-start;background:var(--card);border-radius:12px;padding:12px 14px;border:1px solid var(--line)}
+.flow{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+.flow span{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 8px}
+
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dots{display:flex;gap:5px;margin:10px 0 16px}
+.dots i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.dots i.ok{background:var(--teal)} .dots i.no{background:var(--rose)} .dots i.cur{background:var(--ink)}
+.q{font-stretch:75%;font-weight:900;font-size:26px;line-height:1.1;margin:14px 0 12px;text-transform:uppercase}
+
+.flip{perspective:1400px}
+.flip-in{display:grid;transition:transform .4s var(--ease);transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;position:relative}
+.face.back{transform:rotateY(180deg)}
+.stamp{position:absolute;right:10px;bottom:14px;z-index:5;font-family:var(--mono);font-weight:700;font-size:14px;text-transform:uppercase;
+  padding:6px 10px;border:3px solid currentColor;border-radius:8px;background:rgba(255,255,255,.92);transform:rotate(6deg)}
+.stamp.fake{color:var(--rose)} .stamp.real{color:var(--teal)}
+
+.sp{background:var(--card);border-radius:var(--r);border:2px solid var(--ink);box-shadow:0 5px 0 var(--ink);overflow:hidden}
+.back .sp{overflow:visible}
+.anc{position:relative}
+.pin{position:absolute;z-index:4;top:-10px;right:-6px;width:28px;height:28px;border-radius:50%;background:var(--mark);color:var(--ink);border:2px solid var(--ink);
+  font-family:var(--mono);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1;
+  opacity:0;transform:scale(.3);animation:pop .3s var(--ease) forwards;animation-delay:var(--d,0ms)}
+.pin.xy{top:auto;right:auto;margin:-14px 0 0 -14px}
+.pin.xy::after{content:"";position:absolute;inset:-12px;border:2px dashed var(--ink);border-radius:50%}
+.hl::before{content:"";position:absolute;inset:-4px;border:3px solid var(--rose);border-radius:10px;pointer-events:none;
+  opacity:0;transform:scale(1.06);animation:ring .3s var(--ease) forwards;animation-delay:var(--d,0ms)}
+.hl.ok::before{border-color:var(--teal)}
+@keyframes pop{to{opacity:1;transform:scale(1)}}
+@keyframes ring{to{opacity:1;transform:scale(1)}}
+
+.pf{padding:14px}
+.pf-top{display:flex;align-items:center;gap:14px}
+.pf-av{width:76px;height:76px;flex:none;border-radius:50%;border:2px solid var(--line)}
+.pf-av svg{width:100%;height:100%;display:block;border-radius:50%}
+.pf-stats{flex:1;display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:4px 0}
+.pf-stats b{display:block;font-size:17px;font-weight:800}
+.pf-stats small{font-size:12px;color:var(--ink2)}
+.pf-name{font-weight:800;margin-top:10px}
+.pf-handle{display:inline-block;font-family:var(--mono);font-size:13px;color:var(--ink2)}
+.pf-meta{display:inline-block;font-size:13px;color:var(--ink2);margin-top:8px;padding:2px 6px;background:var(--paper);border-radius:6px}
+.pf-bio{margin-top:8px;font-size:15px;padding:2px 0}
+.pf-dm{margin-top:10px;background:var(--paper);border-radius:12px;padding:10px 12px;font-size:15px}
+.pf-dm small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink2);margin-bottom:3px;text-transform:uppercase}
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:12px}
+.pf-grid div{aspect-ratio:1;border-radius:4px}
+.pf-grid .empty{background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink2)}
+
+.m-head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#F3F5F9;border-bottom:1px solid var(--line);border-radius:12px 12px 0 0}
+.m-av{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.m-head b{display:block;line-height:1.2}
+.m-head small{font-size:12px;color:var(--ink2)}
+.m-body{padding:14px;display:flex;flex-direction:column;gap:8px;background:#FBFCFE;border-radius:0 0 12px 12px}
+.bub{max-width:86%;padding:9px 12px;border-radius:14px;font-size:15px;line-height:1.4;word-break:break-word}
+.bub.them{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.bub.me{background:#D9E4FF;border-bottom-right-radius:4px;align-self:flex-end}
+.bub .who{display:block;font-size:12px;font-weight:800;color:var(--teal)}
+.bub .lnk{color:#2456D6;text-decoration:underline;font-family:var(--mono);font-size:13px}
+.bub .t{display:block;text-align:right;font-size:11px;color:var(--ink2);margin-top:2px}
+.day{align-self:center;font-family:var(--mono);font-size:11px;color:var(--ink2);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+.frame{position:relative;line-height:0}
+.frame svg{width:100%;height:auto;display:block;border-radius:12px 12px 0 0}
+.cap{padding:10px 14px;font-size:15px;border-top:1px solid var(--line)}
+.cap small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink2);text-transform:uppercase}
+
+.fb{margin-top:18px;animation:enter .3s var(--ease) both;animation-delay:.25s}
+.verdict{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-weight:800;font-size:18px}
+.verdict.good{background:var(--teal-bg);color:#0A5E4C}
+.verdict.bad{background:var(--rose-bg);color:#A11E45}
+.verdict i{font-style:normal;font-size:24px}
+.clues{list-style:none;margin:14px 0}
+.clues li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line);
+  opacity:0;transform:translateX(-8px);animation:slide .3s var(--ease) forwards;animation-delay:var(--d,0ms)}
+.clues li b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--mark);border:2px solid var(--ink);font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center}
+@keyframes slide{to{opacity:1;transform:none}}
+.explain{background:var(--card);border-left:5px solid var(--ink);border-radius:8px;padding:12px 14px;margin-bottom:16px}
+
+.big{font-stretch:62.5%;font-weight:900;font-size:120px;line-height:.9}
+.big small{font-size:44px;color:var(--ink2)}
+.bars{margin:20px 0}
+.bar{margin-bottom:16px}
+.bar .lbl{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+.bar .lbl b{font-family:var(--mono);font-size:20px}
+.track{height:26px;border-radius:8px;background:var(--card);border:2px solid var(--ink);overflow:hidden}
+.fill{height:100%;transform-origin:left;transform:scaleX(0);transition:transform .4s var(--ease)}
+.fill.pre{background:repeating-linear-gradient(45deg,var(--ink2) 0 6px,#6B7489 6px 12px)}
+.fill.post{background:var(--teal)}
+.arrow{font-stretch:62.5%;font-weight:900;font-size:72px;line-height:1;display:flex;align-items:baseline;gap:12px;margin:16px 0}
+.arrow .from{color:var(--ink2)}
+.arrow .to{color:var(--teal)}
+.arrow .sep{font-size:44px}
+
+.sign{background:var(--card);border-radius:var(--r);border:2px solid var(--ink);padding:14px;display:grid;grid-template-columns:48px 1fr;gap:12px;
+  opacity:0;transform:translateY(8px);animation:slide .3s var(--ease) forwards;animation-delay:var(--d,0ms)}
+.sign .ic{width:48px;height:48px;border-radius:12px;background:var(--mark);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:20px;border:2px solid var(--ink)}
+.sign p{font-size:15px;color:var(--ink2);margin-top:4px}
+.sign .ex{margin-top:8px;font-size:14px;font-family:var(--mono);background:var(--paper);border-radius:8px;padding:6px 8px;color:var(--ink)}
+
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;background:var(--card);border-radius:var(--r);padding:14px;border:2px solid var(--ink);
+  opacity:0;transform:translateY(8px);animation:slide .3s var(--ease) forwards;animation-delay:var(--d,0ms)}
+.step .n{width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;font-stretch:62.5%;font-weight:900;font-size:24px;display:flex;align-items:center;justify-content:center}
+.step p{font-size:15px;margin-top:4px;color:var(--ink2)}
+.step ul{margin:8px 0 0 18px;font-size:15px}
+.calm{background:var(--teal-bg);border-radius:var(--r);padding:14px;font-weight:700;color:#0A5E4C}
+.contacts{background:var(--ink);color:#fff;border-radius:var(--r);padding:16px}
+.contacts h3{margin-bottom:8px}
+.contacts li{list-style:none;padding:8px 0;border-top:1px solid rgba(255,255,255,.18);font-size:15px}
+.contacts .tel{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;margin:4px 6px 0 0;border-radius:10px;background:var(--mark);color:var(--ink);
+  font-family:var(--mono);font-weight:700;font-size:15px;text-decoration:none;white-space:nowrap}
+.contacts li b{font-family:var(--mono);color:var(--mark)}
+.urgent{border:3px solid var(--rose);background:var(--rose-bg);border-radius:var(--r);padding:12px 14px;font-weight:700;color:#A11E45}
+.fine{font-size:13px;color:var(--ink2)}
+
+.veil{position:fixed;inset:0;background:rgba(18,26,44,.55);z-index:40;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.veil.on{opacity:1;pointer-events:auto}
+.sheet{background:var(--paper);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:20px 16px 28px;max-height:90vh;overflow:auto;
+  transform:translateY(40px);transition:transform .3s var(--ease)}
+.veil.on .sheet{transform:none}
+
+/* mini-games */
+.gcard{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:2px solid var(--ink);
+  border-radius:var(--r);padding:14px;box-shadow:0 4px 0 var(--ink);min-height:72px;transition:transform .15s var(--ease)}
+.gcard:active{transform:translateY(2px)}
+.gcard .gi{width:56px;height:56px;border-radius:12px;background:var(--mark);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:26px}
+.gcard b{display:block;font-size:18px;line-height:1.2}
+.gcard small{display:block;font-size:14px;color:var(--ink2);margin-top:2px}
+.gcard .gt{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink2)}
+.mp{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:12px;position:relative}
+.mp.orig{border-style:dashed;box-shadow:none}
+.mp.copy{box-shadow:0 5px 0 var(--ink)}
+.mp-lbl{position:absolute;top:-12px;left:12px;font-family:var(--mono);font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--ink);color:#fff}
+.mp.copy .mp-lbl{background:var(--mark);color:var(--ink);border:2px solid var(--ink)}
+.mp-row{display:flex;gap:12px;align-items:center}
+.part{position:relative;display:block;text-align:left;border-radius:10px;padding:6px 8px;min-height:44px;width:100%}
+.mp-row .part.av{width:72px;flex:none;padding:4px}
+.part.av svg{width:60px;height:60px;border-radius:50%;display:block}
+.mp.copy .part{background:#F6F8FB}
+.mp.copy .part+.part,.mp .part+.part{margin-top:6px}
+.part .k{display:block;font-family:var(--mono);font-size:11px;color:var(--ink2);text-transform:uppercase}
+.part.found::before,.part.mark::before{content:"";position:absolute;inset:-3px;border:3px solid var(--rose);border-radius:12px;pointer-events:none}
+.part.mark::before{border-style:dashed;border-width:2px;opacity:.7}
+.part.found.new::before{opacity:0;transform:scale(1.08);animation:ring .3s var(--ease) forwards}
+.part.hint::after{content:"";position:absolute;inset:-3px;border:3px solid var(--mark);border-radius:12px;pointer-events:none;animation:hint .4s ease-in-out 6 alternate}
+@keyframes hint{from{opacity:.2;transform:scale(1)}to{opacity:1;transform:scale(1.03)}}
+.part .pin{top:-10px;right:-6px}
+.part:not(.new) .pin{animation:none;opacity:1;transform:none}
+.note{min-height:24px;font-size:15px;color:var(--ink2);margin:10px 0;opacity:0;transition:opacity .2s}
+.note.on{opacity:1}
+.field{position:relative;height:360px;margin:8px 0 16px}
+.bubble{position:absolute;width:128px;height:128px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;
+  font-weight:800;font-size:16px;line-height:1.2;color:var(--ink);border:2px solid var(--ink);
+  background:radial-gradient(circle at 32% 28%, #fff 0 14%, rgba(255,255,255,.6) 15%, rgba(185,198,255,.55) 60%, rgba(226,61,106,.25) 100%);
+  animation:float 3.6s ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.bubble.pop{animation:popout .3s var(--ease) forwards;pointer-events:none}
+@keyframes popout{to{opacity:0;transform:scale(1.35)}}
+.bubble.gone{visibility:hidden;opacity:0}
+.answers{list-style:none}
+.answers.latest{min-height:96px;margin-top:12px}
+.answers li{background:var(--teal-bg);color:#0A5E4C;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:15px;
+  opacity:0;transform:translateY(8px);animation:slide .3s var(--ease) forwards}
+.answers li s{display:block;text-decoration:line-through;color:var(--ink2);font-size:13px;font-weight:700}
+.answers li.old{animation:none;opacity:1;transform:none}
+.endbox{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:16px;margin-top:14px;animation:enter .3s var(--ease) both}
+
+@media (prefers-reduced-motion: reduce){
+  .answers li,.part.found::before{opacity:1 !important;transform:none !important}
+  .bubble.pop{opacity:0;visibility:hidden}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .pin,.clues li,.sign,.step,.hl::before{opacity:1 !important;transform:none !important}
+  .flip.on .flip-in{transform:rotateY(180deg) !important}
+}
+@media (max-width:360px){ h1{font-size:40px} .big{font-size:100px} }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="13" cy="13" r="9" fill="none" stroke="#FFE14D" stroke-width="3.5"/><path d="M20 20l8 8" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+    <span id="brand">Лупа</span>
+  </div>
+  <div class="lang" role="group" aria-label="Забон / Язык">
+    <button data-lang="tj" aria-pressed="true">TJ</button><button data-lang="ru" aria-pressed="false">RU</button>
+  </div>
+</div></header>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<button class="help" data-act="help" id="helpBtn">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5v6M12 16.8v.2"/></svg>
+  <span id="helpLbl"></span>
+</button>
+
+<div class="veil" id="veil" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" id="sheet"></div>
+</div>
+
+<script>
+/* ================= CONTENT (all texts, separate from logic) ================= */
+const content = {
+  ui: {
+    tj: {
+      brand:"Лупа", help:"Ба ман кӯмак лозим",
+      homeEyebrow:"Машқ барои 13–24 сола",
+      homeTitle:"Ба аслӣ монанд аст.", homeTitle2:"Аммо ҳаст?",
+      homeLead:"Профилҳо, паёмҳо ва тасвирҳоро ИИ ва фиребгарон месозанд. Дар 5 дақиқа санҷ, ки чандтоашро мешиносӣ.",
+      flow:["5 корт","6 аломат","5 корт","буд → шуд"],
+      start:"Санҷишро оғоз кун", ifYou:"Қалбакӣ дар бораи ман — чӣ кор кунам?",
+      privacy:"Бе бақайдгирӣ. Ном, акс ва рақамро ҷамъ намекунем. Ҳисоб танҳо дар ҳамин телефон нигоҳ дошта мешавад.",
+      pre:"Санҷиши аввал", post:"Санҷиши охир", cardOf:"Корти {n} аз 5",
+      types:{profile:"Профил", message:"Паём", image:"Тасвир"},
+      question:"Аслӣ ё қалбакӣ?", real:"Аслӣ", fake:"Қалбакӣ",
+      good:"Дуруст!", bad:"Хато шуд",
+      isFake:"Ин қалбакӣ аст", isReal:"Ин аслӣ аст",
+      stampFake:"Қалбакӣ", stampReal:"Аслӣ",
+      cluesFake:"Чӣ фош мекунад:", cluesReal:"Чаро ба он бовар кардан мумкин:",
+      next:"Корти навбатӣ", finish:"Натиҷаро бин",
+      preResTitle:"Натиҷаи аввал", preResLine:"аз 5 дуруст",
+      preResText:"Ин нуқтаи оғоз аст. Акнун 6 аломатро меомӯзем, ки қалбакиро зуд нишон медиҳанд — ва баъд 5 корти нав.",
+      toLesson:"Ба дарс: 6 аломат",
+      lessonEyebrow:"Дарс · 2 дақиқа", lessonTitle:"6 аломати қалбакӣ",
+      lessonLead:"Як аломат ҳанӯз далел нест. Ду-се аломат якҷоя — вақти истодан ва санҷидан.",
+      exLbl:"Мисол:", toPost:"Ба санҷиши охир",
+      cmpEyebrow:"Натиҷа", cmpTitle:"Буд → шуд", before:"Пеш аз дарс", after:"Баъд аз дарс",
+      cmpUp:"Ту бештар пайхас мекунӣ. Ин малака аст — он бо ту мемонад.",
+      cmpSame:"Ҳисоб зиёд нашуд — ин муқаррарӣ аст. Аломатҳоро боз як бор хон ва аз нав кӯшиш кун.",
+      toPlan:"Агар қалбакӣ дар бораи ту бошад", again:"Аз нав гузаштан", reread:"Аломатҳоро боз хондан",
+      planEyebrow:"Нақшаи амал", planTitle:"Агар қалбакӣ дар бораи ту бошад",
+      planLead:"Касе бо рӯй ё номи ту профил ё тасвир сохтааст, ё таҳдид мекунад, ки «ба ҳама нишон медиҳам»? Ин 4 қадамро бо тартиб иҷро кун.",
+      calm:"Ту гунаҳкор нестӣ. Гунаҳкор касест, ки қалбакӣ сохтааст ва шантаж мекунад.",
+      urgent:"Агар ба ҳаёт ё саломатии ту таҳдид кунанд — фавран ба калонсол бигӯ ва ба милиса 102 занг зан.",
+      contactsTitle:"Ба куҷо муроҷиат кардан",
+      contactsNote:"Рақамҳо аз рӯи манбаъҳои кушод санҷида шудаанд (октябри 2026). Пеш аз намоиш боз санҷед.",
+      home:"Ба саҳифаи асосӣ", reset:"Ҳисобро пок кун", resetDone:"Ҳисоб пок шуд",
+      fictional:"Ҳамаи мисолҳо тахайюлӣ ҳастанд ва бо код (SVG) кашида шудаанд. Одамони воқеӣ, номҳо ва ҳисобҳо нестанд.",
+      helpTitle:"Ту танҳо нестӣ",
+      helpText:"Агар ба ту таҳдид кунанд, шантаж кунанд ё дар бораи ту қалбакӣ паҳн карда бошанд — ин гуноҳи ту нест. Пул напардоз ва ҳеҷ чиз нафирист. Ба калонсоле, ки ба ӯ бовар дорӣ, нақл кун.",
+      openPlan:"Нақшаи 4 қадамро кушо", close:"Пӯшидан"
+    },
+    ru: {
+      brand:"Лупа", help:"Мне нужна помощь",
+      homeEyebrow:"Тренажёр для 13–24 лет",
+      homeTitle:"Выглядит как настоящее.", homeTitle2:"А так ли это?",
+      homeLead:"Профили, сообщения и картинки делают ИИ и мошенники. За 5 минут проверь, сколько подделок ты узнаёшь.",
+      flow:["5 карточек","6 признаков","5 карточек","было → стало"],
+      start:"Начать проверку", ifYou:"Подделка про меня — что делать?",
+      privacy:"Без регистрации. Не собираем имя, фото и номер. Счёт хранится только на этом телефоне.",
+      pre:"Входной тест", post:"Итоговый тест", cardOf:"Карточка {n} из 5",
+      types:{profile:"Профиль", message:"Сообщение", image:"Картинка"},
+      question:"Настоящее или подделка?", real:"Настоящее", fake:"Подделка",
+      good:"Верно!", bad:"Не угадал(а)",
+      isFake:"Это подделка", isReal:"Это настоящее",
+      stampFake:"Подделка", stampReal:"Настоящее",
+      cluesFake:"Что выдаёт:", cluesReal:"Почему этому можно верить:",
+      next:"Следующая карточка", finish:"Посмотреть результат",
+      preResTitle:"Первый результат", preResLine:"из 5 верно",
+      preResText:"Это точка отсчёта. Сейчас разберём 6 признаков, по которым подделку видно быстро, — и потом 5 новых карточек.",
+      toLesson:"К уроку: 6 признаков",
+      lessonEyebrow:"Урок · 2 минуты", lessonTitle:"6 признаков подделки",
+      lessonLead:"Один признак — ещё не доказательство. Два-три вместе — повод остановиться и проверить.",
+      exLbl:"Пример:", toPost:"К итоговому тесту",
+      cmpEyebrow:"Результат", cmpTitle:"Было → стало", before:"До урока", after:"После урока",
+      cmpUp:"Ты замечаешь больше. Это навык — он останется с тобой.",
+      cmpSame:"Счёт не вырос — это нормально. Перечитай признаки и попробуй ещё раз.",
+      toPlan:"Если подделка про тебя", again:"Пройти заново", reread:"Перечитать признаки",
+      planEyebrow:"План действий", planTitle:"Если подделка про тебя",
+      planLead:"Кто-то сделал профиль или картинку с твоим лицом или именем, или угрожает «всем показать»? Сделай эти 4 шага по порядку.",
+      calm:"Ты не виноват(а). Виноват тот, кто сделал подделку и шантажирует.",
+      urgent:"Если угрожают твоей жизни или здоровью — сразу скажи взрослому и звони в милицию 102.",
+      contactsTitle:"Куда обратиться",
+      contactsNote:"Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте.",
+      home:"На главную", reset:"Стереть счёт", resetDone:"Счёт стёрт",
+      fictional:"Все примеры вымышленные и нарисованы кодом (SVG). Реальных людей, имён и аккаунтов нет.",
+      helpTitle:"Ты не один (не одна)",
+      helpText:"Если тебе угрожают, шантажируют или выложили подделку о тебе — это не твоя вина. Не плати и ничего не отправляй. Расскажи взрослому, которому доверяешь.",
+      openPlan:"Открыть план из 4 шагов", close:"Закрыть"
+    }
+  },
+
+  /* clue: {at:"<anchor>"} points to a part of the card, {x,y} = % on the picture */
+  cards: [
+    /* ---------- PRE ---------- */
+    { id:"p1", set:"pre", type:"profile", isFake:true, avatar:"glossy",
+      name:{tj:"Нигина ✨ Стиль", ru:"Нигина ✨ Стиль"}, handle:"nigina.style.official",
+      stats:{posts:"2", followers:{tj:"12,4 ҳаз.",ru:"12,4 тыс."}, following:"7 500"},
+      created:{tj:"Ҳисоб сохта шуд: 3 рӯз пеш", ru:"Аккаунт создан: 3 дня назад"},
+      bio:{tj:"Барои аз 500 сомонӣ дар як рӯз кор кардан кӯмак мекунам 💸 Ба паёми шахсӣ навис!", ru:"Помогу зарабатывать от 500 сомони в день 💸 Пиши в личку!"},
+      tiles:["#F4A6C0","#C3B5FF"],
+      clues:[
+        {at:"avatar", text:{tj:"Акс аз ҳад ҳамвор: пӯсти бенуқсон, пасзаминаи хира, ҷузъиёти хурд нест", ru:"Фото слишком гладкое: идеальная кожа, размытый фон, нет мелких деталей"}},
+        {at:"stats", text:{tj:"2 пост, аммо 12 ҳазор обуначӣ — дар одами зинда ин тавр намешавад", ru:"2 поста, но 12 тысяч подписчиков — у живого человека так не бывает"}},
+        {at:"created", text:{tj:"Ҳисоб ҳамагӣ 3 рӯза аст", ru:"Аккаунту всего 3 дня"}},
+        {at:"bio", text:{tj:"Пули осон ваъда медиҳад ва ба паёми шахсӣ даъват мекунад", ru:"Обещает лёгкие деньги и зовёт в личку"}}
+      ],
+      explain:{tj:"Ҳисоби нав, рақамҳои аҷиб, ваъдаи пул ва акси «бенуқсон» — ин қалбакии маъмулӣ барои фиреб аст.", ru:"Новый аккаунт, странные цифры, обещание денег и «идеальное» фото — типичный фейк для обмана."}
+    },
+    { id:"p2", set:"pre", type:"message", isFake:false,
+      sender:{tj:"Синфи 9«Б»", ru:"9«Б» класс"}, sub:{tj:"28 иштирокчӣ", ru:"28 участников"}, color:"#0F8A70", initial:"9Б",
+      bubbles:[
+        {from:"them", who:{tj:"Сабина (сардори синф)",ru:"Сабина (староста)"}, text:{tj:"Салом ба ҳама! Дарси тарбияи ҷисмониро ба соати 3-юм гузарониданд, либоси варзиширо фаромӯш накунед 🏃",ru:"Всем привет! Физру перенесли на 3-й урок, не забудьте форму 🏃"}, k:"m1", t:"19:42"},
+        {from:"them", who:{tj:"Тимур",ru:"Тимур"}, text:{tj:"Хуб, раҳмат!",ru:"Ок, спасибо!"}, t:"19:44"},
+        {from:"me", text:{tj:"👍",ru:"👍"}, t:"19:45"}
+      ],
+      clues:[
+        {at:"sender", ok:true, text:{tj:"Чати шиноси синф, иштирокчиён кайҳо дар рӯйхат ҳастанд", ru:"Знакомый чат класса, все участники давно в контактах"}},
+        {at:"m1", ok:true, text:{tj:"Ҳеҷ чиз намехоҳад: на пул, на рамз, на акс. Пайванд ва шитоб нест", ru:"Ничего не просит: ни денег, ни кодов, ни фото. Нет ссылок и спешки"}}
+      ],
+      explain:{tj:"Паёми оддӣ: фиристандаи шинос, сабаби фаҳмо, ҳеҷ чиз талаб намекунад. Аслӣ аксар вақт ҳамин хел аст.", ru:"Обычное сообщение: знакомый отправитель, понятный повод, ничего не требует. Настоящее чаще всего выглядит так."}
+    },
+    { id:"p3", set:"pre", type:"image", isFake:true, scene:"lake",
+      capLbl:{tj:"Пост дар саҳифаи умумӣ", ru:"Пост в паблике"},
+      cap:{tj:"«Акси ман аз сайр дар кӯҳҳо, бе ягон филтр!» 🏔", ru:"«Моё фото с прогулки в горах, без фильтров!» 🏔"},
+      clues:[
+        {x:69, y:60, text:{tj:"Навиштаҷот дар лавҳа — ҳарфҳои бемаъно", ru:"Надпись на табличке — бессмысленный набор букв"}},
+        {x:19, y:63, text:{tj:"Сояи ду дарахт ба тарафҳои гуногун меафтад, гарчанде офтоб як аст", ru:"Тени двух деревьев падают в разные стороны, хотя солнце одно"}},
+        {x:44, y:78, text:{tj:"Инъикос дар об ба кӯҳҳо мувофиқ нест", ru:"Отражение в воде не совпадает с горами"}}
+      ],
+      explain:{tj:"Барномаҳои тасвирсозӣ дар матн, рӯшноӣ ва инъикос хато мекунанд. Ҷойҳоеро ҷӯй, ки «физика» мувофиқ намеояд.", ru:"Генераторы картинок ошибаются в тексте, свете и отражениях. Ищи места, где «физика» не сходится."}
+    },
+    { id:"p4", set:"pre", type:"message", isFake:true,
+      sender:{tj:"Support Team ✅", ru:"Support Team ✅"}, sub:{tj:"Рақами номаълум", ru:"Неизвестный номер"}, color:"#3B5BDB", initial:"S",
+      bubbles:[
+        {from:"them", text:{tj:"ДИҚҚАТ! Ҳисоби шумо пас аз 24 соат барои вайрон кардани қоидаҳо нест карда мешавад.",ru:"ВНИМАНИЕ! Ваш аккаунт будет удалён через 24 часа за нарушение правил."}, k:"m1", t:"02:13"},
+        {from:"them", text:{tj:"Барои нигоҳ доштан рамзи SMS-ро дар ин ҷо ворид кунед:",ru:"Чтобы сохранить его, введите код из SMS здесь:"}, link:"acc-verify-help.xyz/login", k:"m2", t:"02:13"}
+      ],
+      clues:[
+        {at:"sender", text:{tj:"Платформаҳо аз номи «дастгирӣ» бо эмодзи ✅ ба паёми шахсӣ наменависанд", ru:"Платформы не пишут в личку от «поддержки» с эмодзи ✅ вместо настоящей галочки"}},
+        {at:"m1", text:{tj:"Метарсонанд ва шитоб мекунонанд: «24 соат», ҳарфҳои калон, шаб соати 2", ru:"Пугают и торопят: «24 часа», капслок, два часа ночи"}},
+        {at:"m2", text:{tj:"Рамзи SMS-ро мепурсанд ва суроғаи пайванд аҷиб аст — ин сомонаи расмӣ нест", ru:"Просят код из SMS, а адрес ссылки странный — это не официальный сайт"}}
+      ],
+      explain:{tj:"Фишинг: бо тарс фишор меоранд, шитоб мекунонанд ва рамз мепурсанд. Рамзи SMS-ро ба ҳеҷ кас надеҳ.", ru:"Фишинг: давят страхом, торопят и просят код. Код из SMS не давай никому."}
+    },
+    { id:"p5", set:"pre", type:"profile", isFake:false, avatar:"robot",
+      name:{tj:"Робототехника · мактаби №12", ru:"Робототехника · школа №12"}, handle:"robo_klub_12",
+      stats:{posts:"148", followers:"312", following:"41"},
+      created:{tj:"Ҳисоб сохта шуд: 2 сол пеш", ru:"Аккаунт создан: 2 года назад"},
+      bio:{tj:"Маҳфили робототехника. Машғулиятҳо: сешанбе ва панҷшанбе, соати 15:00, синфи 204. Аксҳо аз мусобиқаҳо 🤖", ru:"Кружок робототехники. Занятия: вт и чт в 15:00, кабинет 204. Фото с соревнований 🤖"},
+      tiles:["#9AD1C2","#FFD98A","#B9C6FF","#F2B5A0","#A7D7F0","#D7E3A0"],
+      clues:[
+        {at:"created", ok:true, text:{tj:"Ҳисоб 2-сола аст ва постҳо бисёр", ru:"Аккаунту 2 года и в нём много постов"}},
+        {at:"stats", ok:true, text:{tj:"Обуначиён каманд — барои маҳфили мактаб ин табиӣ аст", ru:"Подписчиков немного — для школьного кружка это естественно"}},
+        {at:"bio", ok:true, text:{tj:"Маълумоти аниқ: рӯз, вақт, ҷой. Ҳеҷ чиз намефурӯшад ва намепурсад", ru:"Конкретика: дни, время, место. Ничего не продаёт и не просит"}}
+      ],
+      explain:{tj:"Ҳисоби зинда: таърихи дароз, рақамҳои оддӣ, мақсади фаҳмо.", ru:"Живой аккаунт: долгая история, обычные цифры, понятная цель."}
+    },
+
+    /* ---------- POST ---------- */
+    { id:"q1", set:"post", type:"message", isFake:true,
+      sender:{tj:"+992 •• ••• 41 07", ru:"+992 •• ••• 41 07"}, sub:{tj:"Дар рӯйхати тамосҳои ту нест", ru:"Нет в твоих контактах"}, color:"#8A94A8", initial:"?",
+      bubbles:[
+        {from:"them", text:{tj:"Ин ту дар видео ҳастӣ?? 😳 Ҳама аллакай тамошо мекунанд…",ru:"Это ты на видео?? 😳 Все уже смотрят…"}, k:"m1", t:"23:51"},
+        {from:"them", text:{tj:"",ru:""}, link:"vid-share-top.click/v/8841", k:"m2", t:"23:51"}
+      ],
+      clues:[
+        {at:"sender", text:{tj:"Рақами бегона, ки дар тамосҳо нест", ru:"Чужой номер, которого нет в контактах"}},
+        {at:"m1", text:{tj:"Тарс ва кунҷковиро бедор мекунанд — мехоҳанд, ки бе фикр пахш кунӣ", ru:"Давят на страх и любопытство — хотят, чтобы ты нажал(а) не думая"}},
+        {at:"m2", text:{tj:"Суроғаи аҷиб бо анҷоми .click — аксар вақт ҳисобро медуздад", ru:"Странный адрес с окончанием .click — часто ворует аккаунт"}}
+      ],
+      explain:{tj:"Пайвандро накушо. Агар нигарон бошӣ — бевосита аз дӯстонат пурс, ки оё чунин видеоро дидаанд.", ru:"Не открывай ссылку. Если волнуешься — спроси друзей напрямую, видели ли они такое видео."}
+    },
+    { id:"q2", set:"post", type:"image", isFake:true, scene:"shoe",
+      capLbl:{tj:"Реклама дар лента", ru:"Реклама в ленте"},
+      cap:{tj:"Кроссовкаҳои «AirWave» — ҳамагӣ 49 сомонӣ! Танҳо 3 ҷуфт монд ⏳", ru:"Кроссовки «AirWave» — всего 49 сомони! Осталось 3 пары ⏳"},
+      clues:[
+        {x:30, y:62, text:{tj:"Бандҳо бо таг якҷо шудаанд — ИИ ҳамин хел мекашад", ru:"Шнурки сливаются с подошвой — так рисует ИИ"}},
+        {x:61, y:48, text:{tj:"Логотип «шорида», ҳарфҳо каҷ", ru:"Логотип «поплыл», буквы кривые"}},
+        {x:84, y:17, text:{tj:"Нарх якчанд маротиба арзонтар аз муқаррарӣ ва «3 ҷуфт монд» — фишор", ru:"Цена в разы ниже обычной и «осталось 3 пары» — давление"}}
+      ],
+      explain:{tj:"Тасвири сохтагӣ + нархи ғайривоқеӣ + шитоб = мағозаи фиребгар. Пеш аз пардохт шарҳҳо ва суроғаи сомонаро санҷ.", ru:"Сгенерированная картинка + нереальная цена + спешка = магазин-обманка. Перед оплатой проверь отзывы и адрес сайта."}
+    },
+    { id:"q3", set:"post", type:"profile", isFake:true, avatar:"letter",
+      name:{tj:"Фаррух К.", ru:"Фаррух К."}, handle:"farrukh.k_2",
+      stats:{posts:"0", followers:"17", following:"290"},
+      created:{tj:"Ҳисоб сохта шуд: дирӯз", ru:"Аккаунт создан: вчера"},
+      bio:{tj:"Ин ҳисоби нави ман, кӯҳнаашро рахна карданд", ru:"Это мой новый акк, старый взломали"},
+      dm:{tj:"Салом, то пагоҳ 150 сомонӣ қарз деҳ? Телефонам вайрон шуд, занг зада наметавонам. Ба ҳамин корт гузарон 🙏", ru:"Привет, займи 150 сомони до завтра? Телефон сломался, позвонить не могу. Переведи на эту карту 🙏"},
+      dmLbl:{tj:"Паём ба ту", ru:"Сообщение тебе"},
+      clues:[
+        {at:"handle", text:{tj:"Ҳисоби дугона: «_2» дар ном ва дирӯз сохта шудааст", ru:"Аккаунт-двойник: «_2» в имени, создан вчера"}},
+        {at:"stats", text:{tj:"0 пост ва 290 обуна — ба ҳамаи дӯстон дархост фиристодааст", ru:"0 постов и 290 подписок — разослал заявки всем друзьям"}},
+        {at:"dm", text:{tj:"Пул ба корти бегона мепурсад ва мефаҳмонад, ки чаро занг зада наметавонад", ru:"Просит деньги на чужую карту и объясняет, почему не может позвонить"}}
+      ],
+      explain:{tj:"Ба дӯстат бо рақами кӯҳна занг зан ё шахсан пурс. Клонҳо аксар вақт ба ҳамаи дӯстон якбора менависанд.", ru:"Позвони другу по старому номеру или спроси лично. Клоны часто пишут всем друзьям сразу."}
+    },
+    { id:"q4", set:"post", type:"message", isFake:false,
+      sender:{tj:"Модар ❤", ru:"Мама ❤"}, sub:{tj:"дар шабака", ru:"в сети"}, color:"#E23D6A", initial:"М",
+      bubbles:[
+        {day:{tj:"Дирӯз",ru:"Вчера"}},
+        {from:"them", text:{tj:"Нон харидӣ?",ru:"Хлеб купил(а)?"}, t:"18:10"},
+        {from:"me", text:{tj:"Ҳа, ду дона",ru:"Да, две штуки"}, t:"18:12"},
+        {day:{tj:"Имрӯз",ru:"Сегодня"}},
+        {from:"them", text:{tj:"Ман дар кор то соати 7 мемонам. Палав дар яхдон аст, гарм карда хӯр 🙂",ru:"Я задержусь на работе до 7. Плов в холодильнике, разогрей 🙂"}, k:"m1", t:"16:30"}
+      ],
+      clues:[
+        {at:"sender", ok:true, text:{tj:"Тамос кайҳо сабт шудааст ва таърихи мукотиба ҳаст", ru:"Контакт давно сохранён, есть история переписки"}},
+        {at:"m1", ok:true, text:{tj:"Лаҳни одатӣ, ҳеҷ чиз гузаронидан ё пахш карданро намепурсад", ru:"Обычный тон, ничего не просит перевести или нажать"}}
+      ],
+      explain:{tj:"Ҳама чиз ба ҳаёти ҳаррӯза мувофиқ аст. Агар «модар» ногаҳон пул ба корти бегона пурсад — он гоҳ занг зада санҷ.", ru:"Всё совпадает с обычной жизнью. Если бы «мама» вдруг попросила деньги на чужую карту — тогда стоит позвонить и проверить."}
+    },
+    { id:"q5", set:"post", type:"image", isFake:false, scene:"yard",
+      capLbl:{tj:"Акс аз чати синф", ru:"Фото из чата класса"},
+      cap:{tj:"Ҳавлии мактаб баъд аз борон. Дар версияи ниҳоӣ ин ҷо акси худи даста мешавад.", ru:"Школьный двор после дождя. В финальной версии здесь будет фото самой команды."},
+      clues:[
+        {x:53, y:19, ok:true, text:{tj:"Навиштаҷот равшан хонда мешавад", ru:"Надпись читается чётко"}},
+        {x:28, y:72, ok:true, text:{tj:"Ҳамаи сояҳо ба як тараф — аз офтоб", ru:"Все тени падают в одну сторону — от солнца"}},
+        {x:36, y:86, ok:true, text:{tj:"Инъикос дар кӯлмак ба дарахт мувофиқ аст", ru:"Отражение в луже совпадает с деревом"}}
+      ],
+      explain:{tj:"Матн, рӯшноӣ ва инъикос бо ҳам мувофиқанд. Аммо дар хотир дор: акси аслиро ҳам метавонанд бо матни дурӯғ паҳн кунанд.", ru:"Текст, свет и отражения сходятся. Но помни: настоящее фото тоже могут распространять с ложной подписью."}
+    }
+  ],
+
+  signs: [
+    { ic:"✋", title:{tj:"Аз ҳад бенуқсон ё аҷиб", ru:"Слишком идеально или странно"},
+      text:{tj:"Пӯсти аз ҳад ҳамвор, ангуштони иловагӣ, матни каҷ, сояҳо ба тарафҳои гуногун, инъикоси нодуруст.", ru:"Неестественно гладкая кожа, лишние пальцы, кривой текст, тени в разные стороны, неверные отражения."},
+      ex:{tj:"Лавҳа бо ҳарфҳои бемаъно дар акси кӯҳ", ru:"Табличка с бессмысленными буквами на фото гор"} },
+    { ic:"⏱", title:{tj:"Ҳисоби нав", ru:"Свежий аккаунт"},
+      text:{tj:"Навакак сохта шуда, пост кам ё нест, таносуби аҷиби обуначиён ва обунаҳо.", ru:"Создан недавно, постов мало или нет, странное соотношение подписчиков и подписок."},
+      ex:{tj:"3 рӯза, 2 пост, 12 ҳазор обуначӣ", ru:"3 дня, 2 поста, 12 тысяч подписчиков"} },
+    { ic:"!", title:{tj:"Фишор ва шитоб", ru:"Давят и торопят"},
+      text:{tj:"«Фавран», «24 соат», ҳарфҳои калон, тарс ё ҳаяҷон. Фиребгар намехоҳад, ки ту фикр кунӣ.", ru:"«Срочно», «24 часа», капслок, страх или восторг. Мошеннику нужно, чтобы ты не успел(а) подумать."},
+      ex:{tj:"«Ҳисобатон пас аз 24 соат нест мешавад!»", ru:"«Ваш аккаунт удалят через 24 часа!»"} },
+    { ic:"$", title:{tj:"Чизе мепурсанд", ru:"Чего-то просят"},
+      text:{tj:"Пул, рамзи SMS, парол, акс ё гузаштан ба мессенҷери дигар. Дӯсти аслӣ ҳам метавонад пурсад — бинобар ин санҷ.", ru:"Деньги, код из SMS, пароль, фото или перейти в другой мессенджер. Настоящий друг тоже может попросить — поэтому проверь."},
+      ex:{tj:"«150 сомонӣ ба ҳамин корт гузарон»", ru:"«Переведи 150 сомони на эту карту»"} },
+    { ic:"🔗", title:{tj:"Пайвандҳои аҷиб", ru:"Странные ссылки"},
+      text:{tj:"Суроға бо хато, калимаҳои зиёдатӣ (verify, help, top), анҷоми ғайриоддӣ (.xyz, .click).", ru:"Адрес с ошибками, лишними словами (verify, help, top), необычным окончанием (.xyz, .click)."},
+      ex:{tj:"acc-verify-help.xyz/login", ru:"acc-verify-help.xyz/login"} },
+    { ic:"☎", title:{tj:"Ба худи шахс монанд нест", ru:"Не похоже на человека"},
+      text:{tj:"Дӯст на бо услуби худ менависад ё «телефонаш вайрон аст». Бо роҳи дигар санҷ: занг зан ё шахсан пурс.", ru:"Друг пишет не своим стилем или «телефон сломался». Проверь другим способом: позвони или спроси лично."},
+      ex:{tj:"farrukh.k_2 — «ҳисоби нави ман»", ru:"farrukh.k_2 — «мой новый акк»"} }
+  ],
+
+  ifItsYou: [
+    { title:{tj:"Далелҳоро нигоҳ дор", ru:"Сохрани доказательства"},
+      text:{tj:"Пеш аз он ки чизеро нест кунӣ, ҳамаашро сабт кун:", ru:"Прежде чем что-то удалять, зафиксируй всё:"},
+      list:{tj:["скриншоти паёмҳо ва профил","пайванд ва номи ҳисоб (ник)","сана ва вақт"], ru:["скриншоты переписки и профиля","ссылку и ник аккаунта","дату и время"]} },
+    { title:{tj:"Пул напардоз ва ҷавоб надеҳ", ru:"Не плати и не отвечай"},
+      text:{tj:"Шантаж пас аз пардохт қатъ намешавад — боз мехоҳанд. Пул, акс ва рамз нафирист. Бо шантажгар баҳс накун.", ru:"Шантаж после оплаты не прекращается — просят ещё. Не отправляй деньги, фото или коды. Не спорь с шантажистом."} },
+    { title:{tj:"Шикоят кун ва баста кун", ru:"Пожалуйся и заблокируй"},
+      text:{tj:"Дар профил ё пост тугмаи «Шикоят»-ро пахш кун: «худро ба ҷои ман муаррифӣ мекунад», «тасвири маҳрамона» ё «шантаж». Баъд ҳисобро баста (блок) кун.", ru:"Нажми «Пожаловаться» на профиле или посте: «выдаёт себя за меня», «интимное изображение» или «шантаж». Потом заблокируй аккаунт."} },
+    { title:{tj:"Ба калонсол нақл кун", ru:"Расскажи взрослому"},
+      text:{tj:"Ба волидайн, муаллим ё равоншиноси мактаб — ба касе, ки ба ӯ бовар дорӣ. Якҷоя ҳал кардан осонтар аст.", ru:"Родителю, учителю или школьному психологу — тому, кому доверяешь. Вместе решать легче."} }
+  ],
+
+  contacts: {
+    tj:[
+      {l:"Телефони боварии ВКД — шантаж, таҳдид, қаллобӣ, рахна кардани ҳисоб", n:[["1919","1919"],["+992 37 221-21-21","+992372212121"]]},
+      {l:"Телефони боварии миллӣ (Кумитаи кор бо занон ва оила)", n:[["1313","1313"]]},
+      {l:"Милиса (фаврӣ)", n:[["102","102"]]},
+      {l:"Ёрии таъҷилии тиббӣ", n:[["103","103"]]},
+      {l:"Маркази ҷумҳуриявии хизматрасониҳои иҷтимоӣ ба ҷабрдидагони зӯроварӣ (Душанбе)", n:[["+992 37 233-33-53","+992372333353"],["+992 48 888-07-07","+992488880707"]]},
+      {l:"Равоншиноси мактаб ё роҳбари синф", v:"дар мактаби ту"},
+      {l:"Дастгирии платформа", v:"тугмаи «Шикоят»"}
+    ],
+    ru:[
+      {l:"Телефон доверия МВД — шантаж, угрозы, мошенничество, взлом", n:[["1919","1919"],["+992 37 221-21-21","+992372212121"]]},
+      {l:"Национальный телефон доверия (Комитет по делам женщин и семьи)", n:[["1313","1313"]]},
+      {l:"Милиция (экстренно)", n:[["102","102"]]},
+      {l:"Скорая помощь", n:[["103","103"]]},
+      {l:"Республиканский центр соцуслуг для пострадавших от насилия (Душанбе)", n:[["+992 37 233-33-53","+992372333353"],["+992 48 888-07-07","+992488880707"]]},
+      {l:"Школьный психолог или классный руководитель", v:"в твоей школе"},
+      {l:"Поддержка платформы", v:"кнопка «Пожаловаться»"}
+    ]
+  },
+
+  /* ---------- MINI-GAMES: no losing, no timers, nothing saved ---------- */
+  games: {
+    ui: {
+      tj: {
+        card:"Бозиҳои хурд", cardSub:"2 бозӣ, ҳар кадом 1–2 дақиқа, барои дам гирифтан",
+        title:"Бозиҳои хурд", lead:"Дам гир: бохт нест, вақтшумор нест, ҳеҷ чиз нигоҳ дошта намешавад.", min:"1–2 дақ.",
+        spotTitle:"3 фарқро ёб", spotDesc:"Профили аслӣ ва клони он. Ёб, ки нусха бо чӣ фарқ мекунад.",
+        bubTitle:"Ташвишро тарқон", bubDesc:"Ба ҳубобчаҳои фикрҳои ташвишовар пахш кун — дар зери ҳар кадом ҷавоб ҳаст.",
+        round:"Даври {n} аз 3", orig:"Аслӣ", copy:"Нусха — ба ин ҷо пахш кун",
+        found:"Ёфт шуд: {n} аз 3", same:"Ин ҷо ҳама мувофиқ аст — ҷои дигарро бин 🙂",
+        hint:"Маслиҳат", nextRound:"Даври навбатӣ",
+        spotEnd:"Ту ҳамаи 9 фарқро ёфтӣ!",
+        spotEndText:"Клонҳо акс ва номро нусхабардорӣ мекунанд, аммо бо ҷузъиёти хурд худро фош мекунанд. Агар аз ту клон сохта бошанд — ба калонсол нақл кардан ва якҷоя шикоят кардан мумкин аст.",
+        bubLead:"Чунин фикрҳо дар бисёриҳо пайдо мешаванд. Ҳар кадомашро тарқон — бин, ки дар асл чӣ тавр аст.",
+        left:"Монд: {n}", bubEnd:"Ташвиш камтар шуд?",
+        bubEndText:"Ба калонсол нақл кардан мумкин — ин заифӣ нест, балки қадами аввал аст. Якҷоя ҳал кардан осонтар аст.",
+        back:"Ба бозиҳои хурд", again:"Боз як бор", planBub:"Ташвиш дорӣ? Ташвишро тарқон"
+      },
+      ru: {
+        card:"Мини-игры", cardSub:"2 игры по 1–2 минуты, чтобы передохнуть",
+        title:"Мини-игры", lead:"Передохни: проигрышей нет, таймеров нет, ничего не сохраняется.", min:"1–2 мин",
+        spotTitle:"Найди 3 отличия", spotDesc:"Настоящий профиль и его клон. Найди, чем отличается копия.",
+        bubTitle:"Лопни тревогу", bubDesc:"Нажимай на пузыри с тревожными мыслями — под каждым есть ответ.",
+        round:"Раунд {n} из 3", orig:"Настоящий", copy:"Копия — нажимай сюда",
+        found:"Найдено: {n} из 3", same:"Здесь всё совпадает — посмотри в другом месте 🙂",
+        hint:"Подсказка", nextRound:"Следующий раунд",
+        spotEnd:"Ты нашёл(ла) все 9 отличий!",
+        spotEndText:"Клоны копируют фото и имя, но выдают себя мелочами. Если клон сделали с тебя — можно рассказать взрослому и вместе пожаловаться на аккаунт.",
+        bubLead:"Такие мысли бывают у многих. Лопни каждую — посмотри, как на самом деле.",
+        left:"Осталось: {n}", bubEnd:"Тревоги стало меньше?",
+        bubEndText:"Можно рассказать взрослому — это не слабость, а первый шаг. Вместе решать легче.",
+        back:"К мини-играм", again:"Ещё раз", planBub:"Тревожно? Лопни тревогу"
+      }
+    },
+    /* parts: avatar, name, handle, stats, created, bio */
+    spot: [
+      { orig:{av:{c:"#F2B5A0",l:"М"}, name:"Мадина", handle:"madina.art", posts:"96", followers:"840",
+              created:{tj:"3 сол пеш",ru:"3 года назад"}, bio:{tj:"Расм мекашам 🎨 Душанбе",ru:"Рисую 🎨 Душанбе"}},
+        copy:{av:{c:"#F2B5A0",l:"М"}, name:"Мадина", handle:"madlna.art", posts:"0", followers:"12",
+              created:{tj:"дирӯз",ru:"вчера"}, bio:{tj:"Расм мекашам 🎨 Душанбе",ru:"Рисую 🎨 Душанбе"}},
+        diffs:{
+          handle:{tj:"Дар ник «l» ба ҷои «i»: madlna ба ҷои madina", ru:"В нике «l» вместо «i»: madlna вместо madina"},
+          stats:{tj:"0 пост ва 12 обуначӣ — дар асл 96 пост", ru:"0 постов и 12 подписчиков — у настоящего 96 постов"},
+          created:{tj:"Дирӯз сохта шудааст, асл бошад 3-сола", ru:"Создан вчера, а настоящему 3 года"}
+        } },
+      { orig:{av:{c:"#9AD1C2",l:"Т"}, name:"Тимур", handle:"timur.goal", posts:"214", followers:"530",
+              created:{tj:"2 сол пеш",ru:"2 года назад"}, bio:{tj:"Футбол ⚽ дастаи мактаби №7",ru:"Футбол ⚽ сборная школы №7"}},
+        copy:{av:{glossy:true}, name:"Тимур", handle:"timur.goal", posts:"3", followers:{tj:"9,8 ҳаз.",ru:"9,8 тыс."},
+              created:{tj:"2 сол пеш",ru:"2 года назад"}, bio:{tj:"Ҷоиза тақсим мекунам 🎁 bit-prize.top",ru:"Раздаю призы 🎁 bit-prize.top"}},
+        diffs:{
+          avatar:{tj:"Ба ҷои акси оддӣ — тасвири ҳамвори ИИ бо пасзаминаи хира", ru:"Вместо обычного фото — гладкая ИИ-картинка с размытым фоном"},
+          stats:{tj:"3 пост, аммо 9,8 ҳазор обуначӣ — сунъӣ зиёд кардаанд", ru:"3 поста, но 9,8 тысяч подписчиков — накрученные"},
+          bio:{tj:"Ҷоизаҳо ва пайванди аҷиби bit-prize.top", ru:"Призы и странная ссылка bit-prize.top"}
+        } },
+      { orig:{av:{c:"#C3B5FF",l:"З"}, name:"Зарина", handle:"zarina.books", posts:"58", followers:"210",
+              created:{tj:"1 сол пеш",ru:"1 год назад"}, bio:{tj:"Китоб мехонам ва тавсия медиҳам 📚",ru:"Читаю и советую книги 📚"}},
+        copy:{av:{c:"#C3B5FF",l:"З"}, name:"Зарина ✅", handle:"zarina.books", posts:"58", followers:"210",
+              created:{tj:"имрӯз",ru:"сегодня"}, bio:{tj:"Ба ман дар Telegram нависед: @zarina_help_24",ru:"Пишите мне в Telegram: @zarina_help_24"}},
+        diffs:{
+          name:{tj:"Эмодзи ✅ дар ном — ин аломати тасдиқи аслӣ нест", ru:"Эмодзи ✅ в имени — это не настоящая галочка"},
+          created:{tj:"Ҳисоб имрӯз сохта шудааст", ru:"Аккаунт создан сегодня"},
+          bio:{tj:"Ба мессенҷери дигар даъват мекунад — он ҷо фиреб додан осонтар аст", ru:"Зовёт в другой мессенджер — там проще обмануть"}
+        } }
+    ],
+    worries: [
+      { w:{tj:"Шарм медорам", ru:"Стыдно"},
+        a:{tj:"Шарм бояд касе дошта бошад, ки қалбакӣ сохтааст — на ту.", ru:"Стыдно должно быть тому, кто сделал фейк, — не тебе."} },
+      { w:{tj:"Маро сарзаниш мекунанд", ru:"Будут ругать"},
+        a:{tj:"Калонсолон кӯмак мекунанд, на ҷазо медиҳанд. Аз касе оғоз кун, ки ба ӯ бештар бовар дорӣ.", ru:"Взрослые помогут, а не накажут. Начни с того, кому доверяешь больше всех."} },
+      { w:{tj:"Ҳама мебинанд", ru:"Все увидят"},
+        a:{tj:"Қалбакиро тавассути шикоят дар платформа нест кардан мумкин. Ҳар қадар барвақттар — ҳамон қадар камтар одам мебинад.", ru:"Фейк можно удалить через жалобу на платформе. Чем раньше — тем меньше людей увидят."} },
+      { w:{tj:"Худам гунаҳкорам", ru:"Я сам(а) виноват(а)"},
+        a:{tj:"Ту гунаҳкор нестӣ. Гунаҳкор касест, ки фиреб медиҳад ва шантаж мекунад.", ru:"Ты не виноват(а). Виноват тот, кто обманывает и шантажирует."} },
+      { w:{tj:"Ҳеҷ кас кӯмак намекунад", ru:"Никто не поможет"},
+        a:{tj:"Кӯмак мекунанд: волидайн, муаллим, равоншиноси мактаб, телефони боварӣ.", ru:"Помогут: родители, учитель, школьный психолог, телефон доверия."} }
+    ]
+  }
+};
+
+/* ================= VISUALS (inline SVG, drawn in code, no external images) ================= */
+const art = {
+  glossy:`<svg viewBox="0 0 80 80"><defs><radialGradient id="gb" cx=".3" cy=".25" r=".9"><stop offset="0" stop-color="#FFE3EE"/><stop offset=".55" stop-color="#C9B8FF"/><stop offset="1" stop-color="#7FA2FF"/></radialGradient><radialGradient id="gf" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FFF4EE"/><stop offset="1" stop-color="#F2C7B4"/></radialGradient></defs><rect width="80" height="80" fill="url(#gb)"/><circle cx="16" cy="18" r="10" fill="#fff" opacity=".45"/><circle cx="64" cy="60" r="14" fill="#fff" opacity=".3"/><path d="M14 80c2-16 13-24 26-24s24 8 26 24z" fill="#3B2F5C"/><ellipse cx="40" cy="36" rx="15" ry="18" fill="url(#gf)"/><path d="M24 34c0-14 8-20 16-20s17 6 16 20c-3-7-9-10-16-10s-13 3-16 10z" fill="#2B1F45"/><ellipse cx="34" cy="37" rx="2" ry="2.4" fill="#2B1F45"/><ellipse cx="46" cy="37" rx="2" ry="2.4" fill="#2B1F45"/><path d="M35 45q5 4 10 0" stroke="#D0607E" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+  robot:`<svg viewBox="0 0 80 80"><rect width="80" height="80" fill="#DDF3EC"/><rect x="20" y="26" width="40" height="32" rx="8" fill="#0F8A70"/><rect x="37" y="14" width="6" height="12" fill="#0F8A70"/><circle cx="40" cy="13" r="4" fill="#FFE14D"/><circle cx="32" cy="40" r="5" fill="#fff"/><circle cx="48" cy="40" r="5" fill="#fff"/><circle cx="32" cy="40" r="2" fill="#121A2C"/><circle cx="48" cy="40" r="2" fill="#121A2C"/><rect x="31" y="50" width="18" height="3" rx="1.5" fill="#fff"/></svg>`,
+  letter:`<svg viewBox="0 0 80 80"><rect width="80" height="80" fill="#C9D3E3"/><text x="40" y="52" text-anchor="middle" font-family="Noto Sans,Arial" font-weight="800" font-size="36" fill="#4A5468">Ф</text></svg>`,
+
+  lake:`<svg viewBox="0 0 320 220" aria-hidden="true"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8EC5FF"/><stop offset="1" stop-color="#E6F2FF"/></linearGradient><linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A90C8"/><stop offset="1" stop-color="#1F5E8C"/></linearGradient></defs>
+    <rect width="320" height="220" fill="url(#sk)"/><circle cx="262" cy="38" r="18" fill="#FFF2A8"/>
+    <path d="M0 132 L60 62 L100 104 L150 40 L205 110 L250 70 L320 132 Z" fill="#6E7FA3"/><path d="M150 40 L136 58 L150 54 L164 60 Z M60 62 L50 76 L62 72 L72 78Z" fill="#fff"/>
+    <rect y="132" width="320" height="88" fill="url(#wt)"/>
+    <path d="M110 132 L170 132 L140 196 Z" fill="#5C6E92" opacity=".55"/><path d="M230 132 L300 132 L270 160Z" fill="#5C6E92" opacity=".45"/>
+    <path d="M0 128 Q60 120 120 134 L120 150 L0 150Z" fill="#6FA35A"/>
+    <rect x="28" y="96" width="5" height="36" fill="#6B4A2E"/><circle cx="30" cy="92" r="14" fill="#2F7A3E"/><ellipse cx="50" cy="138" rx="20" ry="4" fill="#2C4A2A" opacity=".55"/>
+    <rect x="86" y="100" width="5" height="32" fill="#6B4A2E"/><circle cx="88" cy="96" r="12" fill="#2F7A3E"/><ellipse cx="68" cy="138" rx="18" ry="4" fill="#2C4A2A" opacity=".55"/>
+    <rect x="218" y="112" width="4" height="26" fill="#6B4A2E"/><rect x="190" y="94" width="62" height="20" rx="3" fill="#F3E2C0" stroke="#6B4A2E" stroke-width="2"/>
+    <text x="221" y="108" text-anchor="middle" font-family="Arial" font-size="9" font-weight="700" fill="#5A3A1E">ОЗRЕ0 КPAСТЫЫ</text></svg>`,
+
+  shoe:`<svg viewBox="0 0 320 220" aria-hidden="true"><defs><linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE9F1"/><stop offset="1" stop-color="#E4E9FF"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#DDE3F0"/></linearGradient></defs>
+    <rect width="320" height="220" fill="url(#bg2)"/><ellipse cx="160" cy="180" rx="120" ry="10" fill="#121A2C" opacity=".12"/>
+    <path d="M40 160 Q38 118 78 110 L120 96 Q150 70 180 86 L250 118 Q286 128 284 156 L284 166 Q160 176 40 168Z" fill="url(#sh)" stroke="#9AA6BD" stroke-width="2"/>
+    <path d="M38 164 Q160 182 286 164 L286 174 Q160 192 40 176Z" fill="#E23D6A"/>
+    <path d="M86 110 Q96 126 84 144 Q78 156 70 168 M100 104 Q112 122 98 146 Q92 160 96 172 M114 98 Q128 120 118 150 Q114 162 120 174" stroke="#121A2C" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M150 128 Q190 112 238 134" stroke="#E23D6A" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <text x="196" y="112" text-anchor="middle" font-family="Arial" font-weight="900" font-size="15" fill="#121A2C" transform="rotate(-8 196 112) skewX(-18)">AlRWΛVΞ</text>
+    <circle cx="270" cy="38" r="30" fill="#FFE14D" stroke="#121A2C" stroke-width="2"/><text x="270" y="38" text-anchor="middle" font-family="Arial" font-weight="900" font-size="18" fill="#121A2C">49</text><text x="270" y="52" text-anchor="middle" font-family="Arial" font-weight="700" font-size="10" fill="#121A2C">TJS</text>
+    <text x="16" y="32" font-family="Arial" font-weight="700" font-size="12" fill="#E23D6A">−90%  ⏳ 00:04:59</text></svg>`,
+
+  yard:`<svg viewBox="0 0 320 220" aria-hidden="true"><rect width="320" height="220" fill="#CFDDEA"/><circle cx="28" cy="26" r="14" fill="#FFF6C8"/>
+    <rect x="70" y="40" width="200" height="110" fill="#E9D8C2" stroke="#9C8467" stroke-width="2"/><rect x="110" y="30" width="120" height="22" fill="#2F5D8A"/>
+    <text x="170" y="46" text-anchor="middle" font-family="Arial" font-weight="700" font-size="12" fill="#fff">МАКТАБИ №12</text>
+    <g fill="#9EC3E0" stroke="#9C8467" stroke-width="1.5"><rect x="86" y="64" width="26" height="28"/><rect x="126" y="64" width="26" height="28"/><rect x="188" y="64" width="26" height="28"/><rect x="228" y="64" width="26" height="28"/></g>
+    <rect x="156" y="104" width="28" height="46" fill="#7A5A3A"/>
+    <rect y="150" width="320" height="70" fill="#9AA3AE"/>
+    <rect x="56" y="112" width="6" height="40" fill="#6B4A2E"/><circle cx="59" cy="104" r="18" fill="#3F8A4C"/>
+    <path d="M62 152 L120 160 L114 166 L58 156Z" fill="#5F6873" opacity=".55"/>
+    <rect x="236" y="140" width="40" height="5" fill="#7A5A3A"/><rect x="238" y="145" width="3" height="8" fill="#7A5A3A"/><rect x="271" y="145" width="3" height="8" fill="#7A5A3A"/>
+    <path d="M276 153 L304 160 L300 164 L272 156Z" fill="#5F6873" opacity=".55"/>
+    <ellipse cx="110" cy="192" rx="60" ry="14" fill="#B9CCDD"/>
+    <g opacity=".5"><rect x="105" y="182" width="5" height="12" fill="#6B4A2E"/><ellipse cx="107" cy="198" rx="12" ry="5" fill="#3F8A4C"/></g></svg>`
+};
+
+/* ================= LOGIC ================= */
+const KEY = "lupa.v1";
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({lang:S.lang, pre:S.pre, post:S.post})); }catch(e){} }
+const saved = load();
+const S = { lang: saved.lang === "ru" ? "ru" : "tj", screen:"home", set:"pre", idx:0, res:[], answered:false, fromCompare:false, g:null, b:{popped:[]},
+            pre: typeof saved.pre === "number" ? saved.pre : null, post: typeof saved.post === "number" ? saved.post : null };
+const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+const $app = document.getElementById("app");
+
+const U = () => content.ui[S.lang];
+const t = v => (v && typeof v === "object" && ("tj" in v || "ru" in v)) ? v[S.lang] : (v == null ? "" : v);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const setCards = set => content.cards.filter(c => c.set === set);
+/* All markup is built from the static `content` object above (no user input); text fields go through esc(). */
+function html(el, markup){ el.replaceChildren(document.createRange().createContextualFragment(markup)); }
+
+function go(screen, extra){ clearTimeout(hintTimer); Object.assign(S, {screen}, extra || {}); render(); window.scrollTo(0,0); }
+
+/* ---- specimen renderers ---- */
+function profile(c){
+  const st = c.stats;
+  const lab = S.lang === "tj" ? ["пост","обуначӣ","обуна"] : ["постов","подписчиков","подписок"];
+  const tiles = c.tiles && c.tiles.length
+    ? c.tiles.map(col => `<div style="background:${col}"></div>`).join("") + (c.tiles.length < 3 ? '<div class="empty"></div>'.repeat(3 - c.tiles.length) : "")
+    : `<div class="empty">—</div><div class="empty">—</div><div class="empty">—</div>`;
+  return `<div class="sp"><div class="pf">
+    <div class="pf-top"><div class="pf-av anc" data-k="avatar">${art[c.avatar]}</div>
+      <div class="pf-stats anc" data-k="stats"><div><b>${esc(t(st.posts))}</b><small>${lab[0]}</small></div><div><b>${esc(t(st.followers))}</b><small>${lab[1]}</small></div><div><b>${esc(t(st.following))}</b><small>${lab[2]}</small></div></div></div>
+    <div class="pf-name">${esc(t(c.name))}</div>
+    <div class="pf-handle anc" data-k="handle">@${esc(c.handle)}</div><br>
+    <div class="pf-meta anc" data-k="created">🕓 ${esc(t(c.created))}</div>
+    <div class="pf-bio anc" data-k="bio">${esc(t(c.bio))}</div>
+    ${c.dm ? `<div class="pf-dm anc" data-k="dm"><small>${esc(t(c.dmLbl))}</small>${esc(t(c.dm))}</div>` : ""}
+    <div class="pf-grid">${tiles}</div></div></div>`;
+}
+function message(c){
+  const b = c.bubbles.map(m => {
+    if (m.day) return `<div class="day">${esc(t(m.day))}</div>`;
+    const txt = t(m.text);
+    return `<div class="bub ${m.from} anc" ${m.k ? `data-k="${m.k}"` : ""}>${m.who ? `<span class="who">${esc(t(m.who))}</span>` : ""}${esc(txt)}${m.link ? `${txt ? "<br>" : ""}<span class="lnk">${esc(m.link)}</span>` : ""}<span class="t">${m.t}</span></div>`;
+  }).join("");
+  return `<div class="sp"><div class="m-head anc" data-k="sender"><div class="m-av" style="background:${c.color}">${esc(c.initial)}</div><div><b>${esc(t(c.sender))}</b><small>${esc(t(c.sub))}</small></div></div><div class="m-body">${b}</div></div>`;
+}
+function image(c){
+  return `<div class="sp"><div class="frame">${art[c.scene]}</div><div class="cap anc" data-k="cap"><small>${esc(t(c.capLbl))}</small>${esc(t(c.cap))}</div></div>`;
+}
+const specimen = c => ({profile, message, image})[c.type](c);
+
+/* ---- screens ---- */
+const screens = {
+  home(){
+    const u = U();
+    return `<section class="screen">
+      <p class="eyebrow">${u.homeEyebrow}</p>
+      <h1 style="margin-top:8px">${u.homeTitle}<br><span class="hlt">${u.homeTitle2}</span></h1>
+      <div class="hero-spec" aria-hidden="true">
+        <div class="mini m1"><div style="display:flex;gap:8px;align-items:center"><div class="av"></div><div style="flex:1"><div class="l" style="width:70%;margin:0"></div><div class="l" style="width:45%"></div></div></div><div class="l"></div><div class="l" style="width:80%"></div></div>
+        <div class="mini m2"><div class="l" style="width:50%;margin:0;background:#D9E4FF"></div><div class="l" style="background:#D9E4FF"></div><div class="l" style="width:60%;background:var(--rose-bg)"></div></div>
+        <svg class="loupe" viewBox="0 0 100 100"><circle cx="40" cy="40" r="30" fill="rgba(255,225,77,.35)" stroke="#121A2C" stroke-width="7"/><path d="M62 62l28 28" stroke="#121A2C" stroke-width="11" stroke-linecap="round"/></svg>
+      </div>
+      <p class="lead">${u.homeLead}</p>
+      <div class="flow">${u.flow.map(f => `<span>${f}</span>`).join("")}</div>
+      <div class="stack">
+        <button class="btn btn-ink" data-act="start">${u.start} →</button>
+        <button class="btn btn-line" data-act="plan">${u.ifYou}</button>
+        <button class="gcard" data-act="games"><span class="gi" aria-hidden="true">🎲</span><span><b>${G().card}</b><small>${G().cardSub}</small></span><span class="gt">→</span></button>
+      </div>
+      <p class="home-note" style="margin-top:18px"><span aria-hidden="true">🔒</span><span>${u.privacy}</span></p>
+    </section>`;
+  },
+
+  quiz(){
+    const u = U(), cards = setCards(S.set), c = cards[S.idx];
+    const dots = cards.map((_, i) => `<i class="${i < S.res.length ? (S.res[i] ? "ok" : "no") : (i === S.idx ? "cur" : "")}"></i>`).join("");
+    return `<section class="screen">
+      <div class="qhead"><span class="eyebrow">${S.set === "pre" ? u.pre : u.post}</span><span class="tag">${u.types[c.type]}</span></div>
+      <div class="dots">${dots}</div>
+      <p class="eyebrow">${u.cardOf.replace("{n}", S.idx + 1)}</p>
+      <h2 class="q">${u.question}</h2>
+      <div class="flip" id="flip"><div class="flip-in">
+        <div class="face front">${specimen(c)}</div>
+        <div class="face back" id="back" aria-hidden="true"></div>
+      </div></div>
+      <div id="act" class="row2" style="margin-top:18px">
+        <button class="btn btn-real" data-act="ans" data-v="real">✓ ${u.real}</button>
+        <button class="btn btn-fake" data-act="ans" data-v="fake">✕ ${u.fake}</button>
+      </div>
+      <div id="fb"></div>
+    </section>`;
+  },
+
+  preResult(){
+    const u = U();
+    return `<section class="screen">
+      <p class="eyebrow">${u.preResTitle}</p>
+      <div class="big" style="margin:14px 0 4px"><span id="cnt">0</span><small> / 5</small></div>
+      <p style="font-weight:800;font-size:18px">${u.preResLine}</p>
+      <div class="dots" style="margin:16px 0">${S.res.map(r => `<i class="${r ? "ok" : "no"}"></i>`).join("")}</div>
+      <p class="lead" style="margin-bottom:20px">${u.preResText}</p>
+      <button class="btn btn-ink" data-act="lesson">${u.toLesson} →</button>
+    </section>`;
+  },
+
+  lesson(){
+    const u = U();
+    return `<section class="screen">
+      <p class="eyebrow">${u.lessonEyebrow}</p>
+      <h2 style="margin:8px 0 10px">${u.lessonTitle}</h2>
+      <p class="lead" style="margin-bottom:18px">${u.lessonLead}</p>
+      <div class="stack">${content.signs.map((s, i) => `<article class="sign" style="--d:${i * 80}ms"><div class="ic" aria-hidden="true">${s.ic}</div><div><h3>${esc(t(s.title))}</h3><p>${esc(t(s.text))}</p><div class="ex">${u.exLbl} ${esc(t(s.ex))}</div></div></article>`).join("")}</div>
+      <div style="margin-top:20px">${S.fromCompare
+        ? `<button class="btn btn-ink" data-act="restart">${u.again}</button>`
+        : `<button class="btn btn-ink" data-act="post">${u.toPost} →</button>`}</div>
+    </section>`;
+  },
+
+  compare(){
+    const u = U(), up = S.post > S.pre;
+    return `<section class="screen">
+      <p class="eyebrow">${u.cmpEyebrow}</p>
+      <h2 style="margin-top:8px">${u.cmpTitle}</h2>
+      <div class="arrow" aria-label="${S.pre} → ${S.post}"><span class="from" id="cPre">0</span><span class="sep">→</span><span class="to" id="cPost">0</span><span class="sep" style="color:var(--ink2)">/5</span></div>
+      <div class="bars">
+        <div class="bar"><div class="lbl"><span>${u.before}</span><b>${S.pre}/5</b></div><div class="track"><div class="fill pre" id="bPre"></div></div></div>
+        <div class="bar"><div class="lbl"><span>${u.after}</span><b>${S.post}/5</b></div><div class="track"><div class="fill post" id="bPost"></div></div></div>
+      </div>
+      <p class="explain">${up ? u.cmpUp : u.cmpSame}</p>
+      <div class="stack">
+        <button class="btn btn-ink" data-act="plan">${u.toPlan} →</button>
+        <button class="btn btn-line" data-act="reread">${u.reread}</button>
+        <button class="btn btn-line" data-act="restart">${u.again}</button>
+      </div>
+    </section>`;
+  },
+
+  plan(){
+    const u = U(), c = content.contacts[S.lang];
+    return `<section class="screen">
+      <p class="eyebrow">${u.planEyebrow}</p>
+      <h2 style="margin:8px 0 10px">${u.planTitle}</h2>
+      <p class="lead" style="margin-bottom:14px">${u.planLead}</p>
+      <p class="calm" style="margin-bottom:14px">${u.calm}</p>
+      <div class="stack">${content.ifItsYou.map((s, i) => `<article class="step" style="--d:${i * 90}ms"><div class="n">${i + 1}</div><div><h3>${esc(t(s.title))}</h3><p>${esc(t(s.text))}</p>${s.list ? `<ul>${t(s.list).map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div></article>`).join("")}</div>
+      <p class="urgent" style="margin:16px 0">${u.urgent}</p>
+      <div class="contacts"><h3>${u.contactsTitle}</h3><ul>${contactItems(c)}</ul><p class="fine" style="color:#AEB6C6;margin-top:8px">${u.contactsNote}</p></div>
+      <div class="stack" style="margin-top:18px">
+        <button class="btn btn-line" data-act="bubbles">🫧 ${G().planBub}</button>
+        <button class="btn btn-ink" data-act="home">${u.home}</button>
+        <button class="btn btn-line" data-act="reset">${u.reset}</button>
+      </div>
+      <p class="fine" style="margin-top:14px">${u.fictional}</p>
+    </section>`;
+  }
+};
+
+/* ================= MINI-GAMES ================= */
+const G = () => content.games.ui[S.lang];
+const PARTS = ["avatar","name","handle","stats","created","bio"];
+let hintTimer = null;
+
+screens.games = function(){
+  const g = G();
+  const card = (act, icon, title, desc) => `<button class="gcard" data-act="${act}"><span class="gi" aria-hidden="true">${icon}</span><span><b>${title}</b><small>${desc}</small></span><span class="gt">${g.min}</span></button>`;
+  return `<section class="screen">
+    <p class="eyebrow">${g.min}</p>
+    <h2 style="margin:8px 0 10px">${g.title}</h2>
+    <p class="lead" style="margin-bottom:18px">${g.lead}</p>
+    <div class="stack">${card("spot","🔍",g.spotTitle,g.spotDesc)}${card("bubbles","🫧",g.bubTitle,g.bubDesc)}</div>
+    <div style="margin-top:20px"><button class="btn btn-line" data-act="home">${U().home}</button></div>
+  </section>`;
+};
+
+function miniAvatar(av){
+  if (av.glossy) return art.glossy;
+  return `<svg viewBox="0 0 80 80"><rect width="80" height="80" fill="${av.c}"/><text x="40" y="52" text-anchor="middle" font-family="Noto Sans,Arial" font-weight="800" font-size="34" fill="#121A2C">${esc(av.l)}</text></svg>`;
+}
+function miniProfile(p, side, round){
+  const g = G(), lab = S.lang === "tj" ? ["пост","обуначӣ"] : ["постов","подписчиков"];
+  const found = S.g.found, isCopy = side === "copy";
+  const inner = {
+    avatar: miniAvatar(p.av),
+    name: `<b>${esc(t(p.name))}</b>`,
+    handle: `<span style="font-family:var(--mono);font-size:14px">@${esc(p.handle)}</span>`,
+    stats: `<span class="k">${S.lang === "tj" ? "Рақамҳо" : "Цифры"}</span>${esc(t(p.posts))} ${lab[0]} · ${esc(t(p.followers))} ${lab[1]}`,
+    created: `<span class="k">${S.lang === "tj" ? "Сохта шуд" : "Создан"}</span>🕓 ${esc(t(p.created))}`,
+    bio: `<span class="k">Bio</span>${esc(t(p.bio))}`
+  };
+  const part = k => {
+    const n = found.indexOf(k);
+    const cls = "part" + (k === "avatar" ? " av" : "") + (n >= 0 ? (isCopy ? " found" : " mark") : "") + (isCopy && n >= 0 && n === S.g.newest ? " new" : "") + (isCopy && S.g.hint === k ? " hint" : "");
+    const pin = isCopy && n >= 0 ? `<span class="pin">${n + 1}</span>` : "";
+    return isCopy
+      ? `<button class="${cls}" data-act="part" data-part="${k}">${inner[k]}${pin}</button>`
+      : `<div class="${cls}">${inner[k]}</div>`;
+  };
+  return `<div class="mp ${side}"><span class="mp-lbl">${isCopy ? g.copy : g.orig}</span>
+    <div class="mp-row" style="margin-top:6px">${part("avatar")}<div style="flex:1;min-width:0">${part("name")}${part("handle")}</div></div>
+    ${part("stats")}${part("created")}${part("bio")}</div>`;
+}
+function spotBody(){
+  const g = G(), r = content.games.spot[S.g.round], keys = Object.keys(r.diffs), done = S.g.found.length === 3;
+  const last = S.g.round === 2;
+  return `<div class="qhead"><span class="eyebrow">${g.round.replace("{n}", S.g.round + 1)}</span><span class="tag">${g.found.replace("{n}", S.g.found.length)}</span></div>
+    <div class="dots">${keys.map((_, i) => `<i class="${i < S.g.found.length ? "ok" : ""}"></i>`).join("")}</div>
+    <div class="stack" style="margin-top:22px">${miniProfile(r.orig, "orig")}<div style="height:10px"></div>${miniProfile(r.copy, "copy")}</div>
+    <p class="note" id="note" aria-live="polite"></p>
+    <ol class="clues">${S.g.found.map((k, i) => `<li style="${i === S.g.newest ? "" : "animation:none;opacity:1;transform:none"}"><b>${i + 1}</b><span>${esc(t(r.diffs[k]))}</span></li>`).join("")}</ol>
+    ${done ? (last
+      ? `<div class="endbox"><h3>🎉 ${g.spotEnd}</h3><p style="margin:8px 0 14px">${g.spotEndText}</p><div class="stack"><button class="btn btn-ink" data-act="plan">${U().toPlan} →</button><button class="btn btn-line" data-act="games">${g.back}</button></div></div>`
+      : `<button class="btn btn-ink" data-act="nextRound">${g.nextRound} →</button>`)
+      : `<button class="btn btn-line" data-act="hint" id="hintBtn" ${S.g.hintReady ? "" : "hidden"}>💡 ${g.hint}</button>`}`;
+}
+screens.spot = function(){
+  const g = G();
+  return `<section class="screen"><h2 class="q">${g.spotTitle}</h2><p class="lead">${g.spotDesc}</p><div id="spotBody">${spotBody()}</div></section>`;
+};
+function armHint(){
+  clearTimeout(hintTimer);
+  if (S.g.hintReady) return;
+  hintTimer = setTimeout(() => { S.g.hintReady = true; const h = document.getElementById("hintBtn"); if (h) h.hidden = false; }, 12000);
+}
+function startSpot(round){ S.g = {round, found:[], newest:-1, hint:null, hintReady:false}; go("spot"); armHint(); }
+function refreshSpot(){ html(document.getElementById("spotBody"), spotBody()); }
+function spotTap(k){
+  const r = content.games.spot[S.g.round];
+  if (S.g.found.length === 3) return;
+  if (r.diffs[k] && !S.g.found.includes(k)){
+    S.g.found.push(k); S.g.newest = S.g.found.length - 1; S.g.hint = null;
+    refreshSpot();
+  } else if (!r.diffs[k]) {
+    const n = document.getElementById("note"); n.textContent = G().same; n.classList.add("on");
+  }
+}
+function spotHint(){
+  const r = content.games.spot[S.g.round];
+  S.g.hint = Object.keys(r.diffs).find(k => !S.g.found.includes(k)) || null;
+  S.g.newest = -1; refreshSpot();
+}
+
+const POS = [{l:2,t:2},{l:56,t:8},{l:29,t:35},{l:3,t:64},{l:56,t:62}];
+screens.bubbles = function(){
+  const g = G(), W = content.games.worries, left = W.length - S.b.popped.length;
+  return `<section class="screen">
+    <h2 class="q">${g.bubTitle}</h2>
+    <p class="lead" style="margin-bottom:10px">${g.bubLead}</p>
+    <p class="tag" id="left">${g.left.replace("{n}", left)}</p>
+    <ul class="answers latest" id="latest">${left > 0 && S.b.popped.length ? answerLi(S.b.popped[S.b.popped.length - 1], true) : ""}</ul>
+    <div class="field" id="field" ${left === 0 ? "hidden" : ""}>${W.map((w, i) => `<button class="bubble ${S.b.popped.includes(i) ? "gone" : ""}" data-act="pop" data-i="${i}" style="left:${POS[i].l}%;top:${POS[i].t}%;--d:${(i * 0.7).toFixed(1)}s">${esc(t(w.w))}</button>`).join("")}</div>
+    <ul class="answers" id="answers">${left === 0 ? S.b.popped.map(i => answerLi(i, true)).join("") : ""}</ul>
+    <div id="bubEnd">${left === 0 ? bubEnd() : ""}</div>
+  </section>`;
+};
+function answerLi(i, old){ const w = content.games.worries[i]; return `<li class="${old ? "old" : ""}"><s>${esc(t(w.w))}</s>${esc(t(w.a))}</li>`; }
+function bubEnd(){
+  const g = G();
+  return `<div class="endbox"><h3>${g.bubEnd}</h3><p style="margin:8px 0 14px">${g.bubEndText}</p><div class="stack">
+    <button class="btn btn-ink" data-act="plan">${U().toPlan} →</button>
+    <button class="btn btn-line" data-act="bubbles">${g.again}</button>
+    <button class="btn btn-line" data-act="games">${g.back}</button></div></div>`;
+}
+function pop(i, el){
+  if (S.b.popped.includes(i)) return;
+  S.b.popped.push(i);
+  el.classList.add("pop");
+  setTimeout(() => el.classList.add("gone"), reduce ? 0 : 300);
+  const left = content.games.worries.length - S.b.popped.length;
+  document.getElementById("left").textContent = G().left.replace("{n}", left);
+  if (left > 0) { html(document.getElementById("latest"), answerLi(i, false)); return; }
+  setTimeout(() => {
+    document.getElementById("latest").replaceChildren();
+    document.getElementById("field").hidden = true;
+    html(document.getElementById("answers"), S.b.popped.map(j => answerLi(j, j !== i)).join(""));
+    html(document.getElementById("bubEnd"), bubEnd());
+  }, reduce ? 0 : 300);
+}
+
+function render(){
+  const u = U();
+  document.documentElement.lang = S.lang === "tj" ? "tg" : "ru";
+  document.getElementById("brand").textContent = u.brand;
+  document.getElementById("helpLbl").textContent = u.help;
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === S.lang)));
+  html($app, screens[S.screen]());
+  if (S.screen === "quiz" && S.answered) showAnswer(true);
+  if (S.screen === "preResult") countTo(document.getElementById("cnt"), 0, S.pre);
+  if (S.screen === "compare") runCompare();
+  if (document.getElementById("veil").classList.contains("on")) renderSheet();
+}
+
+/* ---- answer / flip / clue reveal ---- */
+function showAnswer(instant){
+  const u = U(), c = setCards(S.set)[S.idx], ok = S.res[S.idx];
+  const back = document.getElementById("back");
+  html(back, specimen(c) + `<div class="stamp ${c.isFake ? "fake" : "real"}">${c.isFake ? u.stampFake : u.stampReal}</div>`);
+  back.removeAttribute("aria-hidden");
+  document.querySelector(".front").setAttribute("aria-hidden", "true");
+  const base = (instant || reduce) ? 0 : 450;
+  c.clues.forEach((cl, i) => {
+    const d = (base + i * 380) + "ms";
+    const pin = document.createElement("span");
+    pin.className = "pin"; pin.textContent = i + 1; pin.style.setProperty("--d", d);
+    if (cl.at){
+      const el = back.querySelector(`[data-k="${cl.at}"]`);
+      if (!el) return;
+      el.classList.add("hl"); if (cl.ok) el.classList.add("ok");
+      el.style.setProperty("--d", d); el.appendChild(pin);
+    } else {
+      pin.classList.add("xy"); pin.style.left = cl.x + "%"; pin.style.top = cl.y + "%";
+      back.querySelector(".frame").appendChild(pin);
+    }
+  });
+  const flip = document.getElementById("flip");
+  if (instant) flip.classList.add("on"); else requestAnimationFrame(() => requestAnimationFrame(() => flip.classList.add("on")));
+  const act = document.getElementById("act");
+  act.replaceChildren(); act.style.display = "none";
+  html(document.getElementById("fb"), `<div class="fb">
+    <div class="verdict ${ok ? "good" : "bad"}"><i aria-hidden="true">${ok ? "✓" : "✕"}</i><span>${ok ? u.good : u.bad} · ${c.isFake ? u.isFake : u.isReal}</span></div>
+    <p class="eyebrow" style="margin-top:14px">${c.isFake ? u.cluesFake : u.cluesReal}</p>
+    <ol class="clues">${c.clues.map((cl, i) => `<li style="--d:${base + i * 380}ms"><b>${i + 1}</b><span>${esc(t(cl.text))}</span></li>`).join("")}</ol>
+    <p class="explain">${esc(t(c.explain))}</p>
+    <button class="btn btn-ink" data-act="next">${S.idx === 4 ? u.finish : u.next} →</button></div>`);
+}
+
+function answer(v){
+  if (S.answered) return;
+  const c = setCards(S.set)[S.idx];
+  S.res[S.idx] = (v === "fake") === c.isFake;
+  S.answered = true;
+  showAnswer(false);
+}
+
+function next(){
+  if (S.idx < 4){ S.idx++; S.answered = false; render(); window.scrollTo(0,0); return; }
+  const score = S.res.filter(Boolean).length;
+  if (S.set === "pre"){ S.pre = score; S.post = null; save(); go("preResult"); }
+  else { S.post = score; save(); go("compare"); }
+}
+
+/* ---- counters: number ticks up, bars grow with CSS transform ---- */
+function countTo(el, from, to, cb){
+  if (!el) return;
+  if (reduce || from >= to){ el.textContent = to; cb && cb(); return; }
+  let v = from; el.textContent = v;
+  const step = () => { v++; el.textContent = v; if (v < to) setTimeout(step, 160); else cb && cb(); };
+  setTimeout(step, 200);
+}
+function runCompare(){
+  const bPre = document.getElementById("bPre"), bPost = document.getElementById("bPost");
+  const preEl = document.getElementById("cPre"), postEl = document.getElementById("cPost");
+  requestAnimationFrame(() => requestAnimationFrame(() => { bPre.style.transform = `scaleX(${S.pre / 5})`; }));
+  countTo(preEl, 0, S.pre, () => {
+    postEl.textContent = S.pre;
+    setTimeout(() => { bPost.style.transform = `scaleX(${S.post / 5})`; }, 120);
+    countTo(postEl, S.pre, S.post, () => { postEl.textContent = S.post; });
+  });
+}
+
+/* ---- help sheet (available on every screen) ---- */
+function renderSheet(){
+  const u = U(), c = content.contacts[S.lang];
+  html(document.getElementById("sheet"), `
+    <h2 id="sheetTitle" style="font-size:30px;margin-bottom:10px">${u.helpTitle}</h2>
+    <p style="margin-bottom:14px">${u.helpText}</p>
+    <div class="contacts" style="margin-bottom:14px"><ul>${contactItems(c)}</ul><p class="fine" style="color:#AEB6C6;margin-top:6px">${u.contactsNote}</p></div>
+    <div class="stack"><button class="btn btn-ink" data-act="sheetPlan">${u.openPlan}</button><button class="btn btn-line" data-act="close">${u.close}</button></div>`);
+}
+function contactItems(c){
+  return c.map(x => `<li>${esc(x.l)}: ${x.n ? x.n.map(([shown, tel]) => `<a class="tel" href="tel:${tel}">${esc(shown)}</a>`).join(" ") : `<b>${esc(x.v)}</b>`}</li>`).join("");
+}
+let lastFocus = null;
+function openSheet(){ lastFocus = document.activeElement; renderSheet(); const v = document.getElementById("veil"); v.classList.add("on"); v.removeAttribute("aria-hidden"); setTimeout(() => { const b = v.querySelector("button"); b && b.focus(); }, 50); }
+function closeSheet(){ const v = document.getElementById("veil"); if (!v.classList.contains("on")) return; v.classList.remove("on"); v.setAttribute("aria-hidden", "true"); lastFocus && lastFocus.focus && lastFocus.focus(); }
+
+/* ---- events ---- */
+document.addEventListener("click", e => {
+  if (e.target.id === "veil"){ closeSheet(); return; }
+  const lb = e.target.closest("[data-lang]");
+  if (lb){ S.lang = lb.dataset.lang; save(); render(); return; }
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const a = b.dataset.act;
+  if (a === "start" || a === "restart") go("quiz", {set:"pre", idx:0, res:[], answered:false, fromCompare:false});
+  else if (a === "ans") answer(b.dataset.v);
+  else if (a === "next") next();
+  else if (a === "lesson") go("lesson", {fromCompare:false});
+  else if (a === "post") go("quiz", {set:"post", idx:0, res:[], answered:false});
+  else if (a === "reread") go("lesson", {fromCompare:true});
+  else if (a === "plan") go("plan");
+  else if (a === "home") go("home");
+  else if (a === "games") go("games");
+  else if (a === "spot") startSpot(0);
+  else if (a === "nextRound") startSpot(S.g.round + 1);
+  else if (a === "part") spotTap(b.dataset.part);
+  else if (a === "hint") spotHint();
+  else if (a === "bubbles") go("bubbles", {b:{popped:[]}});
+  else if (a === "pop") pop(+b.dataset.i, b);
+  else if (a === "help") openSheet();
+  else if (a === "close") closeSheet();
+  else if (a === "sheetPlan"){ closeSheet(); go("plan"); }
+  else if (a === "reset"){ S.pre = null; S.post = null; save(); b.textContent = U().resetDone; b.disabled = true; }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Хакатон · 8 кейсов</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d1f24;--muted:#5d6370;--line:#e3dfd6;--accent:#0f6e5b}
+@media (prefers-color-scheme:dark){:root{--bg:#121417;--card:#1b1e23;--ink:#eceef1;--muted:#a2a8b3;--line:#2c3037;--accent:#4fc3a1}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans",system-ui,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:40px 16px 60px}
+h1{font-size:clamp(28px,5vw,44px);margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 28px;font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;color:inherit;text-decoration:none;transition:transform .2s,border-color .2s}
+a.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.n{font-weight:800;color:var(--accent);font-size:14px}
+.card h2{font-size:19px;margin:4px 0 6px;line-height:1.25}
+.card p{margin:0;color:var(--muted);font-size:14px}
+a.guide{display:flex;gap:16px;align-items:center;margin-top:22px;background:var(--accent);color:#fff;border-radius:16px;padding:20px;text-decoration:none}
+a.guide b{font-size:20px}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Безопасность детей в интернете</h1>
+  <p class="sub">8 кейсов хакатона — прототипы приложений (TJ / RU) · 8 октября</p>
+  <div class="grid">
+    <a class="card" href="case-01/"><span class="n">01</span><h2>Обучение без нравоучений</h2><p>Ветвящиеся истории про манипуляции + мини-игры</p></a>
+    <a class="card" href="case-02/"><span class="n">02</span><h2>Свидетель</h2><p>Как помочь, если видишь травлю</p></a>
+    <a class="card" href="case-03/"><span class="n">03</span><h2>Разговор дома</h2><p>Карточки для родителей с озвучкой</p></a>
+    <a class="card" href="case-04/"><span class="n">04</span><h2>Куда обратиться?</h2><p>Что случилось → что делать → кто поможет</p></a>
+    <a class="card" href="case-05/"><span class="n">05</span><h2>Выглядит как настоящее</h2><p>Тренажёр: фейки и ИИ-контент</p></a>
+    <a class="card" href="case-06/"><span class="n">06</span><h2>Безопасность в дизайне игр</h2><p>Аудит игры для разработчиков (RU / EN)</p></a>
+    <a class="card" href="case-07/"><span class="n">07</span><h2>Изменение восприятия</h2><p>Как реагировать, когда рассказывают о беде</p></a>
+    <a class="card" href="case-08/"><span class="n">08</span><h2>Свободная тема</h2><p>Пример: «Аввал санҷ» — проверь пост до публикации</p></a>
+  </div>
+  <a class="guide" href="guide/"><span style="font-size:32px">🛠</span><span><b>Как собрать такой сайт с ИИ — по шагам</b><br>Чат-ИИ → Stitch → GitHub → Vercel + готовые промпты</span></a>
+</div>
+</body>
+</html>

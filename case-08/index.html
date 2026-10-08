@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B1A3A">
+<meta name="robots" content="noindex">
+<title>Стоп-кадр</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wdth,wght@75..100,400..800&family=Noto+Sans+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1FB;      /* холодная фотобумага */
+  --ink:#1B1A3A;        /* индиго */
+  --ink-2:#4A4970;
+  --rec:#E8401F;        /* красная точка записи */
+  --go:#13895C;
+  --wait:#B57C00;
+  --card:#FFFFFF;
+  --line:#C9CDE6;
+  --sans:"Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"Noto Sans Mono",ui-monospace,"Roboto Mono",monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);font-size:17px;line-height:1.45;color:var(--ink);
+  background:var(--paper);min-height:100vh;min-height:100dvh;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+}
+button,a{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--rec);outline-offset:3px;border-radius:6px}
+h1:focus,h2:focus{outline:none}
+
+/* шапка */
+.top{
+  position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 16px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-stretch:75%;font-size:22px;letter-spacing:.01em;text-transform:uppercase}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--rec);box-shadow:0 0 0 3px rgba(232,64,31,.3)}
+.lang{display:flex;border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:2px}
+.lang button{min-width:52px;min-height:44px;border-radius:999px;font-family:var(--mono);font-weight:700;font-size:15px;color:rgba(255,255,255,.8)}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+
+main{max-width:520px;margin:0 auto;padding:18px 16px 8px}
+
+/* видоискатель — фирменный элемент */
+.vf{position:relative;padding:22px 18px 20px}
+.vf::before,.vf::after,.vf>.c1,.vf>.c2{content:"";position:absolute;width:26px;height:26px;border:0 solid var(--ink);pointer-events:none}
+.vf::before{top:0;left:0;border-top-width:4px;border-left-width:4px}
+.vf::after{top:0;right:0;border-top-width:4px;border-right-width:4px}
+.vf>.c1{bottom:0;left:0;border-bottom-width:4px;border-left-width:4px}
+.vf>.c2{bottom:0;right:0;border-bottom-width:4px;border-right-width:4px}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:14px}
+.hud .r{display:flex;align-items:center;gap:6px;color:var(--rec)}
+.hud .r i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+
+h1,h2{font-weight:800;font-stretch:75%;line-height:1.04;letter-spacing:-.005em}
+h1{font-size:clamp(36px,10.5vw,50px);text-transform:uppercase}
+h2{font-size:clamp(27px,7.6vw,34px)}
+.lead{margin-top:12px;color:var(--ink-2);font-size:17px}
+
+/* экран */
+.screen{animation:in .32s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* выбор типа */
+.types{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.type{
+  min-height:124px;background:var(--card);border:2px solid var(--ink);border-radius:14px;
+  padding:14px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:10px;
+  box-shadow:4px 4px 0 var(--ink);transition:transform .15s var(--ease),box-shadow .15s var(--ease);
+  animation:in .3s var(--ease) both;
+}
+.type:nth-child(2){animation-delay:.05s}.type:nth-child(3){animation-delay:.1s}.type:nth-child(4){animation-delay:.15s}
+.type:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.type svg{width:34px;height:34px}
+.type b{font-size:17px;line-height:1.2;font-weight:700}
+.privacy{margin-top:18px;font-size:14px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.privacy svg{flex:none;margin-top:2px}
+
+/* вопрос */
+.frames{display:flex;gap:6px;margin-bottom:18px}
+.frames span{flex:1;height:8px;border-radius:2px;background:var(--line);transform-origin:left}
+.frames span.on{background:var(--ink)}
+.frames span.now{background:var(--rec);animation:grow .3s var(--ease) both}
+@keyframes grow{from{transform:scaleX(.2)}to{transform:scaleX(1)}}
+.q{animation:slide .3s var(--ease) both}
+@keyframes slide{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+.q h2{min-height:3.15em}
+.q .hint{margin-top:10px;color:var(--ink-2);font-size:16px;min-height:2.9em}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.yn button{
+  min-height:64px;border-radius:14px;font-weight:800;font-size:22px;font-stretch:75%;text-transform:uppercase;letter-spacing:.03em;
+  border:2px solid var(--ink);background:var(--card);box-shadow:4px 4px 0 var(--ink);
+  transition:transform .15s var(--ease),box-shadow .15s var(--ease);
+}
+.yn button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.yn .yes{background:var(--ink);color:#fff}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+.row .hud{margin:0}
+.ghost{min-height:48px;padding:0 6px;font-weight:600;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px}
+
+/* результат */
+.meter{margin:6px 0 18px}
+.meter .lbl{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.bars{display:flex;gap:5px;margin-top:8px;height:22px}
+.bars span{flex:1;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.bars span::after{content:"";position:absolute;inset:0;background:var(--lvl,var(--ink));transform:scaleY(0);transform-origin:bottom;transition:transform .25s var(--ease)}
+.bars span.f::after{transform:scaleY(1)}
+.stamp{
+  display:inline-block;margin-bottom:12px;padding:6px 12px;border:3px solid currentColor;border-radius:8px;
+  font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+  transform:rotate(-3deg);animation:stamp .3s var(--ease) .15s both;
+}
+@keyframes stamp{from{opacity:0;transform:rotate(-3deg) scale(1.4)}to{opacity:1;transform:rotate(-3deg) scale(1)}}
+.v-green{color:var(--go)}.v-amber{color:var(--wait)}.v-red{color:var(--rec)}
+.fixes{list-style:none;margin-top:20px;display:grid;gap:10px}
+.fixes li{background:var(--card);border-left:5px solid var(--rec);border-radius:10px;padding:14px;animation:in .3s var(--ease) both}
+.fixes li:nth-child(2){animation-delay:.06s}.fixes li:nth-child(3){animation-delay:.12s}.fixes li:nth-child(4){animation-delay:.18s}.fixes li:nth-child(5){animation-delay:.24s}
+.fixes li.mid{border-left-color:var(--wait)}
+.fixes small{display:block;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+.habit{margin-top:20px;padding:14px;border:2px dashed var(--ink-2);border-radius:12px;font-size:16px}
+.habit b{display:block;font-weight:800;font-stretch:75%;font-size:19px;text-transform:uppercase;margin-bottom:4px}
+.btn{
+  display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin-top:20px;border-radius:14px;
+  background:var(--ink);color:#fff;font-weight:700;font-size:18px;transition:transform .15s var(--ease);
+}
+.btn:active{transform:scale(.97)}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--ink);margin-top:10px}
+
+/* помощь: всегда на месте, без анимации */
+.helpbar{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--paper) 70%,rgba(238,241,251,0))}
+.help{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:488px;margin:0 auto;min-height:56px;border-radius:14px;background:var(--rec);color:#fff;font-weight:800;font-size:18px}
+.sheet{position:fixed;inset:0;z-index:10;display:none}
+.sheet.open{display:block}
+.sheet .bg{position:absolute;inset:0;background:rgba(27,26,58,.55);animation:fade .2s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet .panel{
+  position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:var(--paper);
+  border-radius:20px 20px 0 0;padding:22px 16px calc(22px + env(safe-area-inset-bottom));
+  animation:up .3s var(--ease) both;
+}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.panel .inner{max-width:488px;margin:0 auto}
+.panel h2{color:var(--rec)}
+.steps{margin:14px 0 6px;padding-left:22px;display:grid;gap:8px}
+.contact{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border-radius:12px;padding:12px 14px;margin-top:10px;min-height:64px}
+.contact span{font-weight:600;font-size:16px}
+.contact a{flex:none;min-height:48px;min-width:112px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--ink);color:#fff;text-decoration:none;font-family:var(--mono);font-weight:700}
+.note{font-size:14px;color:var(--ink-2);margin-top:10px}
+
+/* мини-игры */
+.type.wide{grid-column:1/-1;min-height:76px;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;background:var(--ink);color:#fff}
+.type.wide.light{background:var(--card);color:var(--ink);margin-top:12px;width:100%}
+.type.wide span{display:flex;flex-direction:column;gap:2px}
+.type.wide small{font-size:14px;font-weight:400;opacity:.8}
+.scene{position:relative;margin-top:16px;border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:#DDE3F5}
+.scene svg{display:block;width:100%;height:auto}
+.spot{position:absolute;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%}
+.spot::after{content:"";position:absolute;inset:4px;border:3px solid var(--rec);border-radius:50%;opacity:0;transform:scale(1.5);transition:opacity .25s,transform .25s var(--ease)}
+.spot.found::after{opacity:1;transform:scale(1);background:rgba(232,64,31,.14)}
+.spot.hint:not(.found)::after{opacity:.8;transform:scale(1);border-style:dashed;border-color:var(--ink)}
+.fcount{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.fcount .hud{margin:0}
+.info{margin-top:12px;background:var(--card);border-radius:12px;padding:14px;border-left:5px solid var(--rec);animation:in .3s var(--ease) both}
+.info h3{font-size:19px;font-weight:800;font-stretch:75%;text-transform:uppercase;margin-bottom:8px}
+.info small{display:block;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
+.info.done{border-left-color:var(--go)}
+.bridge{margin-top:12px;padding:12px 14px;border:2px dashed var(--ink-2);border-radius:12px;font-size:16px}
+.breath{display:grid;justify-items:center;gap:12px;margin-top:8px;text-align:center}
+.blabel{font-weight:700;font-size:19px;min-height:1.5em}
+.ballwrap{position:relative;width:190px;height:190px;display:grid;place-items:center}
+.ball{width:190px;height:190px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,#AEBBF3 28%,#3D4AA8 75%,var(--ink) 100%);transform:scale(.42);transition:transform 4s linear}
+.ball.in{transform:scale(1)}
+.bnum{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:30px;color:#fff;pointer-events:none}
+.bdots{display:flex;gap:10px}
+.bdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink)}
+.bdots i.on{background:var(--ink)}
+.hold{width:100%;min-height:64px;border-radius:14px;background:var(--ink);color:#fff;font-weight:800;font-size:19px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;transition:transform .15s var(--ease)}
+.hold.on{transform:scale(.96)}
+.bdone{font-weight:800;font-size:22px;font-stretch:75%;text-transform:uppercase;color:var(--go);animation:in .3s var(--ease) both}
+.breathbox{background:var(--card);border-radius:14px;padding:14px;margin-top:14px}
+.breathbox .btn{margin-top:12px}
+
+footer{max-width:520px;margin:18px auto 0;padding:0 16px 12px;font-size:13px;color:var(--ink-2)}
+footer b{color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot" aria-hidden="true"></span><span id="brand"></span></div>
+  <div class="lang" role="group" aria-label="Язык / Забон">
+    <button type="button" data-lang="tj">TJ</button>
+    <button type="button" data-lang="ru">RU</button>
+  </div>
+</header>
+
+<main id="app" aria-live="polite"></main>
+<footer id="foot"></footer>
+
+<div class="helpbar"><button type="button" class="help" id="helpBtn"></button></div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="bg" data-close></div>
+  <div class="panel"><div class="inner" id="helpInner"></div></div>
+</div>
+
+<script>
+/* ===== Весь текст и контент (tj / ru) ===== */
+const content = {
+  tj: {
+    brand: "Аввал санҷ",
+    help: "Ба ман кӯмак лозим аст",
+    start: {
+      title: "Чиро нашр кардан мехоҳӣ?",
+      lead: "Ба пости худ бо чашми як нафари бегона нигоҳ кун. 5 савол — як дақиқа.",
+      privacy: "Ҷавобҳои ту дар ҳамин телефон мемонанд ва ба ҳеҷ ҷо фиристода намешаванд."
+    },
+    q: { yes: "Ҳа", no: "Не", back: "Бозгашт", of: "аз" },
+    result: {
+      meter: "Бегона чӣ қадар мефаҳмад", low: "кам", much: "бисёр",
+      fixTitle: "Чӣ тавр ислоҳ кунем",
+      high: "Хатари баланд", mid: "Ислоҳ кун",
+      again: "Пости дигарро санҷидан", redo: "Ҳаминро аз нав санҷидан",
+      habitT: "Одати як сония",
+      habit: "Пеш аз нашр худатро пурс: «Агар инро як нафари ношинос бинад, ӯ дар бораи ман чӣ мефаҳмад?»",
+      verdicts: {
+        green: { stamp: "Тайёр", title: "Метавонӣ нашр кунӣ",
+          text: "Дар ин пост чизе нест, ки ҷой ё шахсияти туро ба бегона нишон диҳад. Ҳамин тавр ҳар дафъа санҷ." },
+        amber: { stamp: "Аввал ислоҳ кун", title: "Каме ислоҳ кун ва баъд нашр кун",
+          text: "Якчанд ҷузъиёти хурд ба бегона бисёр чиз мегӯяд. Инҳоро ислоҳ кун — як дақиқа вақт мегирад." },
+        red: { stamp: "Ист", title: "Ҳоло нашр накун",
+          text: "Аз ин пост бегона метавонад бифаҳмад, ки ту кистӣ ё ҳозир куҷо ҳастӣ. Аввал ислоҳ кун ё онро нагузор." }
+      }
+    },
+    sheet: {
+      title: "Ба ман кӯмак лозим аст",
+      lead: "Агар аллакай чизе гузоштӣ ва касе туро метарсонад ё чизе талаб мекунад:",
+      steps: [
+        "Ба ӯ ҷавоб надеҳ ва ҳеҷ чиз нафиристон — на сурат, на пул.",
+        "Скриншот гир. Ин далел аст.",
+        "Постро нест кун ва дар платформа шикоят кун.",
+        "Ба калонсоле, ки ба ӯ бовар дорӣ, нақл кун. Ту гунаҳкор нестӣ."
+      ],
+      contacts: [
+        ["Хати боварии миллӣ (ройгон)", "1313", "1313"],
+        ["Хати боварии ВКД: таҳдид, шантаж, рахна кардани аккаунт", "1919", "1919"],
+        ["Милиция — агар хатари фаврӣ бошад", "102", "102"]
+      ],
+      call: "Занг задан",
+      note: "Инчунин метавонӣ ба падару модар, муаллим ё психологи мактаб гӯӣ.",
+      checked: "Рақамҳо аз рӯи манбаъҳои кушода санҷида шудаанд (октябри 2026). Пеш аз намоиш боз санҷед.",
+      close: "Бастан"
+    },
+    games: {
+      card: "Бозиҳои хурд", cardSub: "Каме дам гир — бе бохт ва бе вақтшумор",
+      title: "Бозиҳои хурд", lead: "Дар ин ҷо бохт нест, вақтшумор нест ва ҳеҷ чиз нигоҳ дошта намешавад.",
+      find: "Чизи зиёдатиро дар сурат ёб", findSub: "7 ҷузъиёт дар сурати хаёлӣ · 1–2 дақ",
+      breath: "Пуфак-нафаскашӣ", breathSub: "3 нафаси ором · 1 дақ",
+      back: "Бозгашт", toGames: "Ба бозиҳо"
+    },
+    find: {
+      title: "Чизи зиёдатиро ёб",
+      lead: "Ин сурати хаёлии як ҳуҷра аст. 7 ҷузъиётеро ёб, ки ба бегона дар бораи соҳиби ҳуҷра аз ҳад зиёд нақл мекунанд. Ба онҳо пахш кун.",
+      found: "Ёфта шуд", of: "аз", hint: "Ишора",
+      learn: "Бегона чӣ мефаҳмад", hide: "Чӣ тавр пинҳон кунем",
+      doneT: "Ҳар 7-ро ёфтӣ!",
+      done: "Акнун ту кадрро бо чашми одами бегона мебинӣ. Суратҳои худро низ пеш аз нашр ҳамин тавр санҷ.",
+      bridge: "Агар чизе монанди ин аллакай дар интернет бошад ва ту хавотир бошӣ — метавонӣ ба калонсоле, ки ба ӯ бовар дорӣ, нақл кунӣ. Ту ҳеҷ чизро вайрон накардаӣ.",
+      check: "Пости худро санҷидан", replay: "Боз бозӣ кардан",
+      spots: {
+        logo: { name: "Нишони мактаб дар либос", learn: "Дар кадом мактаб мехонӣ — яъне ҳар рӯз туро дар куҷо дидан мумкин аст.", hide: "Либосро ба ҷевон овез ё кадрро бур." },
+        house: { name: "Рақами хона дар тиреза", learn: "Суроға ё кӯчае, ки дар он зиндагӣ мекунӣ.", hide: "На дар назди тиреза акс гир ё рақамро хира кун." },
+        landmark: { name: "Манора дар тиреза", learn: "Маҳаллаи шаҳр: аз рӯи манзараи тиреза хонаро ёфтан осон аст.", hide: "Пардаро каш ё аз кунҷи дигар акс гир." },
+        pass: { name: "Чипта дар миз", learn: "Ном, насаб, сана ва ба куҷо меравӣ. Коди чипта боз бештар маълумот дорад.", hide: "Пеш аз акс гирифтан ҳуҷҷат ва чиптаҳоро аз миз бардор." },
+        qr: { name: "QR-код", learn: "QR-кодро аз худи сурат хондан мумкин аст — ин метавонад вуруд ба аккаунт ё чипта бошад.", hide: "Ҳеҷ гоҳ QR-код ва штрих-кодро нишон надеҳ." },
+        note: { name: "Варақча бо рақами телефон", learn: "Рақами телефонат — бо он ба ту навишта ё занг зада метавонанд.", hide: "Варақчаро гир ё пӯшон." },
+        geotag: { name: "Геотег", learn: "Ҷои аниқе, ки сурат гирифта шудааст.", hide: "Геотегро дар камера ва дар барнома хомӯш кун." }
+      }
+    },
+    breath: {
+      title: "Пуфак-нафаскашӣ",
+      lead: "Тугмаро пахш карда нигоҳ дор ва нафас каш, то пуфак калон шавад. Сар деҳ — ва оҳиста нафас барор.",
+      hold: "Пахш кун ва нафас каш", round: "Нафас", of: "аз",
+      inhale: "Нафас каш…", release: "Сар деҳ ва нафас барор", exhale: "Нафас барор…",
+      done: "Офарин! Акнун қадам ба қадам.",
+      bridge: "Агар хавотир бошӣ — метавонӣ ба калонсоле, ки ба ӯ бовар дорӣ, нақл кунӣ. Ин шармовар нест.",
+      again: "Боз як бор", toggle: "Аввал каме нафас гирем (1 дақ)"
+    },
+    footer: "<b>Мавзӯи намунавӣ</b> барои кейси 08 «Мавзӯи озод»: санҷиши пост пеш аз нашр. Рақамҳои кӯмак аз манбаъҳои кушода гирифта шудаанд. Барнома ҳеҷ маълумот ҷамъ намекунад ва ҳеҷ чиз намефиристад.",
+    types: {
+      photo: { name: "Сурат ё селфи", qs: [
+        { q: "Мактабат маълум аст?", hint: "Либоси мактабӣ, нишон, номи мактаб дар девор.", fix: "Суратро бур ё нишонро хира кун.", w: 1 },
+        { q: "Рақами хона, кӯча ё манзараи тиреза дида мешавад?", hint: "Аз рӯи як лавҳа ё бинои шинос ҷоятро ёфтан мумкин аст.", fix: "Кадрро бур ё дар ҷои бетараф акс гир.", w: 1 },
+        { q: "Дар кадр ҳуҷҷат, чипта, корти бонкӣ ё QR-код ҳаст?", hint: "Ҳатто дар гӯшаи сурат.", fix: "Онро аз кадр бардор. QR-код ва штрих-кодро аз сурат ҳам хондан мумкин аст.", w: 2 },
+        { q: "Геотег фаъол аст ё ҷойро дар матн навиштаӣ?", hint: "Масалан: «Ман дар боғи …».", fix: "Геотегро хомӯш кун. Ҷойро баъдтар нависӣ беҳтар, вақте ки аз он ҷо рафтӣ.", w: 2 },
+        { q: "Дар сурат одамони дигар ҳастанд, ки иҷозат надодаанд?", hint: "Дӯстон, бародару хоҳар, ҳамсинфон.", fix: "Аввал аз онҳо пурс. Агар намехоҳанд — рӯяшонро пӯшон ё суратро нагузор.", w: 1 }
+      ]},
+      video: { name: "Видео ё сторис", qs: [
+        { q: "Ин эфири зинда аст ё ту ҳоло дар ҳамон ҷо ҳастӣ?", hint: "Бегона мефаҳмад, ки ту ҳозир куҷоӣ.", fix: "Видеоро баъдтар гузор, вақте ки аз он ҷо рафтӣ.", w: 2 },
+        { q: "Дар видео ном, суроға ё номи мактаб шунида мешавад?", hint: "Касе туро бо ном ҷеғ мезанад ё суроғаро мегӯяд.", fix: "Ин қисмро бурида парто ё садоро хомӯш кун.", w: 1 },
+        { q: "Хона, ҳавлӣ ё кӯчаатон дида мешавад?", hint: "Дарвоза, мошин бо рақам, манзараи тиреза.", fix: "Дар назди девори одӣ, бе тиреза сабт кун.", w: 1 },
+        { q: "Дар видео одамони дигар ҳастанд, ки иҷозат надодаанд?", hint: "Ҳатто агар дар қафо бошанд.", fix: "Аввал аз онҳо пурс ё онҳоро аз кадр бардор.", w: 1 },
+        { q: "Сторисро ҳама мебинанд, на танҳо дӯстони наздик?", hint: "Профили кушода — ҳар кас метавонад бинад.", fix: "Рӯйхати «Дӯстони наздик»-ро истифода бар.", w: 1 }
+      ]},
+      text: { name: "Матн ё шарҳ", qs: [
+        { q: "Насаб, мактаб ё синфатро навиштаӣ?", hint: "Ё ин ки аз матн инро фаҳмидан мумкин аст.", fix: "Инро нест кун. Дӯстон аллакай медонанд, бегонаҳо набояд донанд.", w: 1 },
+        { q: "Рақами телефон ё никатро дар шабакаи дигар навиштаӣ?", hint: "Масалан: «ба ман дар телеграм нависед».", fix: "Рақамро ҳеҷ гоҳ ошкоро нагузор. Онро танҳо ба касоне деҳ, ки дар ҳаёт мешиносӣ.", w: 2 },
+        { q: "Навиштаӣ, ки кай ва куҷо мешавӣ?", hint: "Масалан: «пагоҳ соати 5 дар боғ».", fix: "Нақшаҳоро танҳо дар чати пӯшида бо дӯстон муҳокима кун.", w: 2 },
+        { q: "Ҳозир хафа ё асабонӣ ҳастӣ?", hint: "Он чизе ки дар хашм навишта мешавад, дер боз мемонад.", fix: "10 дақиқа сабр кун ва матнро аз нав хон.", w: 1 },
+        { q: "Дар бораи каси дигар чизе менависӣ, ки ӯ намехост дигарон бидонанд?", hint: "Сир, сурат, ҳодисаи хандаовар бо ӯ.", fix: "Инро нагузор. Агар гапе дорӣ — ба ӯ шахсан навис.", w: 1 }
+      ]},
+      profile: { name: "Профили нав", qs: [
+        { q: "Профилат барои ҳама кушода аст?", hint: "Ҳар кас суратҳо ва дӯстонатро мебинад.", fix: "Дар танзимот «Аккаунти пӯшида»-ро фаъол кун.", w: 1 },
+        { q: "Дар тавсиф шаҳр, мактаб ё синф навишта шудааст?", hint: "Масалан: «Душанбе, мактаби №…, 7 «б»».", fix: "Онро нест кун. Барои дӯстон ном ва сурат кифоя аст.", w: 1 },
+        { q: "Санаи пурраи таваллуд дида мешавад?", hint: "Рӯз, моҳ ва сол.", fix: "Санаро пинҳон кун ё танҳо рӯз ва моҳро гузор.", w: 1 },
+        { q: "Рақами телефонат дар профил дида мешавад?", hint: "Ё бо рақам туро ёфтан мумкин аст.", fix: "Рақамро аз профил нест кун ва «ҷустуҷӯ аз рӯи рақам»-ро хомӯш кун.", w: 2 },
+        { q: "Дархостҳоро аз одамони ношинос қабул мекунӣ?", hint: "«Дӯсти дӯст» ҳам метавонад бегона бошад.", fix: "Танҳо касонеро қабул кун, ки дар ҳаёти воқеӣ мешиносӣ.", w: 1 }
+      ]}
+    }
+  },
+  ru: {
+    brand: "Стоп-кадр",
+    help: "Мне нужна помощь",
+    start: {
+      title: "Что ты хочешь выложить?",
+      lead: "Посмотри на свой пост глазами незнакомца. 5 вопросов — одна минута.",
+      privacy: "Твои ответы остаются в этом телефоне и никуда не отправляются."
+    },
+    q: { yes: "Да", no: "Нет", back: "Назад", of: "из" },
+    result: {
+      meter: "Сколько узнает незнакомец", low: "мало", much: "много",
+      fixTitle: "Как исправить",
+      high: "Высокий риск", mid: "Исправь",
+      again: "Проверить другой пост", redo: "Проверить этот заново",
+      habitT: "Привычка на одну секунду",
+      habit: "Перед публикацией спроси себя: «Что узнает обо мне человек, которого я не знаю?»",
+      verdicts: {
+        green: { stamp: "Готово", title: "Можно выкладывать",
+          text: "В этом посте нет ничего, что выдаёт незнакомцу, кто ты и где ты. Проверяй так каждый раз." },
+        amber: { stamp: "Сначала исправь", title: "Немного поправь — и выкладывай",
+          text: "Пара мелких деталей рассказывает незнакомцу больше, чем кажется. Исправь их — это займёт минуту." },
+        red: { stamp: "Стоп", title: "Пока не выкладывай",
+          text: "По этому посту чужой человек может понять, кто ты или где ты прямо сейчас. Сначала исправь или не публикуй." }
+      }
+    },
+    sheet: {
+      title: "Мне нужна помощь",
+      lead: "Если ты уже что-то выложил(а) и тебя пугают или что-то требуют:",
+      steps: [
+        "Не отвечай и ничего не отправляй — ни фото, ни денег.",
+        "Сделай скриншоты. Это доказательства.",
+        "Удали пост и пожалуйся на платформе.",
+        "Расскажи взрослому, которому доверяешь. Ты не виноват(а)."
+      ],
+      contacts: [
+        ["Национальный телефон доверия (бесплатно)", "1313", "1313"],
+        ["Телефон доверия МВД: угрозы, шантаж, взлом аккаунта", "1919", "1919"],
+        ["Милиция — если опасность прямо сейчас", "102", "102"]
+      ],
+      call: "Позвонить",
+      note: "Ещё можно рассказать родителям, учителю или школьному психологу.",
+      checked: "Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте.",
+      close: "Закрыть"
+    },
+    games: {
+      card: "Мини-игры", cardSub: "Передохни — без проигрышей и таймеров",
+      title: "Мини-игры", lead: "Здесь нельзя проиграть, нет таймеров, и ничего не сохраняется.",
+      find: "Найди лишнее на фото", findSub: "7 деталей на вымышленном фото · 1–2 мин",
+      breath: "Шарик-дыхание", breathSub: "3 спокойных вдоха · 1 мин",
+      back: "Назад", toGames: "К играм"
+    },
+    find: {
+      title: "Найди лишнее на фото",
+      lead: "Это вымышленное фото комнаты. Найди 7 деталей, которые рассказывают незнакомцу о хозяине больше, чем нужно. Нажимай на них.",
+      found: "Найдено", of: "из", hint: "Подсказка",
+      learn: "Что узнает незнакомец", hide: "Как скрыть",
+      doneT: "Ты нашёл(ла) все 7!",
+      done: "Теперь ты видишь кадр глазами чужого человека. Так же можно проверять свои фото перед публикацией.",
+      bridge: "Если что-то похожее уже есть в сети и тебе тревожно — можно рассказать взрослому, которому доверяешь. Ты ничего не испортил(а).",
+      check: "Проверить свой пост", replay: "Сыграть ещё раз",
+      spots: {
+        logo: { name: "Эмблема школы на форме", learn: "В какой школе ты учишься — значит, где тебя можно встретить каждый день.", hide: "Повесь форму в шкаф или обрежь кадр." },
+        house: { name: "Номер дома за окном", learn: "Твой адрес или улицу, где ты живёшь.", hide: "Снимай не у окна или размой номер." },
+        landmark: { name: "Башня за окном", learn: "Район города: по виду из окна легко найти дом.", hide: "Задёрни штору или выбери другой ракурс." },
+        pass: { name: "Билет на столе", learn: "Имя, фамилию, дату и куда ты едешь. Код на билете хранит ещё больше.", hide: "Убери документы и билеты со стола перед съёмкой." },
+        qr: { name: "QR-код", learn: "QR-код считывается прямо с фото — это может быть вход в аккаунт или билет.", hide: "Никогда не показывай QR-коды и штрихкоды." },
+        note: { name: "Стикер с телефоном", learn: "Твой номер телефона — по нему могут писать и звонить.", hide: "Сними стикер или закрой его." },
+        geotag: { name: "Геометка", learn: "Точное место, где сделано фото.", hide: "Выключи геометку в камере и в приложении." }
+      }
+    },
+    breath: {
+      title: "Шарик-дыхание",
+      lead: "Зажми кнопку и вдыхай, пока шарик растёт. Отпусти — и медленно выдыхай.",
+      hold: "Зажми и вдыхай", round: "Вдох", of: "из",
+      inhale: "Вдыхай…", release: "Отпусти и выдыхай", exhale: "Выдыхай…",
+      done: "Ты молодец. Теперь по шагам.",
+      bridge: "Если тревожно — можно рассказать взрослому, которому доверяешь. Это не стыдно.",
+      again: "Ещё раз", toggle: "Сначала подышать (1 мин)"
+    },
+    footer: "<b>Пример темы</b> для кейса 08 «Свободная тема»: проверка поста перед публикацией. Номера помощи взяты из открытых источников. Приложение не собирает данные и ничего не отправляет.",
+    types: {
+      photo: { name: "Фото или селфи", qs: [
+        { q: "Видно твою школу?", hint: "Форма, эмблема, название школы на стене.", fix: "Обрежь фото или размой эмблему.", w: 1 },
+        { q: "Видно номер дома, улицу или вид из окна?", hint: "По одной вывеске или знакомому зданию можно найти место.", fix: "Обрежь кадр или снимай на нейтральном фоне.", w: 1 },
+        { q: "В кадре есть документ, билет, банковская карта или QR-код?", hint: "Даже в углу фото.", fix: "Убери это из кадра. QR-код и штрихкод можно считать прямо с фотографии.", w: 2 },
+        { q: "Включена геометка или место написано в подписи?", hint: "Например: «Я в парке …».", fix: "Выключи геометку. Место лучше отметить позже, когда уйдёшь оттуда.", w: 2 },
+        { q: "На фото есть люди, которые не разрешали себя выкладывать?", hint: "Друзья, брат или сестра, одноклассники.", fix: "Сначала спроси их. Если против — закрой лица или не выкладывай.", w: 1 }
+      ]},
+      video: { name: "Видео или сторис", qs: [
+        { q: "Это прямой эфир или ты всё ещё в этом месте?", hint: "Незнакомец узнает, где ты прямо сейчас.", fix: "Выложи видео позже, когда уйдёшь оттуда.", w: 2 },
+        { q: "В видео слышно имя, адрес или название школы?", hint: "Кто-то зовёт тебя по имени или называет адрес.", fix: "Вырежи этот кусок или выключи звук.", w: 1 },
+        { q: "Видно дом, двор или вашу улицу?", hint: "Ворота, машина с номером, вид из окна.", fix: "Снимай у обычной стены, без окна.", w: 1 },
+        { q: "В видео есть люди, которые не разрешали снимать?", hint: "Даже если они на заднем плане.", fix: "Спроси их или убери из кадра.", w: 1 },
+        { q: "Сторис видят все, а не только близкие друзья?", hint: "Открытый профиль — смотреть может любой.", fix: "Используй список «Близкие друзья».", w: 1 }
+      ]},
+      text: { name: "Текст или комментарий", qs: [
+        { q: "Ты написал(а) фамилию, школу или класс?", hint: "Или это можно понять из текста.", fix: "Удали это. Друзья и так знают, а чужим знать не нужно.", w: 1 },
+        { q: "Ты указал(а) номер телефона или ник в другой сети?", hint: "Например: «пишите мне в телеграм».", fix: "Никогда не публикуй номер открыто. Давай его только тем, кого знаешь в жизни.", w: 2 },
+        { q: "Ты написал(а), где и когда будешь?", hint: "Например: «завтра в 5 в парке».", fix: "Планы обсуждай только в закрытом чате с друзьями.", w: 2 },
+        { q: "Ты сейчас злишься или обижен(а)?", hint: "Написанное в гневе остаётся надолго.", fix: "Подожди 10 минут и перечитай текст.", w: 1 },
+        { q: "Ты пишешь о другом человеке то, что он не хотел бы рассказывать?", hint: "Секрет, фото, смешной случай с ним.", fix: "Не публикуй. Если есть что сказать — напиши ему лично.", w: 1 }
+      ]},
+      profile: { name: "Новый профиль", qs: [
+        { q: "Твой профиль открыт для всех?", hint: "Любой видит твои фото и друзей.", fix: "Включи в настройках «Закрытый аккаунт».", w: 1 },
+        { q: "В описании указан город, школа или класс?", hint: "Например: «Душанбе, школа №…, 7 «Б»».", fix: "Удали это. Друзьям хватит имени и фото.", w: 1 },
+        { q: "Видна полная дата рождения?", hint: "День, месяц и год.", fix: "Скрой дату или оставь только день и месяц.", w: 1 },
+        { q: "В профиле виден твой номер телефона?", hint: "Или тебя можно найти по номеру.", fix: "Убери номер из профиля и выключи «поиск по номеру».", w: 2 },
+        { q: "Ты принимаешь заявки от незнакомых людей?", hint: "«Друг друга» тоже может оказаться чужим.", fix: "Принимай только тех, кого знаешь в реальной жизни.", w: 1 }
+      ]}
+    }
+  }
+};
+
+const icons = {
+  photo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>',
+  video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>',
+  text: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>',
+  profile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="9" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  game: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="16" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg>',
+  ball: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>',
+  lock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  help: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>'
+};
+
+/* ===== Логика ===== */
+const state = { lang: "tj", screen: "start", type: null, i: 0, answers: [] };
+try { const l = localStorage.getItem("stopkadr-lang"); if (l && content[l]) state.lang = l; } catch (e) {}
+
+const app = document.getElementById("app");
+const sheet = document.getElementById("sheet");
+const T = () => content[state.lang];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+/* разметка строится только из статичного объекта content, пользовательский ввод не используется */
+const put = (el, html) => el.replaceChildren(document.createRange().createContextualFragment(html));
+const vf = (hud, body) => `<section class="vf screen"><i class="c1"></i><i class="c2"></i>${hud}${body}</section>`;
+
+function renderStart() {
+  const t = T();
+  const cards = Object.keys(t.types).map(k =>
+    `<button type="button" class="type" data-type="${k}">${icons[k]}<b>${esc(t.types[k].name)}</b></button>`).join("");
+  put(app, vf(
+    `<div class="hud"><span class="r"><i></i>REC</span><span>1 / 3</span></div>`,
+    `<h1>${esc(t.start.title)}</h1><p class="lead">${esc(t.start.lead)}</p>
+     <div class="types">${cards}
+       <button type="button" class="type wide" data-games>${icons.game}<span><b>${esc(t.games.card)}</b><small>${esc(t.games.cardSub)}</small></span></button>
+     </div>
+     <p class="privacy">${icons.lock}<span>${esc(t.start.privacy)}</span></p>`));
+}
+
+function renderQuestion() {
+  const t = T(), qs = t.types[state.type].qs, q = qs[state.i];
+  const frames = qs.map((_, n) => `<span class="${n < state.i ? "on" : n === state.i ? "now" : ""}"></span>`).join("");
+  put(app, vf(
+    `<div class="hud"><span>${esc(t.types[state.type].name)}</span><span>2 / 3</span></div>`,
+    `<div class="frames" role="img" aria-label="${state.i + 1} ${esc(t.q.of)} ${qs.length}">${frames}</div>
+     <div class="q">
+       <h2>${esc(q.q)}</h2><p class="hint">${esc(q.hint)}</p>
+       <div class="yn">
+         <button type="button" class="yes" data-ans="1">${esc(t.q.yes)}</button>
+         <button type="button" data-ans="0">${esc(t.q.no)}</button>
+       </div>
+     </div>
+     <div class="row"><button type="button" class="ghost" data-back>← ${esc(t.q.back)}</button>
+       <span class="hud">${state.i + 1} ${esc(t.q.of)} ${qs.length}</span></div>`));
+}
+
+function verdict() {
+  const qs = T().types[state.type].qs;
+  let score = 0, high = false;
+  state.answers.forEach((a, n) => { if (a) { score += qs[n].w; if (qs[n].w > 1) high = true; } });
+  const level = score === 0 ? "green" : (high || score >= 3) ? "red" : "amber";
+  return { score, level };
+}
+
+function renderResult() {
+  const t = T(), qs = t.types[state.type].qs, { score, level } = verdict(), v = t.result.verdicts[level];
+  const col = { green: "var(--go)", amber: "var(--wait)", red: "var(--rec)" }[level];
+  const total = 7, n = Math.max(1, Math.min(total, score)); // шкала из 7 делений
+  const bars = Array.from({ length: total }, () => `<span style="--lvl:${col}"></span>`).join("");
+  const fixes = qs.map((q, k) => state.answers[k]
+    ? `<li class="${q.w > 1 ? "" : "mid"}"><small>${esc(q.w > 1 ? t.result.high : t.result.mid)}</small>${esc(q.fix)}</li>` : "").join("");
+  put(app, vf(
+    `<div class="hud"><span>${esc(t.types[state.type].name)}</span><span>3 / 3</span></div>`,
+    `<div class="meter"><div class="lbl"><span>${esc(t.result.meter)}</span><span>${score === 0 ? esc(t.result.low) : score >= 4 ? esc(t.result.much) : ""}</span></div>
+       <div class="bars" role="img" aria-label="${score} / ${total}">${bars}</div></div>
+     <span class="stamp v-${level}">${esc(v.stamp)}</span>
+     <h2>${esc(v.title)}</h2><p class="lead">${esc(v.text)}</p>
+     ${fixes ? `<ul class="fixes" aria-label="${esc(t.result.fixTitle)}">${fixes}</ul>` : ""}
+     <div class="habit"><b>${esc(t.result.habitT)}</b>${esc(t.result.habit)}</div>
+     <button type="button" class="btn" data-restart>${esc(t.result.again)}</button>
+     <button type="button" class="btn alt" data-redo>${esc(t.result.redo)}</button>`));
+  // шкала заполняется по одному делению (только transform)
+  const spans = app.querySelectorAll(".bars span");
+  requestAnimationFrame(() => requestAnimationFrame(() => spans.forEach((s, k) => {
+    if (k < n) { s.style.transitionDelay = (k * 40) + "ms"; s.classList.add("f"); }
+  })));
+}
+
+/* ===== Мини-игры ===== */
+function renderGames() {
+  const g = T().games;
+  put(app, vf(
+    `<div class="hud"><span class="r"><i></i>${esc(g.title)}</span></div>`,
+    `<h2>${esc(g.title)}</h2><p class="lead">${esc(g.lead)}</p>
+     <button type="button" class="type wide light" data-go="find">${icons.photo}<span><b>${esc(g.find)}</b><small>${esc(g.findSub)}</small></span></button>
+     <button type="button" class="type wide light" data-go="breath">${icons.ball}<span><b>${esc(g.breath)}</b><small>${esc(g.breathSub)}</small></span></button>
+     <div class="row"><button type="button" class="ghost" data-home>← ${esc(g.back)}</button></div>`));
+}
+
+/* Игра 1: «Найди лишнее на фото». Координаты в системе viewBox 320×240 */
+const SPOTS = { geotag: [266, 19], note: [200, 52], house: [48, 78], landmark: [110, 62], pass: [60, 141], qr: [134, 134], logo: [268, 149] };
+const find = { found: [], last: null, hint: null };
+const SCENE = `<svg viewBox="0 0 320 240" aria-hidden="true" font-family="sans-serif">
+  <rect width="320" height="240" fill="#DDE3F5"/><rect y="186" width="320" height="54" fill="#C3C9E8"/>
+  <rect x="18" y="22" width="134" height="104" rx="4" fill="#BFD3FF"/>
+  <rect x="26" y="60" width="46" height="66" fill="#8C93C4"/><rect x="31" y="98" width="10" height="12" fill="#BFD3FF"/><rect x="55" y="98" width="10" height="12" fill="#BFD3FF"/>
+  <rect x="37" y="71" width="22" height="14" rx="2" fill="#fff" stroke="#1B1A3A" stroke-width="1.5"/><text x="48" y="82" font-size="11" font-weight="700" text-anchor="middle" fill="#1B1A3A">14</text>
+  <path d="M105 126 L110 46 L115 126 Z" fill="#4A4970"/><circle cx="110" cy="60" r="7" fill="#4A4970"/><path d="M110 30v24" stroke="#4A4970" stroke-width="2"/>
+  <rect x="122" y="96" width="24" height="30" fill="#A3ACD9"/>
+  <rect x="18" y="22" width="134" height="104" rx="4" fill="none" stroke="#1B1A3A" stroke-width="4"/><path d="M85 22v104" stroke="#1B1A3A" stroke-width="3"/>
+  <rect x="152" y="16" width="12" height="118" rx="3" fill="#9FB0F5"/>
+  <g transform="rotate(6 200 52)"><rect x="178" y="30" width="44" height="44" fill="#FFD84D"/><path d="M184 42h32M184 50h26M184 58h30" stroke="#1B1A3A" stroke-width="2.5"/></g>
+  <rect x="226" y="8" width="88" height="22" rx="11" fill="#fff" stroke="#1B1A3A" stroke-width="1.5"/><path d="M240 12a5 5 0 0 1 5 5c0 4-5 9-5 9s-5-5-5-9a5 5 0 0 1 5-5z" fill="#E8401F"/><rect x="252" y="16" width="52" height="6" rx="3" fill="#C9CDE6"/>
+  <rect x="8" y="152" width="196" height="10" fill="#1B1A3A"/><rect x="16" y="162" width="8" height="40" fill="#1B1A3A"/><rect x="188" y="162" width="8" height="40" fill="#1B1A3A"/>
+  <g transform="rotate(-4 60 141)"><rect x="30" y="131" width="62" height="20" rx="2" fill="#fff" stroke="#1B1A3A" stroke-width="1.5"/><rect x="30" y="131" width="14" height="20" fill="#9FB0F5"/><path d="M50 137h34M50 144h24" stroke="#1B1A3A" stroke-width="2"/></g>
+  <rect x="120" y="120" width="28" height="28" fill="#fff" stroke="#1B1A3A" stroke-width="1.5"/><rect x="123" y="123" width="8" height="8" fill="#1B1A3A"/><rect x="137" y="123" width="8" height="8" fill="#1B1A3A"/><rect x="123" y="137" width="8" height="8" fill="#1B1A3A"/><rect x="134" y="134" width="3" height="3" fill="#1B1A3A"/><rect x="139" y="139" width="6" height="6" fill="#1B1A3A"/><rect x="133" y="141" width="3" height="4" fill="#1B1A3A"/>
+  <rect x="166" y="134" width="16" height="18" rx="3" fill="#E8401F"/><path d="M182 138q7 0 7 6t-7 5" fill="none" stroke="#E8401F" stroke-width="3"/>
+  <rect x="226" y="100" width="56" height="80" rx="6" fill="#4A4970"/><rect x="220" y="176" width="68" height="10" fill="#1B1A3A"/><rect x="226" y="186" width="6" height="40" fill="#1B1A3A"/><rect x="276" y="186" width="6" height="40" fill="#1B1A3A"/>
+  <path d="M222 108h64l6 66h-76z" fill="#2E3A8C"/><path d="M254 108l-10 28 10-6 10 6z" fill="#fff"/>
+  <path d="M262 141h12v8q0 7-6 10q-6-3-6-10z" fill="#FFD84D" stroke="#1B1A3A" stroke-width="1.2"/>
+</svg>`;
+
+function findInfoHTML() {
+  const f = T().find, ids = Object.keys(SPOTS);
+  let html = "";
+  if (find.last) {
+    const s = f.spots[find.last];
+    html += `<div class="info"><h3>${esc(s.name)}</h3><small>${esc(f.learn)}</small>${esc(s.learn)}<small>${esc(f.hide)}</small>${esc(s.hide)}</div>`;
+  }
+  if (find.found.length === ids.length) {
+    html += `<div class="info done"><h3>${esc(f.doneT)}</h3>${esc(f.done)}</div>
+      <p class="bridge">${esc(f.bridge)}</p>
+      <button type="button" class="btn" data-home>${esc(f.check)}</button>
+      <button type="button" class="btn alt" data-freplay>${esc(f.replay)}</button>`;
+  }
+  return html;
+}
+function findCountHTML() {
+  const f = T().find, total = Object.keys(SPOTS).length, all = find.found.length === total;
+  return `<span class="hud">${esc(f.found)}: ${find.found.length} ${esc(f.of)} ${total}</span>` +
+    (all ? "" : `<button type="button" class="ghost" data-fhint>${esc(f.hint)}</button>`);
+}
+function renderFind() {
+  const t = T(), f = t.find;
+  const spots = Object.entries(SPOTS).map(([id, [x, y]]) =>
+    `<button type="button" class="spot" data-spot="${id}" aria-label="${esc(f.spots[id].name)}" style="left:${(x / 320 * 100).toFixed(2)}%;top:${(y / 240 * 100).toFixed(2)}%"></button>`).join("");
+  put(app, vf(
+    `<div class="hud"><span class="r"><i></i>${esc(t.games.title)}</span></div>`,
+    `<h2>${esc(f.title)}</h2><p class="lead">${esc(f.lead)}</p>
+     <div class="scene">${SCENE}${spots}</div>
+     <div class="fcount" data-fcount></div>
+     <div data-finfo></div>
+     <div class="row"><button type="button" class="ghost" data-games>← ${esc(t.games.toGames)}</button></div>`));
+  updateFind();
+}
+function updateFind() {
+  app.querySelectorAll(".spot").forEach(b => {
+    b.classList.toggle("found", find.found.includes(b.dataset.spot));
+    b.classList.toggle("hint", find.hint === b.dataset.spot);
+  });
+  const c = app.querySelector("[data-fcount]"), i = app.querySelector("[data-finfo]");
+  if (c) put(c, findCountHTML());
+  if (i) put(i, findInfoHTML());
+}
+
+/* Игра 2: «Шарик-дыхание» — 3 раунда, проиграть нельзя */
+const breath = { round: 0, phase: "idle", count: 0, t0: 0, iv: null, to: null };
+function bReset() { clearInterval(breath.iv); clearTimeout(breath.to); Object.assign(breath, { round: 0, phase: "idle", count: 0, iv: null, to: null }); }
+function bLabel() {
+  const b = T().breath;
+  if (breath.phase === "in") return breath.count >= 4 ? b.release : b.inhale;
+  if (breath.phase === "out") return b.exhale;
+  return `${b.round} ${Math.min(breath.round + 1, 3)} ${b.of} 3`;
+}
+function breathInner(ctx) {
+  const b = T().breath, g = T().games;
+  if (breath.phase === "done") {
+    return `<div class="breath"><div class="bdots">${"<i class=\"on\"></i>".repeat(3)}</div><p class="bdone">${esc(b.done)}</p></div>` +
+      (ctx === "screen" ? `<p class="bridge">${esc(b.bridge)}</p><button type="button" class="btn" data-games>${esc(g.toGames)}</button>` : "") +
+      `<button type="button" class="btn alt" data-bagain>${esc(b.again)}</button>`;
+  }
+  const dots = [0, 1, 2].map(n => `<i class="${n < breath.round ? "on" : ""}"></i>`).join("");
+  return `<div class="breath"><p class="blabel" data-bl aria-live="polite">${esc(bLabel())}</p>
+    <div class="ballwrap"><div class="ball${breath.phase === "in" ? " in" : ""}" data-ball></div><span class="bnum" data-bnum>${breath.phase === "in" ? Math.min(breath.count, 4) : ""}</span></div>
+    <div class="bdots" data-bdots>${dots}</div>
+    <button type="button" class="hold${breath.phase === "in" ? " on" : ""}" data-hold>${esc(b.hold)}</button></div>`;
+}
+function bSync() {
+  document.querySelectorAll("[data-broot]").forEach(r => {
+    if (breath.phase === "done" || !r.querySelector("[data-ball]")) { put(r, breathInner(r.dataset.broot)); return; }
+    r.querySelector("[data-bl]").textContent = bLabel();
+    r.querySelector("[data-ball]").classList.toggle("in", breath.phase === "in");
+    r.querySelector("[data-hold]").classList.toggle("on", breath.phase === "in");
+    r.querySelector("[data-bnum]").textContent = breath.phase === "in" ? Math.min(breath.count, 4) : "";
+    r.querySelectorAll("[data-bdots] i").forEach((d, n) => d.classList.toggle("on", n < breath.round));
+  });
+}
+function bStart() {
+  if (breath.phase === "done" || breath.phase === "in") return;
+  clearTimeout(breath.to);
+  Object.assign(breath, { phase: "in", count: 1, t0: Date.now() });
+  breath.iv = setInterval(() => { breath.count++; bSync(); }, 1000);
+  bSync();
+}
+function bEnd() {
+  if (breath.phase !== "in") return;
+  clearInterval(breath.iv);
+  const full = Date.now() - breath.t0 >= 2500; // короткое нажатие просто не засчитывается — без «ошибки»
+  if (full) breath.round++;
+  breath.phase = "out"; bSync();
+  breath.to = setTimeout(() => {
+    breath.phase = breath.round >= 3 ? "done" : "idle"; bSync();
+    if (breath.phase === "done" && sheet.classList.contains("open")) {
+      const st = document.querySelector("#helpInner .steps"); if (st) st.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+  }, full ? 4000 : 1200);
+}
+function renderBreathScreen() {
+  const t = T();
+  put(app, vf(
+    `<div class="hud"><span class="r"><i></i>${esc(t.games.title)}</span></div>`,
+    `<h2>${esc(t.breath.title)}</h2><p class="lead">${esc(t.breath.lead)}</p>
+     <div data-broot="screen">${breathInner("screen")}</div>
+     <div class="row"><button type="button" class="ghost" data-games>← ${esc(t.games.toGames)}</button></div>`));
+}
+let sheetBreath = false;
+
+function renderHelp() {
+  const s = T().sheet, b = T().breath;
+  put(document.getElementById("helpInner"),
+    `<h2 id="helpTitle">${esc(s.title)}</h2>
+     <div class="breathbox">${sheetBreath
+        ? `<p class="lead" style="margin:0 0 4px">${esc(b.lead)}</p><div data-broot="sheet">${breathInner("sheet")}</div>`
+        : `<button type="button" class="type wide light" style="margin:0" data-btoggle>${icons.ball}<span><b>${esc(b.title)}</b><small>${esc(b.toggle)}</small></span></button>`}</div>
+     <p class="lead">${esc(s.lead)}</p>
+     <ol class="steps">${s.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+     ${s.contacts.map(c => `<div class="contact"><span>${esc(c[0])}</span><a href="tel:${esc(c[2])}" aria-label="${esc(s.call)} ${esc(c[1])}: ${esc(c[0])}">${esc(c[1])}</a></div>`).join("")}
+     <p class="note">${esc(s.checked)}</p>
+     <p class="note">${esc(s.note)}</p>
+     <button type="button" class="btn" data-close>${esc(s.close)}</button>`);
+}
+
+function render() {
+  const t = T();
+  document.documentElement.lang = state.lang === "tj" ? "tg" : "ru";
+  document.title = t.brand;
+  document.getElementById("brand").textContent = t.brand;
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
+  put(document.getElementById("helpBtn"), icons.help + `<span>${esc(t.help)}</span>`);
+  put(document.getElementById("foot"), t.footer);
+  if (state.screen === "start") renderStart();
+  else if (state.screen === "q") renderQuestion();
+  else if (state.screen === "games") renderGames();
+  else if (state.screen === "find") renderFind();
+  else if (state.screen === "breath") renderBreathScreen();
+  else renderResult();
+  if (sheet.classList.contains("open")) renderHelp();
+}
+
+let lastFocus = null;
+function openHelp() { lastFocus = document.activeElement; bReset(); sheetBreath = false; if (state.screen === "breath") renderBreathScreen(); renderHelp(); sheet.classList.add("open"); sheet.querySelector(".btn").focus(); }
+function closeHelp() { sheet.classList.remove("open"); bReset(); if (state.screen === "breath") renderBreathScreen(); if (lastFocus && lastFocus.isConnected) lastFocus.focus(); }
+
+document.addEventListener("click", e => {
+  const el = e.target.closest("button,a,[data-close]");
+  if (!el) return;
+  if (el.dataset.lang) {
+    state.lang = el.dataset.lang;
+    try { localStorage.setItem("stopkadr-lang", state.lang); } catch (err) {}
+    render(); return;
+  }
+  if (el.id === "helpBtn") return openHelp();
+  if (el.hasAttribute("data-close")) return closeHelp();
+  if (el.tagName === "A") return; // tel:-ссылки работают как обычно
+  if (el.dataset.spot) {
+    if (!find.found.includes(el.dataset.spot)) find.found.push(el.dataset.spot);
+    find.last = el.dataset.spot; find.hint = null; updateFind(); return;
+  }
+  if (el.hasAttribute("data-fhint")) { find.hint = Object.keys(SPOTS).find(id => !find.found.includes(id)) || null; updateFind(); return; }
+  if (el.hasAttribute("data-bagain")) { bReset(); bSync(); return; }
+  if (el.hasAttribute("data-btoggle")) { sheetBreath = true; renderHelp(); const h = sheet.querySelector("[data-hold]"); if (h) h.focus(); return; }
+  if (el.hasAttribute("data-hold")) return;
+  if (el.hasAttribute("data-games")) { bReset(); state.screen = "games"; }
+  else if (el.dataset.go === "find") { Object.assign(find, { found: [], last: null, hint: null }); state.screen = "find"; }
+  else if (el.dataset.go === "breath") { bReset(); state.screen = "breath"; }
+  else if (el.hasAttribute("data-freplay")) { Object.assign(find, { found: [], last: null, hint: null }); }
+  else if (el.hasAttribute("data-home")) { state.screen = "start"; state.type = null; }
+  else if (el.dataset.type) { state.type = el.dataset.type; state.i = 0; state.answers = []; state.screen = "q"; }
+  else if (el.dataset.ans) {
+    state.answers[state.i] = el.dataset.ans === "1";
+    if (state.i < T().types[state.type].qs.length - 1) state.i++; else state.screen = "result";
+  }
+  else if (el.hasAttribute("data-back")) { if (state.i > 0) state.i--; else state.screen = "start"; }
+  else if (el.hasAttribute("data-restart")) { state.screen = "start"; state.type = null; }
+  else if (el.hasAttribute("data-redo")) { state.i = 0; state.answers = []; state.screen = "q"; }
+  else return;
+  render();
+  window.scrollTo(0, 0);
+  const f = app.querySelector("h1,h2"); if (f) { f.tabIndex = -1; f.focus({ preventScroll: true }); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && sheet.classList.contains("open")) closeHelp();
+  if ((e.key === " " || e.key === "Enter") && e.target.closest && e.target.closest("[data-hold]")) { e.preventDefault(); if (!e.repeat) bStart(); }
+});
+document.addEventListener("keyup", e => { if ((e.key === " " || e.key === "Enter") && e.target.closest && e.target.closest("[data-hold]")) bEnd(); });
+/* удержание кнопки «шарика»: pointer-события работают и для пальца, и для мыши */
+document.addEventListener("pointerdown", e => {
+  const h = e.target.closest("[data-hold]"); if (!h) return;
+  e.preventDefault(); try { h.setPointerCapture(e.pointerId); } catch (err) {}
+  bStart();
+});
+["pointerup", "pointercancel"].forEach(ev => document.addEventListener(ev, bEnd));
+document.addEventListener("contextmenu", e => { if (e.target.closest("[data-hold]")) e.preventDefault(); });
+
+render();
+</script>
+</body>
+</html>

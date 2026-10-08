@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#E6EFEC">
+<title>Куда обратиться</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6EFEC;          /* туман над водой */
+  --surface:#FFFFFF;
+  --ink:#17322F;         /* глубокая хвоя */
+  --muted:#4A625E;
+  --pine:#2E6F67;        /* основной спокойный акцент */
+  --pine-soft:#D3E6E0;
+  --sun:#F0C26A;         /* тёплая точка «ты здесь» */
+  --urgent:#A9432E;      /* срочно: тёплый кирпич, не алый */
+  --line:#BFD4CE;
+  --r:18px;
+  --font:"Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--font);min-height:100vh;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+button,a{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+button{background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--pine);outline-offset:3px;border-radius:12px}
+
+/* шапка */
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 10px;display:flex;align-items:center;gap:10px}
+.home{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:48px;flex:1;min-width:0}
+.mark{width:36px;height:36px;border-radius:50%;background:var(--pine);display:grid;place-items:center;flex:none}
+.mark svg{width:20px;height:20px}
+.brand{font-weight:700;font-size:16px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lang{min-height:48px;min-width:64px;padding:0 14px;border-radius:24px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:15px}
+
+/* маршрут из трёх остановок — те самые 3 нажатия */
+.route{display:flex;align-items:flex-start;padding:2px 16px 14px;max-width:560px;margin:0 auto}
+.route[hidden]{display:none}
+.stop{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;font-size:12.5px;line-height:1.25;color:var(--muted);font-weight:500}
+.stop::before{content:"";position:absolute;top:8px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
+.stop:first-child::before{display:none}
+.stop.done::before,.stop.here::before{background:var(--pine)}
+.dot{width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px solid var(--line);position:relative;z-index:1;margin-bottom:6px}
+.stop.done .dot{background:var(--pine);border-color:var(--pine)}
+.stop.here .dot{background:var(--sun);border-color:var(--pine);box-shadow:0 0 0 4px rgba(46,111,103,.15)}
+.stop.here{color:var(--ink);font-weight:700}
+
+/* экраны */
+main{padding:0 16px;max-width:560px;margin:0 auto}
+.screen{animation:fade .28s ease-out both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.01em;margin:4px 0 8px}
+.lead{color:var(--muted);font-size:17px;margin-bottom:18px}
+h2{font-size:19px;font-weight:700;margin:26px 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h2 .tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--pine);background:var(--pine-soft);padding:3px 9px;border-radius:20px}
+
+/* карточки ситуаций */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--surface);border-radius:var(--r);padding:16px 14px;min-height:132px;text-align:left;display:flex;flex-direction:column;gap:10px;text-decoration:none;transition:transform .15s ease-out}
+.card:active{transform:scale(.97)}
+.card .ic{width:44px;height:44px;border-radius:14px;background:var(--pine-soft);display:grid;place-items:center;color:var(--pine)}
+.card .ic svg{width:26px;height:26px}
+.card b{font-size:16.5px;line-height:1.25;font-weight:700}
+.card small{font-size:13.5px;line-height:1.35;color:var(--muted)}
+.adult-link{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding:16px;min-height:56px;border-radius:var(--r);border:1.5px dashed var(--pine);text-decoration:none;font-weight:600;color:var(--pine)}
+.adult-link svg{flex:none}
+.calm{margin-top:18px;font-size:15px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+.calm svg{flex:none;width:20px;height:20px;color:var(--pine);margin-top:2px}
+
+/* ситуация */
+.back{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 4px;font-weight:600;color:var(--pine);text-decoration:none}
+.hello{background:var(--pine);color:#fff;border-radius:var(--r);padding:16px 18px;font-size:17px;font-weight:500;line-height:1.45}
+.steps{list-style:none;display:flex;flex-direction:column;gap:10px}
+.steps li{background:var(--surface);border-radius:var(--r);padding:14px 16px;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.steps .n{width:34px;height:34px;border-radius:50%;background:var(--pine-soft);color:var(--pine);font-weight:800;display:grid;place-items:center;font-size:16px}
+.steps b{display:block;font-size:17px;line-height:1.3}
+.steps span{display:block;font-size:15px;color:var(--muted);margin-top:3px;line-height:1.4}
+.next{background:var(--surface);border-radius:var(--r);padding:6px 18px;border-left:4px solid var(--sun)}
+.next p{padding:10px 0;border-bottom:1px solid var(--pine-soft);font-size:16px}
+.next p:last-child{border-bottom:0}
+.go{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;margin-top:22px;border-radius:28px;background:var(--pine);color:#fff;font-weight:700;font-size:17px;text-decoration:none;transition:transform .15s ease-out}
+.go:active{transform:scale(.98)}
+.go svg{width:20px;height:20px}
+
+/* контакты */
+.contact{background:var(--surface);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.contact h3{font-size:17.5px;line-height:1.3;font-weight:700}
+.contact .who{font-size:15px;color:var(--muted);margin:4px 0 10px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;margin-bottom:12px}
+.meta span{background:var(--bg);border-radius:10px;padding:5px 10px}
+.call{display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;border-radius:26px;background:var(--pine);color:#fff;font-weight:700;text-decoration:none;transition:transform .15s ease-out}
+.call:active{transform:scale(.98)}
+.call svg{width:20px;height:20px}
+.calls{display:flex;flex-direction:column;gap:8px}
+.how{font-size:15px;background:var(--pine-soft);border-radius:12px;padding:12px 14px}
+.note{font-size:13.5px;color:var(--muted);margin-top:8px}
+
+/* срочно */
+.u-head{background:var(--surface);border-radius:var(--r);padding:18px;border-top:5px solid var(--urgent);margin-bottom:16px}
+.u-head h1{margin-top:0}
+.breath{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.breath div{display:flex;gap:10px;align-items:flex-start;font-size:16px}
+.breath i{font-style:normal;flex:none;width:26px;height:26px;border-radius:50%;background:var(--pine-soft);color:var(--pine);font-weight:800;font-size:14px;display:grid;place-items:center}
+.contact.first{border:2px solid var(--urgent)}
+.contact.first .call{background:var(--urgent)}
+
+/* взрослому */
+.say{background:var(--surface);border-radius:var(--r);padding:16px 18px 16px 46px;margin-bottom:10px;font-size:18px;font-weight:600;line-height:1.4;position:relative}
+.say::before{content:"“";position:absolute;left:14px;top:6px;font-size:44px;line-height:1;color:var(--sun);font-weight:800}
+.dont{list-style:none;background:var(--surface);border-radius:var(--r);padding:6px 18px}
+.dont li{padding:10px 0 10px 26px;border-bottom:1px solid var(--pine-soft);position:relative;font-size:16px}
+.dont li:last-child{border-bottom:0}
+.dont li::before{content:"";position:absolute;left:4px;top:21px;width:12px;height:2px;background:var(--urgent)}
+
+/* мини-игры */
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card.game{min-height:112px;background:var(--pine-soft)}
+.card.game .ic{background:var(--surface)}
+.soft{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin-top:12px;border-radius:26px;border:1.5px solid var(--pine);color:var(--pine);font-weight:700;text-decoration:none;background:var(--surface)}
+.stage{background:var(--surface);border-radius:var(--r);padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.sky{width:240px;height:240px;display:grid;place-items:center}
+.balloon{width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7e3 0,var(--sun) 38%,#E4A94A 100%);transform:scale(.42);transition:transform 4s ease-in-out;will-change:transform}
+.balloon.grow{transform:scale(1)}
+.say-line{min-height:28px;font-weight:700;font-size:19px;text-align:center}
+.holdbtn{width:100%;min-height:64px;border-radius:32px;background:var(--pine);color:#fff;font-weight:800;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .15s ease-out}
+.holdbtn.on{transform:scale(.97)}
+.pips{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--muted)}
+.pips i{width:14px;height:14px;border-radius:50%;border:2px solid var(--pine)}
+.pips i.on{background:var(--pine)}
+.done{background:var(--pine);color:#fff;border-radius:var(--r);padding:18px;animation:fade .3s ease-out both}
+.done h2{margin:0 0 6px}
+.zone{border-radius:28px;padding:12px;margin-bottom:10px;min-height:92px;border:2px dashed transparent;transition:transform .15s ease-out}
+.zone[data-zone=very]{background:#CFE6DF}
+.zone[data-zone=yes]{background:#E3EFEB}
+.zone[data-zone=notyet]{background:#F3F1EA}
+.zone[data-zone=tray]{background:transparent;border-color:var(--line)}
+.zone.target{border-color:var(--pine)}
+.zone h3{font-size:15px;font-weight:700;margin:0 4px 8px;display:flex;align-items:center;gap:8px}
+.zone h3 .ring{width:14px;height:14px;border-radius:50%;border:3px solid var(--pine)}
+.zone[data-zone=yes] .ring{border-width:2px;opacity:.7}
+.zone[data-zone=notyet] .ring{border-width:1.5px;opacity:.45}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:52px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:6px 14px 6px 8px;border-radius:26px;background:var(--surface);border:2px solid var(--line);font-weight:600;font-size:15px;touch-action:none;user-select:none;-webkit-user-select:none;text-align:left}
+.chip .em{font-size:26px;line-height:1}
+.chip.sel{border-color:var(--pine);box-shadow:0 0 0 3px rgba(46,111,103,.2)}
+.chip.dragging{position:relative;z-index:20;pointer-events:none;box-shadow:0 8px 20px rgba(23,50,47,.2)}
+.hintline{font-size:14.5px;color:var(--muted);margin:-8px 0 14px}
+.result{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.result li{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border-radius:22px;padding:6px 12px;font-weight:600}
+
+/* кнопка «Срочно» — статичная, без анимации, всегда внизу на одном месте */
+.sos{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 70%,rgba(230,239,236,0))}
+.sos a{display:flex;align-items:center;justify-content:center;gap:10px;max-width:528px;margin:0 auto;min-height:60px;border-radius:30px;background:var(--urgent);color:#fff;font-weight:800;font-size:17.5px;text-decoration:none;box-shadow:0 6px 18px rgba(169,67,46,.28)}
+.sos svg{width:22px;height:22px}
+.foot{font-size:13px;color:var(--muted);text-align:center;margin:28px 0 8px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="#/">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c3-1 4-4 7-7s4-6 7-7"/><circle cx="5" cy="19" r="1.6" fill="#fff"/><circle cx="19" cy="5" r="1.6" fill="#F0C26A" stroke="#F0C26A"/></svg></span>
+    <span class="brand" id="brand"></span>
+  </a>
+  <button class="lang" id="lang" type="button"></button>
+</header>
+<nav class="route" id="route"></nav>
+<main id="app"></main>
+<div class="sos"><a href="#/urgent" id="sos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg><span></span></a></div>
+
+<script>
+/* ===== КОНТЕНТ (отдельно от логики). Номера, часы и процедуры — только от организаторов/ЮНИСЕФ. ===== */
+const content = {
+  ui: {
+    brand: {tj:"Ба куҷо муроҷиат кунам?", ru:"Куда обратиться?"},
+    langBtn: {tj:"Рус", ru:"Тоҷ"},
+    langLabel: {tj:"Ба забони русӣ гузаштан", ru:"Перейти на таджикский"},
+    sos: {tj:"Ҳозир ба ман кӯмак лозим", ru:"Мне нужна помощь сейчас"},
+    route: {
+      tj:["Чӣ шуд?","Ҳозир чӣ кунам","Кӣ кӯмак мекунад"],
+      ru:["Что случилось","Что сделать","Кто поможет"]
+    },
+    routeLabel: {tj:"Қадамҳо", ru:"Шаги"},
+    homeTitle: {tj:"Чӣ шуд?", ru:"Что случилось?"},
+    homeLead: {tj:"Он чиро интихоб кун, ки ба ҳолати ту наздиктар аст. Ҳеҷ чиз навиштан лозим нест.", ru:"Выбери то, что ближе всего к тому, что с тобой. Ничего писать не нужно."},
+    adultLink: {tj:"Ман калонсолам — кӯдак ба ман нақл кард", ru:"Я взрослый — ребёнок рассказал мне"},
+    calm: {tj:"Ин барнома ҳеҷ чизро дар бораи ту нигоҳ намедорад ва ба ҳеҷ ҷо намефиристад.", ru:"Это приложение ничего о тебе не сохраняет и никуда не отправляет."},
+    back: {tj:"Бозгашт", ru:"Назад"},
+    doNow: {tj:"Ҳозир чӣ кунам", ru:"Что сделать сейчас"},
+    doNowTag: {tj:"3 қадам", ru:"3 шага"},
+    whatNext: {tj:"Агар муроҷиат кунӣ, чӣ мешавад", ru:"Что будет, если обратишься"},
+    toContacts: {tj:"Кӣ ба ман кӯмак мекунад", ru:"Кто мне поможет"},
+    contactsTitle: {tj:"Кӣ кӯмак мекунад", ru:"Кто поможет"},
+    contactsLead: {tj:"Касеро интихоб кун, ки ба ӯ гуфтан барои ту осонтар аст. Метавонӣ аввал ба калонсоли наздикат гӯӣ.", ru:"Выбери того, к кому тебе проще. Можно сначала сказать взрослому, которому доверяешь."},
+    call: {tj:"Занг задан", ru:"Позвонить"},
+    hours: {tj:"Вақти корӣ", ru:"Когда работает"},
+    verified: {tj:"Рақамҳо аз рӯи манбаъҳои кушода санҷида шудаанд (октябри 2026). Пеш аз намоиш боз санҷед.", ru:"Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте."},
+    foot: {tj:"Агар як бор кушода бошӣ, бе интернет ҳам кор мекунад.", ru:"Работает и без интернета, если открыть хотя бы раз."},
+    urgentTitle: {tj:"Ту танҳо нестӣ", ru:"Ты не один"},
+    urgentLead: {tj:"Хуб кардӣ, ки кӯмак ҷустӣ. Акнун оҳиста:", ru:"Ты правильно делаешь, что ищешь помощь. Теперь спокойно:"},
+    urgentSteps: {
+      tj:["Оҳиста нафас гир ва оҳиста баровар. Боз як бор.","Агар ҳозир ба ту ё ба каси дигар хатар бошад — ба хадамоти фаврӣ занг зан.","Ба калонсоли наздиктарин гӯй: «Ба ман кӯмак лозим аст»."],
+      ru:["Сделай медленный вдох и выдох. Ещё раз.","Если тебе или кому-то опасно прямо сейчас — звони в экстренную службу.","Скажи ближайшему взрослому: «Мне нужна помощь»."]
+    },
+    urgentMore: {tj:"Боз ба куҷо муроҷиат кардан мумкин аст", ru:"Ещё куда можно обратиться"},
+    adultTitle: {tj:"Кӯдак ба шумо нақл кард", ru:"Ребёнок рассказал вам"},
+    adultLead: {tj:"Ин аллакай қадами калон аст. Аз суханони аввали шумо вобаста аст, ки ӯ боз ба назди шумо меояд ё не.", ru:"Это уже большой шаг. От первых ваших слов зависит, придёт ли он к вам снова."},
+    adultSay: {tj:"Аввал чӣ гуфтан лозим", ru:"Что сказать первым"},
+    adultDont: {tj:"Чӣ гуфтан ва кардан лозим нест", ru:"Чего не говорить и не делать"},
+    adultThen: {tj:"Баъд", ru:"Потом"},
+    gamesTitle: {tj:"Каме дам гирем", ru:"Передохнуть немного"},
+    allHelpLink: {tj:"Ҳамаи ҷойҳое, ки кӯмак мекунанд", ru:"Все, кто может помочь"},
+    urgentBreath: {tj:"Аввал якҷоя нафас гирем (агар хоҳӣ)", ru:"Сначала подышать вместе (по желанию)"}
+  },
+
+  /* Мини-игры: без проигрыша, без таймеров, ничего не сохраняется */
+  games: {
+    breath: {
+      icon:"balloon",
+      title:{tj:"Пуфак-нафас", ru:"Шарик-дыхание"},
+      hint:{tj:"нафаси ором, 1 дақиқа", ru:"спокойное дыхание, 1 минута"},
+      lead:{tj:"Тугмаро пахш карда нигоҳ дор — пуфак калон мешавад, ту нафас мегирӣ. Сар деҳ — пуфак хурд мешавад, ту оҳиста нафас мебарорӣ.", ru:"Нажми и держи кнопку — шарик растёт, ты вдыхаешь. Отпусти — шарик сдувается, ты медленно выдыхаешь."},
+      hold:{tj:"Пахш карда нигоҳ дор", ru:"Нажми и держи"},
+      inhale:{tj:"Нафас гир…", ru:"Вдыхай…"},
+      exhale:{tj:"Оҳиста нафас баровар…", ru:"Медленно выдыхай…"},
+      short:{tj:"Хуб. Ин дафъа каме дарозтар нигоҳ дор.", ru:"Хорошо. В этот раз подержи чуть дольше."},
+      rounds:{tj:"Давраҳо", ru:"Круги"},
+      doneTitle:{tj:"Ту офарин. Биё идома диҳем.", ru:"Ты молодец. Давай дальше."},
+      doneText:{tj:"Ҳар вақте ки хоҳӣ, ба ин ҷо баргард. Дар бораи он чи шуд, метавонӣ нақл кунӣ — ту танҳо нестӣ.", ru:"Возвращайся сюда, когда захочешь. О том, что случилось, можно рассказать — ты не один."},
+      again:{tj:"Боз як бор", ru:"Ещё раз"},
+      next:{tj:"Чӣ шуд? — интихоб кун", ru:"Выбрать, что случилось"}
+    },
+    team: {
+      icon:"team",
+      title:{tj:"Дастаи ман", ru:"Моя команда"},
+      hint:{tj:"касоне, ки ба онҳо бовар дорӣ", ru:"те, кому ты доверяешь"},
+      lead:{tj:"Ҳар касро ба доирае гузор, ки ба ту мувофиқ аст. Ҷавоби нодуруст нест. Ҳеҷ чиз нигоҳ дошта намешавад.", ru:"Положи каждого в тот круг, который тебе подходит. Неправильных ответов нет. Ничего не сохраняется."},
+      howto:{tj:"Аломатро пахш кун, баъд доираро пахш кун. Ё онро кашида бар.", ru:"Нажми на значок, потом на круг. Или перетащи его."},
+      tray:{tj:"Ҳанӯз гузошта нашудаанд", ru:"Ещё не разложены"},
+      zones:{
+        very:{tj:"Хеле бовар дорам", ru:"Очень доверяю"},
+        yes:{tj:"Бовар дорам", ru:"Доверяю"},
+        notyet:{tj:"Ҳоло не", ru:"Пока нет"}
+      },
+      people:[
+        {id:"mom", e:"👩", name:{tj:"Модар", ru:"Мама"}},
+        {id:"dad", e:"👨", name:{tj:"Падар", ru:"Папа"}},
+        {id:"gran", e:"👵", name:{tj:"Бибӣ", ru:"Бабушка"}},
+        {id:"teacher", e:"👨‍🏫", name:{tj:"Муаллим", ru:"Учитель"}},
+        {id:"sibling", e:"🧑", name:{tj:"Бародар / хоҳари калон", ru:"Старший брат / сестра"}},
+        {id:"psych", e:"👩‍⚕️", name:{tj:"Равоншиноси мактаб", ru:"Школьный психолог"}},
+        {id:"friend", e:"🤝", name:{tj:"Дӯст", ru:"Друг"}}
+      ],
+      done:{tj:"Тайёр", ru:"Готово"},
+      resultTitle:{tj:"Инҳо касоне ҳастанд, ки ба онҳо метавонӣ нақл кунӣ", ru:"Вот кому ты можешь рассказать"},
+      resultNone:{tj:"Ҳоло ҳеҷ кас нест — ин ҳам муқаррарӣ аст. Одамоне ҳастанд, ки кори онҳо кӯмак ба кӯдакон аст.", ru:"Пока никого — и это нормально. Есть люди, чья работа — помогать детям."},
+      bridge:{tj:"Ту танҳо нестӣ. Нақл кардан мумкин аст — ҳатто каме.", ru:"Ты не один. Рассказать можно — даже совсем немного."},
+      toHelp:{tj:"Боз кӣ кӯмак мекунад", ru:"Кто ещё может помочь"},
+      redo:{tj:"Аз нав гузоштан", ru:"Разложить заново"}
+    }
+  },
+  allHelp:["trusted_adult","school","helpline","mvd_trust","victim_center","emergency"],
+
+  situations: [
+    { id:"bullying", icon:"chat",
+      title:{tj:"Маро таҳқир ва масхара мекунанд", ru:"Меня травят"},
+      hint:{tj:"паёмҳои бад, масхара дар гурӯҳ", ru:"обидные сообщения, насмешки в группе"},
+      hello:{tj:"Ту гунаҳкор нестӣ. Ҳеҷ кас ҳақ надорад, ки бо ту ҳамин тавр рафтор кунад.", ru:"Ты не виноват. Никто не имеет права так с тобой обращаться."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Он баъдтар нишон медиҳад, ки чӣ шуд.", ru:"Она потом покажет, что произошло."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Паёмҳо, номи саҳифа ва санаро нигоҳ дор.", ru:"Сохрани сообщения, имя страницы и дату."}},
+        {t:{tj:"Ҷавоб нанавис ва блок кун", ru:"Не отвечай и заблокируй"}, d:{tj:"Дар худи барнома шикоят кун. Ҷавоби ту одатан онҳоро бештар ба ҳаяҷон меорад.", ru:"Пожалуйся на них в самом приложении. Ответ обычно только раззадоривает."}}
+      ],
+      whatNext:[
+        {tj:"Туро гӯш мекунанд ва сарзаниш намекунанд. Ту худат интихоб мекунӣ, ки чӣ қадар нақл кунӣ.", ru:"Тебя выслушают и не будут ругать. Ты сам решаешь, сколько рассказать."},
+        {tj:"Калонсол кӯмак мекунад, ки дар платформа шикоят кунӣ ва роҳи таҳқиркунандагонро бандӣ.", ru:"Взрослый поможет пожаловаться на платформе и закрыть доступ обидчикам."},
+        {tj:"Агар ин аз мактаб бошад, равоншинос ё муаллим метавонанд бе ошкор кардани номи ту кӯмак кунанд.", ru:"Если это из школы, психолог или учитель могут помочь, не раскрывая твоего имени."}
+      ],
+      contacts:["trusted_adult","school","helpline"]
+    },
+    { id:"blackmail", icon:"lock",
+      title:{tj:"Аз ман чизе талаб мекунанд", ru:"От меня что-то требуют"},
+      hint:{tj:"пул, сурат, «вагарна ба ҳама нишон медиҳам»", ru:"деньги, фото, «иначе всем покажу»"},
+      hello:{tj:"Ту гунаҳкор нестӣ, ҳатто агар пештар чизе фиристода бошӣ. Аз ин ҳолат роҳи баромад ҳаст.", ru:"Ты не виноват, даже если раньше что-то отправил. Из этого есть выход."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Ҳатто агар хоҳӣ ҳамаашро пок кунӣ. Ин далел аст.", ru:"Даже если хочется всё стереть. Это доказательство."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Номи профил, паёмҳо ва он чи маҳз талаб мекунанд.", ru:"Имя профиля, сообщения и что именно требуют."}},
+        {t:{tj:"Пул напардоз ва ҷавоб нанавис", ru:"Не плати и не отвечай"}, d:{tj:"Пардохт ёрӣ намедиҳад — одатан баъд боз талаб мекунанд. Дигар ҳеҷ чиз нафирист.", ru:"Оплата не помогает — обычно потом просят ещё. Больше ничего не отправляй."}}
+      ],
+      whatNext:[
+        {tj:"Туро гӯш мекунанд ва барои он чи шуд, туро айбдор намекунанд.", ru:"Тебя выслушают и не будут винить за то, что случилось."},
+        {tj:"Калонсол ва мутахассис кӯмак мекунанд, ки далелҳоро нигоҳ дорӣ ва ба платформа шикоят кунӣ, то саҳифа ва суратҳоро нест кунанд.", ru:"Взрослый и специалист помогут сохранить доказательства и пожаловаться на платформе, чтобы страницу и фото удалили."},
+        {tj:"Агар лозим шавад, онҳо ба милиса муроҷиат мекунанд. Ту ин корро танҳо намекунӣ.", ru:"Если нужно, они обратятся в милицию. Делать это в одиночку тебе не придётся."}
+      ],
+      contacts:["mvd_trust","helpline","trusted_adult"]
+    },
+    { id:"stranger", icon:"person",
+      title:{tj:"Шахси ношинос чизҳои аҷиб менависад", ru:"Незнакомец пишет странное"},
+      hint:{tj:"сурат мепурсад, ба вохӯрӣ даъват мекунад, «ба касе нагӯ»", ru:"просит фото, зовёт встретиться, «никому не говори»"},
+      hello:{tj:"Хуб шуд, ки ту инро пай бурдӣ. Ҳисси ту дуруст аст — агар чизе аҷиб бошад, бояд истод.", ru:"Хорошо, что ты это заметил. Чутьё тебя не обманывает — если странно, стоит остановиться."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Он ба калонсолон кӯмак мекунад, ки фаҳманд ин кист.", ru:"Она поможет взрослым понять, кто это."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Профил, паёмҳо ва ҳар гуна даъват ба вохӯрӣ.", ru:"Профиль, сообщения и любые предложения встретиться."}},
+        {t:{tj:"Ҷавоб нанавис ва ба вохӯрӣ нарав", ru:"Не отвечай и не ходи на встречу"}, d:{tj:"Сурат, суроға ва номи мактабатро нафирист.", ru:"Не отправляй фото, адрес и название школы."}}
+      ],
+      whatNext:[
+        {tj:"Туро гӯш мекунанд ва барои он ки бо ӯ гап задӣ, сарзаниш намекунанд.", ru:"Тебя выслушают и не будут ругать за то, что ты с ним общался."},
+        {tj:"Калонсол кӯмак мекунад, ки ин шахсро блок кунӣ ва дар платформа шикоят кунӣ.", ru:"Взрослый поможет заблокировать этого человека и пожаловаться на платформе."},
+        {tj:"Агар ӯ вохӯрӣ ё сурат талаб карда бошад, мутахассисон медонанд, ки ба куҷо хабар диҳанд.", ru:"Если он просил встречу или фото, специалисты знают, куда об этом сообщить."}
+      ],
+      contacts:["trusted_adult","mvd_trust","helpline"]
+    },
+    { id:"photos", icon:"image",
+      title:{tj:"Суратҳои маро бе иҷозат гузоштанд", ru:"Мои фото выложили"},
+      hint:{tj:"дар гурӯҳ, канал ё саҳифаи қалбакӣ", ru:"в группе, канале или на фейковой странице"},
+      hello:{tj:"Ту гунаҳкор нестӣ. Хато аз они касест, ки суратро бе иҷозат гузошт, на аз ту.", ru:"Ты не виноват. Ошибся тот, кто выложил фото без спроса, а не ты."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Ва пайвандҳоро ба ҷое, ки сурат гузошта шудааст, нигоҳ дор.", ru:"И сохрани ссылки туда, где выложено фото."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Пост, номи саҳифа ва санаро. Худи суратро ба касе нафирист.", ru:"Пост, имя страницы и дату. Само фото никому не пересылай."}},
+        {t:{tj:"Ҷавоб нанавис ва пул напардоз", ru:"Не отвечай и не плати"}, d:{tj:"Дар худи барнома тугмаи «Шикоят»-ро пахш кун.", ru:"Нажми «Пожаловаться» в самом приложении."}}
+      ],
+      whatNext:[
+        {tj:"Туро гӯш мекунанд ва барои сурат айбдор намекунанд.", ru:"Тебя выслушают и не будут винить за фото."},
+        {tj:"Калонсол ва мутахассис кӯмак мекунанд, ки дар платформа шикоят кунед, то суратро нест кунанд.", ru:"Взрослый и специалист помогут пожаловаться на платформе, чтобы фото удалили."},
+        {tj:"Агар лозим шавад, онҳо ба милиса хабар медиҳанд.", ru:"Если нужно, они сообщат в милицию."}
+      ],
+      contacts:["mvd_trust","helpline","trusted_adult"]
+    },
+    { id:"account", icon:"key",
+      title:{tj:"Аккаунти маро гирифтанд", ru:"Украли аккаунт"},
+      hint:{tj:"ворид шуда наметавонам, аз номи ман менависанд", ru:"не могу войти, от моего имени пишут"},
+      hello:{tj:"Ин бо бисёриҳо рух медиҳад. Аккаунтро аксар вақт баргардонидан мумкин аст.", ru:"Такое случается со многими. Аккаунт часто можно вернуть."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Хусусан паёмҳоеро, ки пас аз онҳо дастрасӣ гум шуд.", ru:"Особенно сообщения, после которых пропал доступ."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Ва ба дӯстон гӯй: «Аз номи ман дигар кас менависад — ҷавоб надиҳед».", ru:"И предупреди друзей: «От моего имени пишу не я — не отвечайте»."}},
+        {t:{tj:"Пул напардоз ва рамзро нагӯ", ru:"Не плати и не сообщай коды"}, d:{tj:"Рамзи SMS ва паролро ба ҳеҷ кас нагӯ, ҳатто агар «аз хадамоти дастгирӣ» нависанд.", ru:"Никому не сообщай коды из SMS и пароль, даже если пишут «из поддержки»."}}
+      ],
+      whatNext:[
+        {tj:"Калонсол ҳамроҳи ту дар барнома «Паролро фаромӯш кардам / барқарор кардан»-ро меёбад.", ru:"Взрослый вместе с тобой найдёт в приложении «Забыли пароль / восстановить доступ»."},
+        {tj:"Шумо ба почта ва дигар аккаунтҳо пароли нав мегузоред.", ru:"Вы поставите новые пароли на почту и другие аккаунты."},
+        {tj:"Агар аз номи ту пул ё сурат талаб кунанд, мутахассисон медонанд, ки ба куҷо хабар диҳанд.", ru:"Если от твоего имени просят деньги или фото, специалисты знают, куда сообщить."}
+      ],
+      contacts:["trusted_adult","mvd_trust","helpline"]
+    },
+    { id:"other", icon:"dots",
+      title:{tj:"Чизи дигар", ru:"Другое"},
+      hint:{tj:"намедонам чӣ ном дорад, вале ба ман бад аст", ru:"не знаю, как назвать, но мне плохо"},
+      hello:{tj:"Барои кӯмак хостан номи дақиқ лозим нест. Агар ба ту бад бошад — ҳамин кифоя аст.", ru:"Чтобы попросить помощи, не нужно точное название. Если тебе плохо — этого достаточно."},
+      doNow:[
+        {t:{tj:"Мукотибаро нест накун", ru:"Не удаляй переписку"}, d:{tj:"Ҳар чизе, ки ба ин ҳолат алоқаманд аст.", ru:"Всё, что связано с этой ситуацией."}},
+        {t:{tj:"Скриншот гир", ru:"Сделай скриншоты"}, d:{tj:"Ҳатто агар боварӣ надорӣ, ки ин муҳим аст.", ru:"Даже если не уверен, важно это или нет."}},
+        {t:{tj:"Пул напардоз ва ҷавоб нанавис", ru:"Не плати и не отвечай"}, d:{tj:"То он даме, ки бо касе маслиҳат накардаӣ.", ru:"Пока не посоветуешься с кем-то."}}
+      ],
+      whatNext:[
+        {tj:"Туро гӯш мекунанд ва якҷоя мефаҳмед, ки чӣ шуд.", ru:"Тебя выслушают и вместе разберутся, что произошло."},
+        {tj:"Ту худат интихоб мекунӣ, ки чӣ қадар нақл кунӣ.", ru:"Ты сам решаешь, сколько рассказать."},
+        {tj:"Агар лозим шавад, мегӯянд, ки ба кадом мутахассис муроҷиат кунӣ.", ru:"Если нужно, тебе подскажут, к какому специалисту обратиться."}
+      ],
+      contacts:["helpline","trusted_adult","school"]
+    }
+  ],
+
+  /* Номера: открытые источники (IOM Tajikistan 01.2026, mvd.tj, посольство Нидерландов), октябрь 2026. Перед показом перепроверить. phones:null = звонить не нужно. */
+  contacts: {
+    emergency: {
+      name:{tj:"Милиса ва ёрии таъҷилӣ", ru:"Милиция и скорая помощь"},
+      who:{tj:"Агар ҳозир ба ту ё ба каси дигар хатар бошад.", ru:"Если тебе или кому-то опасно прямо сейчас."},
+      hours:{tj:"шабонарӯзӣ", ru:"круглосуточно"},
+      phones:[{num:"102", tel:"102", what:{tj:"милиса", ru:"милиция"}}, {num:"103", tel:"103", what:{tj:"ёрии таъҷилӣ", ru:"скорая"}}]
+    },
+    helpline: {
+      name:{tj:"Телефони боварии миллӣ", ru:"Национальный телефон доверия"},
+      who:{tj:"Кумитаи кор бо занон ва оила. Гӯш мекунанд ва маслиҳат медиҳанд, ки чӣ кор кунӣ.", ru:"Комитет по делам женщин и семьи. Выслушают и подскажут, что делать."},
+      phones:[{num:"1313", tel:"1313"}]
+    },
+    mvd_trust: {
+      name:{tj:"Телефони боварии ВКД", ru:"Телефон доверия МВД"},
+      who:{tj:"Агар таҳдид кунанд, пул ё сурат талаб кунанд, фиреб диҳанд ё аккаунтро гиранд. Беҳтар аст ҳамроҳи калонсол занг занӣ ва скриншотҳоро омода кунӣ.", ru:"Если угрожают, требуют деньги или фото, обманывают или взломали аккаунт. Лучше звонить вместе со взрослым и держать скриншоты под рукой."},
+      phones:[{num:"1919", tel:"1919"}, {num:"+992 37 221-21-21", tel:"+992372212121"}]
+    },
+    victim_center: {
+      name:{tj:"Маркази ҷумҳуриявии хизматрасониҳои иҷтимоӣ барои осебдидагон аз зӯроварӣ (Душанбе)", ru:"Республиканский центр соцуслуг для пострадавших от насилия (Душанбе)"},
+      who:{tj:"Ба онҳое, ки аз зӯроварӣ азият кашидаанд, кӯмак мерасонад.", ru:"Помогает тем, кто пострадал от насилия."},
+      phones:[{num:"+992 37 233-33-53", tel:"+992372333353"}, {num:"+992 48 888-07-07", tel:"+992488880707"}]
+    },
+    trusted_adult: {
+      name:{tj:"Калонсоле, ки ба ӯ бовар дорӣ", ru:"Взрослый, которому ты доверяешь"},
+      who:{tj:"Модар, падар, бародар ё хоҳари калон, хеш, мураббӣ.", ru:"Мама, папа, старшие брат или сестра, родственник, тренер."},
+      how:{tj:"Метавонӣ ҳамин тавр сар кунӣ: «Дар интернет як чиз шуд. Метавонам ба ту нишон диҳам?»", ru:"Можно начать так: «В интернете кое-что случилось. Можно я тебе покажу?»"},
+      phones:null
+    },
+    school: {
+      name:{tj:"Равоншинос ё муаллими мактаб", ru:"Школьный психолог или учитель"},
+      who:{tj:"Агар ин ба ҳамсинфон алоқаманд бошад.", ru:"Если это связано с одноклассниками."},
+      how:{tj:"Пас аз дарс наздик шав ва гӯй: «Метавонам бо шумо танҳо гап занам?»", ru:"Подойди после урока: «Можно с вами поговорить наедине?»"},
+      phones:null
+    }
+  },
+  urgentContacts:["emergency","helpline","mvd_trust","victim_center","trusted_adult"],
+
+  adult: {
+    say:{
+      tj:["Ташаккур, ки ба ман гуфтӣ.","Ту гунаҳкор нестӣ.","Мо инро якҷоя ҳал мекунем."],
+      ru:["Спасибо, что рассказал мне.","Ты ни в чём не виноват.","Мы разберёмся с этим вместе."]
+    },
+    dont:{
+      tj:["Нагӯед: «Худат гунаҳкорӣ» ё «Чаро ба он ҷо даромадӣ?»","Телефонро нагиред ва интернетро манъ накунед — дафъаи дигар кӯдак хомӯш мемонад.","Мукотибаро нест накунед ва худатон ба таҳқиркунанда нанависед."],
+      ru:["Не говорите «сам виноват» и «зачем ты туда полез».","Не отбирайте телефон и не запрещайте интернет — в следующий раз ребёнок промолчит.","Не удаляйте переписку и не пишите обидчику сами."]
+    },
+    then:{
+      tj:"Дар саҳифаи аввал ҳолатро интихоб кунед — он ҷо қадамҳо ва ба куҷо муроҷиат кардан навишта шудааст.",
+      ru:"Выберите ситуацию на главном экране — там шаги и куда обратиться."
+    }
+  }
+};
+
+/* ===== ИКОНКИ ===== */
+const ICON = {
+  chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M10 9l4 4M14 9l-4 4"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/>',
+  person:'<circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.8-3.6 3.4-5.5 6.5-5.5"/><path d="M16 14.5a2.3 2.3 0 1 1 3 2.2c-.6.2-.9.6-.9 1.2"/><path d="M18.1 21h.01"/>',
+  image:'<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8 8.5"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l1.5 1.5"/>',
+  dots:'<circle cx="7.5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="16.5" cy="12" r="1.2"/><rect x="2.5" y="5" width="19" height="14" rx="7"/>',
+  phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  balloon:'<ellipse cx="12" cy="9.5" rx="6" ry="7"/><path d="M12 16.5l-1 1.5h2zM12 18c0 2-2 2-1 4"/>',
+  team:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>'
+};
+const svg = (n, size) => `<svg viewBox="0 0 24 24" ${size?`width="${size}" height="${size}"`:''} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+
+/* ===== ЛОГИКА ===== */
+let lang = 'tj';
+try { lang = localStorage.getItem('lang') === 'ru' ? 'ru' : 'tj'; } catch(e) {}
+const T = o => (o && (o[lang] ?? o.ru)) || '';
+const U = k => T(content.ui[k]);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// Вся разметка собирается из статичного объекта content, текст экранируется через esc().
+const setHTML = (el, html) => el.replaceChildren(document.createRange().createContextualFragment(html));
+const app = document.getElementById('app');
+
+function contactCard(id, first){
+  const c = content.contacts[id];
+  let body;
+  if (c.phones) {
+    const hours = T(c.hours);
+    body = (hours ? `<div class="meta"><span>${esc(U('hours'))}: ${esc(hours)}</span></div>` : '') +
+      `<div class="calls">${c.phones.map(p => `<a class="call" href="tel:${esc(p.tel)}">${svg('phone')}<span>${esc(U('call'))} · ${esc(p.num)}${p.what ? ` (${esc(T(p.what))})` : ''}</span></a>`).join('')}</div>`;
+  } else {
+    body = `<p class="how">${esc(T(c.how))}</p>`;
+  }
+  return `<article class="contact${first?' first':''}"><h3>${esc(T(c.name))}</h3><p class="who">${esc(T(c.who))}</p>${body}</article>`;
+}
+
+function renderRoute(step){
+  const r = document.getElementById('route');
+  r.hidden = step === null;
+  if (step === null) return;
+  r.setAttribute('aria-label', U('routeLabel'));
+  setHTML(r, T(content.ui.route).map((s,i) =>
+    `<div class="stop ${i<step?'done':i===step?'here':''}" ${i===step?'aria-current="step"':''}><span class="dot"></span>${esc(s)}</div>`).join(''));
+}
+
+const backLink = href => `<a class="back" href="${href}">${svg('back',20)}${esc(U('back'))}</a>`;
+
+const views = {
+  home(){
+    renderRoute(0);
+    return `<h1>${esc(U('homeTitle'))}</h1><p class="lead">${esc(U('homeLead'))}</p>
+      <div class="grid">${content.situations.map(s =>
+        `<a class="card" href="#/s/${s.id}"><span class="ic">${svg(s.icon)}</span><b>${esc(T(s.title))}</b><small>${esc(T(s.hint))}</small></a>`).join('')}</div>
+      <h2>${esc(U('gamesTitle'))}</h2>
+      <div class="games">${['breath','team'].map(g => { const G = content.games[g];
+        return `<a class="card game" href="#/${g}"><span class="ic">${svg(G.icon)}</span><b>${esc(T(G.title))}</b><small>${esc(T(G.hint))}</small></a>`; }).join('')}</div>
+      <a class="adult-link" href="#/adult"><span>${esc(U('adultLink'))}</span>${svg('arrow',20)}</a>
+      <p class="calm">${svg('shield')}<span>${esc(U('calm'))}</span></p>`;
+  },
+  situation(s){
+    renderRoute(1);
+    return `${backLink('#/')}
+      <h1>${esc(T(s.title))}</h1>
+      <p class="hello">${esc(T(s.hello))}</p>
+      <h2>${esc(U('doNow'))} <span class="tag">${esc(U('doNowTag'))}</span></h2>
+      <ol class="steps">${s.doNow.map((d,i) => `<li><span class="n">${i+1}</span><div><b>${esc(T(d.t))}</b><span>${esc(T(d.d))}</span></div></li>`).join('')}</ol>
+      <h2>${esc(U('whatNext'))}</h2>
+      <div class="next">${s.whatNext.map(p => `<p>${esc(T(p))}</p>`).join('')}</div>
+      <a class="go" href="#/s/${s.id}/help">${esc(U('toContacts'))}${svg('arrow')}</a>`;
+  },
+  contacts(s){
+    renderRoute(2);
+    return `${backLink('#/s/'+s.id)}
+      <h1>${esc(U('contactsTitle'))}</h1><p class="lead">${esc(U('contactsLead'))}</p>
+      ${s.contacts.map(c => contactCard(c)).join('')}
+      <p class="note">${esc(U('verified'))}</p>
+      <p class="foot">${esc(U('foot'))}</p>`;
+  },
+  urgent(){
+    renderRoute(null);
+    const [first, ...rest] = content.urgentContacts;
+    return `${backLink('#/')}
+      <div class="u-head"><h1>${esc(U('urgentTitle'))}</h1><p>${esc(U('urgentLead'))}</p>
+      <div class="breath">${T(content.ui.urgentSteps).map((t,i)=>`<div><i>${i+1}</i><span>${esc(t)}</span></div>`).join('')}</div>
+      <a class="soft" href="#/breath">${svg('balloon',20)}${esc(U('urgentBreath'))}</a></div>
+      ${contactCard(first, true)}
+      <h2>${esc(U('urgentMore'))}</h2>
+      ${rest.map(c => contactCard(c)).join('')}
+      <p class="note">${esc(U('verified'))}</p>`;
+  },
+  help(){
+    renderRoute(null);
+    return `${backLink('#/')}
+      <h1>${esc(U('contactsTitle'))}</h1><p class="lead">${esc(U('contactsLead'))}</p>
+      ${content.allHelp.map(c => contactCard(c)).join('')}
+      <p class="note">${esc(U('verified'))}</p>`;
+  },
+  breath(){
+    renderRoute(null);
+    const G = content.games.breath, b = gs.breath;
+    const pips = [0,1,2].map(i => `<i class="${i < b.rounds ? 'on' : ''}"></i>`).join('');
+    const end = b.rounds >= 3 ? `<div class="done"><h2>${esc(T(G.doneTitle))}</h2><p>${esc(T(G.doneText))}</p></div>
+      <a class="go" href="#/">${esc(T(G.next))}${svg('arrow')}</a>
+      <button class="soft" type="button" data-act="breath-again">${esc(T(G.again))}</button>` : '';
+    return `${backLink('#/')}
+      <h1>${esc(T(G.title))}</h1><p class="lead">${esc(T(G.lead))}</p>
+      <div class="stage">
+        <div class="sky" aria-hidden="true"><div class="balloon" id="balloon"></div></div>
+        <p class="say-line" id="sayLine" aria-live="polite">${esc(T(b.msg ? G[b.msg] : null))}</p>
+        <div class="pips" aria-label="${esc(T(G.rounds))}: ${b.rounds}/3"><span>${esc(T(G.rounds))}</span>${pips}</div>
+        ${b.rounds < 3 ? `<button class="holdbtn" id="hold" type="button">${esc(T(G.hold))}</button>` : ''}
+      </div>
+      ${end}`;
+  },
+  team(){
+    renderRoute(null);
+    const G = content.games.team;
+    return `${backLink('#/')}
+      <h1>${esc(T(G.title))}</h1><div id="team">${teamHTML()}</div>`;
+  },
+  adult(){
+    renderRoute(null);
+    const a = content.adult;
+    return `${backLink('#/')}
+      <h1>${esc(U('adultTitle'))}</h1><p class="lead">${esc(U('adultLead'))}</p>
+      <h2>${esc(U('adultSay'))}</h2>${T(a.say).map(t=>`<p class="say">${esc(t)}</p>`).join('')}
+      <h2>${esc(U('adultDont'))}</h2><ul class="dont">${T(a.dont).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+      <h2>${esc(U('adultThen'))}</h2><p>${esc(T(a.then))}</p>
+      <a class="go" href="#/">${esc(U('homeTitle'))}${svg('arrow')}</a>`;
+  }
+};
+
+function render(){
+  const [p0, p1, p2] = location.hash.replace(/^#\/?/,'').split('/');
+  const s = p0 === 's' && content.situations.find(x => x.id === p1);
+  const html = s ? (p2 === 'help' ? views.contacts(s) : views.situation(s))
+    : p0 === 'urgent' ? views.urgent()
+    : p0 === 'adult' ? views.adult()
+    : p0 === 'help' ? views.help()
+    : p0 === 'breath' ? views.breath()
+    : p0 === 'team' ? views.team()
+    : views.home();
+
+  document.documentElement.lang = lang === 'tj' ? 'tg' : 'ru';
+  document.title = U('brand');
+  document.getElementById('brand').textContent = U('brand');
+  const lb = document.getElementById('lang');
+  lb.textContent = U('langBtn');
+  lb.setAttribute('aria-label', U('langLabel'));
+  document.querySelector('#sos span').textContent = U('sos');
+  setHTML(app, `<section class="screen">${html}</section>`);
+}
+
+/* ===== МИНИ-ИГРЫ (состояние только в памяти) ===== */
+const gs = { breath:{rounds:0, msg:null, start:0}, team:{place:{}, sel:null, done:false} };
+
+// Шарик-дыхание: держишь — растёт (вдох), отпускаешь — сдувается (выдох). 3 круга, проиграть нельзя.
+function holdStart(e){
+  const btn = e.target.closest('#hold'); if (!btn) return;
+  e.preventDefault();
+  gs.breath.start = Date.now(); gs.breath.msg = 'inhale';
+  btn.classList.add('on');
+  document.getElementById('balloon').classList.add('grow');
+  document.getElementById('sayLine').textContent = T(content.games.breath.inhale);
+}
+function holdEnd(){
+  const b = gs.breath; if (!b.start) return;
+  const held = Date.now() - b.start; b.start = 0;
+  document.getElementById('hold')?.classList.remove('on');
+  document.getElementById('balloon')?.classList.remove('grow');
+  b.msg = held >= 1500 ? 'exhale' : 'short';
+  const line = document.getElementById('sayLine');
+  if (line) line.textContent = T(content.games.breath[b.msg]);
+  if (held >= 1500) {
+    b.rounds++;
+    if (b.rounds >= 3) setTimeout(() => { if (location.hash === '#/breath') render(true); }, 1600);
+    else document.querySelectorAll('.pips i').forEach((p,i) => p.classList.toggle('on', i < b.rounds));
+  }
+}
+app.addEventListener('pointerdown', holdStart);
+app.addEventListener('keydown', e => { if ((e.key===' '||e.key==='Enter') && !e.repeat && e.target.id==='hold') holdStart(e); });
+app.addEventListener('keyup', e => { if ((e.key===' '||e.key==='Enter') && e.target.id==='hold') holdEnd(); });
+['pointerup','pointercancel'].forEach(t => window.addEventListener(t, holdEnd));
+app.addEventListener('contextmenu', e => { if (e.target.closest('#hold,.chip')) e.preventDefault(); });
+
+// Моя команда: нажми значок → нажми круг, или перетащи.
+function teamHTML(){
+  const G = content.games.team, t = gs.team;
+  const chip = p => `<button type="button" class="chip${t.sel===p.id?' sel':''}" data-person="${p.id}" aria-pressed="${t.sel===p.id}"><span class="em" aria-hidden="true">${p.e}</span>${esc(T(p.name))}</button>`;
+  const inZone = z => G.people.filter(p => (t.place[p.id] || 'tray') === z);
+  if (t.done) {
+    const trusted = G.people.filter(p => t.place[p.id] === 'very' || t.place[p.id] === 'yes');
+    return `<div class="done">${trusted.length
+        ? `<h2>${esc(T(G.resultTitle))}</h2><ul class="result">${trusted.map(p=>`<li><span aria-hidden="true">${p.e}</span>${esc(T(p.name))}</li>`).join('')}</ul>`
+        : `<p>${esc(T(G.resultNone))}</p>`}
+      <p style="margin-top:10px">${esc(T(G.bridge))}</p></div>
+      <a class="go" href="#/help">${esc(T(G.toHelp))}${svg('arrow')}</a>
+      <button class="soft" type="button" data-act="team-redo">${esc(T(G.redo))}</button>`;
+  }
+  const zone = (z, title) => `<section class="zone" data-zone="${z}">${title ? `<h3><span class="ring"></span>${esc(title)}</h3>` : ''}<div class="chips">${inZone(z).map(chip).join('')}</div></section>`;
+  const placed = Object.keys(t.place).some(k => t.place[k] !== 'tray');
+  return `<p class="lead">${esc(T(G.lead))}</p><p class="hintline">${esc(T(G.howto))}</p>
+    ${zone('very', T(G.zones.very))}${zone('yes', T(G.zones.yes))}${zone('notyet', T(G.zones.notyet))}
+    ${inZone('tray').length ? zone('tray', T(G.tray)) : ''}
+    ${placed ? `<button class="go" type="button" data-act="team-done">${esc(T(G.done))}${svg('arrow')}</button>` : ''}`;
+}
+const redrawTeam = () => { const el = document.getElementById('team'); if (el) setHTML(el, teamHTML()); };
+function placePerson(id, z){ gs.team.place[id] = z; gs.team.sel = null; redrawTeam(); }
+
+let drag = null, swallowClick = false;
+app.addEventListener('pointerdown', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  drag = {el:c, id:c.dataset.person, x:e.clientX, y:e.clientY, moving:false};
+});
+window.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moving && Math.hypot(dx, dy) < 10) return;
+  drag.moving = true; drag.el.classList.add('dragging');
+  drag.el.style.transform = `translate(${dx}px,${dy}px)`;
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove('target'));
+  document.elementFromPoint(e.clientX, e.clientY)?.closest('.zone')?.classList.add('target');
+});
+window.addEventListener('pointerup', e => {
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (!d.moving) return;
+  swallowClick = true; setTimeout(() => swallowClick = false, 0);
+  const z = document.elementFromPoint(e.clientX, e.clientY)?.closest('.zone');
+  if (z) placePerson(d.id, z.dataset.zone); else redrawTeam();
+});
+window.addEventListener('pointercancel', () => { if (drag) { drag = null; redrawTeam(); } });
+
+app.addEventListener('click', e => {
+  if (swallowClick) return;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (act === 'breath-again') { gs.breath = {rounds:0, msg:null, start:0}; render(true); return; }
+  if (act === 'team-done') { gs.team.done = true; redrawTeam(); window.scrollTo(0,0); return; }
+  if (act === 'team-redo') { gs.team = {place:{}, sel:null, done:false}; redrawTeam(); return; }
+  const c = e.target.closest('.chip');
+  if (c) { gs.team.sel = gs.team.sel === c.dataset.person ? null : c.dataset.person; redrawTeam(); return; }
+  const z = e.target.closest('.zone');
+  if (z && gs.team.sel) placePerson(gs.team.sel, z.dataset.zone);
+});
+
+document.getElementById('lang').addEventListener('click', () => {
+  lang = lang === 'tj' ? 'ru' : 'tj';
+  try { localStorage.setItem('lang', lang); } catch(e) {}
+  render();
+});
+window.addEventListener('hashchange', () => {
+  if (location.hash === '#/breath') gs.breath = {rounds:0, msg:null, start:0};
+  if (location.hash === '#/team') gs.team = {place:{}, sel:null, done:false};
+  render(); window.scrollTo(0,0);
+});
+render();
+</script>
+</body>
+</html>

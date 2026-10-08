@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17232E">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='5' width='22' height='15' rx='7' fill='%23EBA43D'/%3E%3Crect x='12' y='16' width='22' height='15' rx='7' fill='%2320233A'/%3E%3C/svg%3E">
+<title>Аз тарафи дигар · С другой стороны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&family=Noto+Serif:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E4ECEE;          /* туманное утро */
+  --paper:#FFFFFF;
+  --ink:#17232E;
+  --muted:#556370;
+  --line:#C9D5D9;
+  --saffron:#EBA43D;     /* «ваш» голос */
+  --saffron-soft:#FBE7C6;
+  --night:#20233A;       /* другая сторона */
+  --night-2:#2C3050;
+  --night-ink:#F2ECE2;
+  --night-muted:#B4B2C8;
+  --support:#2E8B6A;
+  --blame:#C4553F;
+  --minimize:#8A68B0;
+  --silence:#6F7B8A;
+  --punish:#B4472F;
+  --expose:#A8701F;
+  --help:#B23A3A;
+  --r:1.1rem;
+  --sans:"Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --serif:"Noto Serif",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+html.cls{font-size:26px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.5 var(--sans);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.wrap{max-width:34rem;margin:0 auto;padding:0 16px}
+html.cls .wrap{max-width:46rem}
+
+/* header */
+header{position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:1px solid var(--line)}
+.hbar{display:flex;align-items:center;gap:8px;min-height:64px}
+.logo{display:flex;align-items:center;gap:.5rem;min-height:48px;padding:0 .25rem 0 0;font-weight:800;font-size:.95rem;line-height:1.1;text-align:left;flex:1;min-width:0}
+.logo svg{flex:none;width:36px;height:36px}
+.logo span{overflow:hidden;text-overflow:ellipsis}
+.helpbtn{min-height:48px;padding:.35rem .8rem;border-radius:999px;background:var(--help);color:#fff;font-weight:600;font-size:.85rem;line-height:1.15;max-width:11rem;text-align:center}
+.langbtn{min-height:48px;min-width:48px;border-radius:999px;border:2px solid var(--ink);font-weight:800;font-size:.85rem;letter-spacing:.04em}
+@media (max-width:400px){.logo span{display:none}}
+
+/* screens */
+main{padding:1.25rem 0 3rem}
+.screen{animation:in .3s ease-out both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* home */
+.hero{padding:.5rem 0 1.25rem}
+.hero h1{font:800 2.4rem/1.05 var(--sans);letter-spacing:-.02em;margin:.25rem 0 .9rem}
+.hero h1 em{font:italic 600 1em/1 var(--serif);letter-spacing:0;color:var(--night)}
+.hero p{margin:0;font-size:1.06rem;color:var(--ink);max-width:30rem}
+.duo{display:flex;flex-direction:column;gap:.4rem;margin:0 0 1.2rem}
+.duo .b{max-width:82%;padding:.6rem .9rem;border-radius:var(--r);font-size:.95rem}
+.duo .b1{align-self:flex-end;background:var(--saffron);border-bottom-right-radius:.3rem}
+.duo .b2{align-self:flex-start;background:var(--night);color:var(--night-ink);font-family:var(--serif);font-style:italic;border-bottom-left-radius:.3rem}
+h2{font-size:1.15rem;margin:1.5rem 0 .75rem;font-weight:800}
+.roles{display:grid;gap:.6rem}
+.role{display:flex;align-items:center;gap:.9rem;text-align:left;background:var(--paper);border-radius:var(--r);padding:1rem;min-height:72px;transition:transform .2s ease}
+.role:active{transform:scale(.98)}
+.role .ico{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:var(--saffron-soft);font-size:1.3rem}
+.role b{display:block;font-size:1.08rem}
+.role small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;background:var(--paper);border-radius:var(--r);padding:.9rem 1rem;min-height:64px;text-align:left;margin-top:.6rem}
+.toggle small{display:block;color:var(--muted);font-size:.85rem;line-height:1.35}
+.sw{flex:none;width:52px;height:30px;border-radius:999px;background:var(--line);position:relative}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s ease}
+.sw.on{background:var(--support)}
+.sw.on::after{transform:translateX(22px)}
+.note{font-size:.85rem;color:var(--muted);margin-top:1.25rem}
+
+/* story */
+.meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem}
+.back{min-height:48px;min-width:48px;border-radius:999px;background:var(--paper);font-size:1.2rem}
+.meta .lbl{flex:1;font-size:.85rem;color:var(--muted);font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:.4rem;min-height:48px;padding:0 .9rem;border-radius:999px;background:var(--paper);font-size:.85rem;font-weight:600}
+.chip.on{background:var(--ink);color:#fff}
+.setup{font-size:.95rem;color:var(--muted);margin:0 0 1rem;padding-left:.75rem;border-left:3px solid var(--saffron)}
+.phone{background:var(--paper);border-radius:1.4rem;padding:1rem .8rem;min-height:14rem}
+.who{display:flex;align-items:center;gap:.6rem;padding:0 .2rem .8rem;border-bottom:1px solid var(--bg);margin-bottom:.8rem}
+.ava{flex:none;width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--night)}
+.who b{display:block;line-height:1.2}
+.who small{color:var(--muted);font-size:.8rem}
+.msgs{display:flex;flex-direction:column;gap:.45rem}
+.msg{align-self:flex-start;max-width:88%;background:var(--bg);padding:.6rem .85rem;border-radius:var(--r);border-bottom-left-radius:.3rem;animation:pop .25s ease-out both}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.85rem;padding:.3rem .2rem;animation:pop .2s ease-out both}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dot 1.2s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
+.next{display:block;width:100%;min-height:56px;margin-top:1rem;border-radius:var(--r);background:var(--ink);color:#fff;font-weight:700;font-size:1.05rem}
+.next.warm{background:var(--saffron);color:var(--ink)}
+.tapzone{cursor:pointer}
+.choices{margin-top:1.25rem;animation:in .3s ease-out both}
+.choices h2{margin-top:0}
+.choice{display:block;width:100%;text-align:left;background:var(--paper);border:2px solid var(--saffron);border-radius:var(--r);border-bottom-right-radius:.3rem;padding:.8rem 1rem;margin-bottom:.6rem;min-height:56px;font-size:1rem;transition:transform .15s ease}
+.choice:active{transform:scale(.98)}
+.choice.tried{border-style:dashed;opacity:.85}
+.choice .t{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:.35rem}
+
+/* feels: другая сторона */
+.other{background:var(--night);color:var(--night-ink);border-radius:1.4rem;padding:1.25rem 1rem 1.4rem;animation:flip .38s cubic-bezier(.2,.7,.2,1) both;transform-origin:50% 0}
+.other.still{animation:none}
+@keyframes flip{from{opacity:0;transform:perspective(900px) rotateX(-14deg) translateY(12px)}to{opacity:1;transform:none}}
+.other .kick{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--night-muted);font-weight:600}
+.other h1{font-size:1.4rem;line-height:1.2;margin:.3rem 0 1rem}
+.said{background:var(--saffron);color:var(--ink);border-radius:var(--r);border-bottom-right-radius:.3rem;padding:.7rem .9rem;margin:0 0 1.1rem 12%;font-size:.95rem}
+.said .t{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;opacity:.8}
+.inner{margin:0;padding:0;list-style:none}
+.inner li{font:italic 400 1.18rem/1.5 var(--serif);margin:0 0 .8rem;padding-left:1rem;border-left:2px solid var(--night-muted);animation:pop .3s ease-out both}
+.inner li.still{animation:none}
+.sum{display:flex;gap:.6rem;align-items:flex-start;background:var(--night-2);border-radius:var(--r);padding:.8rem .9rem;margin-top:1rem;animation:pop .3s ease-out both}
+.sum .dot{flex:none;width:.8rem;height:.8rem;border-radius:50%;margin-top:.35rem}
+.cmp{margin-top:1.25rem}
+.cmp h2,.tally h2{color:var(--night-ink);font-size:1rem;margin:0 0 .6rem}
+.cmp .row{display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:start;padding:.6rem 0;border-top:1px solid var(--night-2);font-size:.95rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.2rem .5rem;border-radius:.4rem;color:#fff;white-space:nowrap}
+.tally{margin-top:1.25rem}
+.bar{display:grid;grid-template-columns:7.5rem 1fr 2rem;gap:.5rem;align-items:center;font-size:.85rem;margin-bottom:.4rem}
+.bar .track{height:.7rem;border-radius:999px;background:var(--night-2);overflow:hidden}
+.bar .fill{display:block;height:100%;border-radius:999px;transform-origin:left}
+.actions{display:grid;gap:.6rem;margin-top:1.25rem}
+.btn{min-height:56px;border-radius:var(--r);font-weight:700;font-size:1rem;padding:.6rem 1rem}
+.btn.pri{background:var(--saffron);color:var(--ink)}
+.btn.sec{background:var(--paper);color:var(--ink)}
+.btn.ghost{background:transparent;border:2px solid var(--night-muted);color:var(--night-ink)}
+
+/* better */
+.better h1{font-size:1.5rem;line-height:1.2;margin:.2rem 0 .5rem}
+.better .lead{color:var(--muted);margin:0 0 1rem}
+.phrase{background:var(--paper);border-radius:var(--r);padding:1rem;margin-bottom:.7rem;border-left:5px solid var(--support);animation:pop .3s ease-out both}
+.phrase:nth-child(2){animation-delay:.08s}.phrase:nth-child(3){animation-delay:.16s}
+.phrase p{margin:0 0 .6rem;font-size:1.08rem;font-weight:600}
+.copy{min-height:48px;padding:0 1rem;border-radius:999px;background:var(--bg);font-weight:600;font-size:.9rem}
+.copy.ok{background:var(--support);color:#fff}
+.truth{background:var(--night);color:var(--night-ink);border-radius:var(--r);padding:1rem;margin:1.25rem 0 0;font:italic 400 1.05rem/1.5 var(--serif)}
+
+/* help */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(23,35,46,.55);display:flex;align-items:flex-end;justify-content:center;animation:fade .2s ease-out both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--paper);width:100%;max-width:34rem;border-radius:1.4rem 1.4rem 0 0;padding:1.25rem 16px 1.5rem;max-height:calc(100vh - 80px);overflow:auto;animation:up .3s ease-out both}
+html.cls .sheet{max-width:46rem}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.sheet h2{margin-top:0;font-size:1.3rem}
+.sheet ul{padding-left:1.2rem;margin:.5rem 0 1rem}
+.sheet li{margin-bottom:.35rem}
+.contact{display:flex;justify-content:space-between;gap:1rem;background:var(--bg);border-radius:.8rem;padding:.8rem 1rem;margin-bottom:.5rem;font-weight:600}
+.contact{align-items:center}
+.contact .nums{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;flex:none}
+.contact a{display:inline-flex;align-items:center;min-height:48px;padding:0 .9rem;border-radius:999px;background:var(--support);color:#fff;font-weight:800;text-decoration:none;white-space:nowrap}
+.sheet .note{margin:.5rem 0 1rem}
+.close{width:100%}
+
+/* mini-games */
+.gamecard{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;background:var(--night);color:var(--night-ink);border-radius:var(--r);padding:1rem;min-height:72px;margin-top:.6rem;transition:transform .2s ease}
+.gamecard:active,.gpick:active,.wbtn:active{transform:scale(.98)}
+.gamecard .ico{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:var(--night-2);font-size:1.3rem}
+.gamecard b{display:block;font-size:1.08rem}
+.gamecard small{display:block;color:var(--night-muted);font-size:.9rem;line-height:1.35}
+.gtitle{font-size:1.5rem;line-height:1.2;margin:.2rem 0 .5rem}
+.glead{color:var(--muted);margin:0 0 1rem}
+.gpick{display:flex;gap:.9rem;align-items:center;width:100%;text-align:left;background:var(--paper);border-radius:var(--r);padding:1rem;min-height:80px;margin-bottom:.6rem;transition:transform .2s ease}
+.gpick .em{flex:none;font-size:2rem;width:3rem;text-align:center}
+.gpick b{display:block;font-size:1.08rem}
+.gpick small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}
+.gcount{font-size:.85rem;font-weight:700;color:var(--muted);margin:0 0 .6rem}
+.pond{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;padding:1rem .5rem;background:var(--night);border-radius:1.4rem;min-height:6rem}
+.bub{width:7.4rem;height:7.4rem;border-radius:50%;padding:.6rem;display:flex;align-items:center;justify-content:center;text-align:center;font:italic 400 .95rem/1.25 var(--serif);color:var(--night-ink);background:var(--night-2);box-shadow:inset 0 0 0 2px rgba(242,236,226,.18),inset -.6rem -.8rem 1.4rem rgba(0,0,0,.25);animation:rise .35s ease-out backwards;transition:transform .22s ease,opacity .22s ease}
+.bub:nth-child(even){transform:translateY(.6rem)}
+.bub.gone{transform:scale(1.35);opacity:0;pointer-events:none}
+@keyframes rise{from{opacity:0;transform:translateY(1.2rem) scale(.9)}to{opacity:1}}
+.pondDone{color:var(--night-muted);font:italic 400 1rem/1.4 var(--serif);text-align:center;padding:1rem}
+.said2{list-style:none;margin:1rem 0 0;padding:0}
+.said2 li{background:var(--paper);border-radius:var(--r);border-left:5px solid var(--support);padding:.75rem 1rem;margin-bottom:.55rem;animation:pop .3s ease-out both}
+.said2 s{display:block;color:var(--muted);font-size:.85rem;text-decoration-thickness:2px}
+.said2 b{display:block;font-size:1.05rem}
+.bridge{background:var(--saffron-soft);border-radius:var(--r);padding:1rem;margin-top:1rem;animation:pop .3s ease-out both}
+.bridge b{display:block;font-size:1.08rem;margin-bottom:.3rem}
+.bridge p{margin:0}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.wbtn{min-height:6.5rem;border-radius:var(--r);background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;font-weight:700;border:3px solid transparent;transition:transform .2s ease}
+.wbtn .em{font-size:2.2rem;line-height:1}
+.wbtn[aria-pressed=true]{border-color:var(--saffron);background:var(--saffron-soft)}
+.wans{margin-top:1rem;animation:in .3s ease-out both}
+.wans .box{background:var(--paper);border-radius:var(--r);padding:1rem;margin-bottom:.6rem}
+.wans .box.dark{background:var(--night);color:var(--night-ink)}
+.wans .k{display:block;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.wans .dark .k{color:var(--night-muted)}
+.wans p{margin:0}
+
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+html.static *{animation:none!important}
+</style>
+</head>
+<body>
+<header><div class="wrap hbar">
+  <button class="logo" id="logo" aria-label="home">
+    <svg viewBox="0 0 36 36" aria-hidden="true"><rect x="2" y="5" width="22" height="15" rx="7" fill="#EBA43D"/><rect x="12" y="16" width="22" height="15" rx="7" fill="#20233A"/></svg>
+    <span id="brand"></span>
+  </button>
+  <button class="helpbtn" id="helpBtn"></button>
+  <button class="langbtn" id="langBtn"></button>
+</div></header>
+<main class="wrap" id="app" aria-live="polite"></main>
+<div id="modalRoot"></div>
+
+<script>
+/* ================= CONTENT (все тексты — только здесь) ================= */
+const content = {
+  ui: {
+    brand: { tj: "Аз тарафи дигар", ru: "С другой стороны" },
+    help: { tj: "Ба ман кӯмак лозим аст", ru: "Мне нужна помощь" },
+    langSwitch: { tj: "RU", ru: "TJ" },
+    langAria: { tj: "Ба забони русӣ гузаштан", ru: "Перейти на таджикский язык" },
+    heroA: { tj: "Касе ба шумо ", ru: "Вам " },
+    heroB: { tj: "сирри худро гуфт.", ru: "доверили тайну." },
+    heroP: {
+      tj: "Касе ҷуръат кард ва гуфт, ки дар интернет бо ӯ чӣ ҳодиса рӯй дод. Аз ҷавоби аввалини шумо вобаста аст, ки оё ӯ боз ба касе мегӯяд ё не.",
+      ru: "Кто-то решился рассказать, что с ним случилось в интернете. От вашего первого ответа зависит, расскажет ли он кому-то ещё раз."
+    },
+    duo1: { tj: "Худат гунаҳкор.", ru: "Сам виноват." },
+    duo2: { tj: "…пас дигар ба ҳеҷ кас намегӯям.", ru: "…значит, больше никому не скажу." },
+    roleQ: { tj: "Шумо дар ин қисса кистед?", ru: "Кто вы в этой истории?" },
+    classTitle: { tj: "Намоиш дар синф", ru: "Показ в классе" },
+    classDesc: {
+      tj: "Ҳарфҳои калон барои проектор. Ҳар қадам — бо пахш кардан, бе худкор.",
+      ru: "Крупный текст для проектора. Каждый шаг — по нажатию, без автопроигрывания."
+    },
+    fiction: {
+      tj: "Ҳамаи қиссаҳо ва номҳо тахайюлӣ мебошанд. Барнома ҳеҷ маълумоти шуморо ҷамъ намекунад.",
+      ru: "Все истории и имена вымышлены. Приложение не собирает никаких данных о вас."
+    },
+    storyOf: { tj: "Қиссаи {n} аз 3", ru: "История {n} из 3" },
+    back: { tj: "Бозгашт", ru: "Назад" },
+    typing: { tj: "менависад…", ru: "печатает…" },
+    next: { tj: "Минбаъд →", ru: "Далее →" },
+    answerQ: { tj: "Шумо чӣ ҷавоб медиҳед?", ru: "Что вы ответите?" },
+    answerHint: { tj: "Ростқавлона интихоб кунед — он чизе, ки воқеан мегуфтед.", ru: "Выберите честно — то, что сказали бы на самом деле." },
+    tried: { tj: "аллакай санҷидед", ru: "уже пробовали" },
+    otherSide: { tj: "Аз тарафи дигар", ru: "С другой стороны" },
+    feelsTitle: { tj: "{name} чӣ ҳис мекунад", ru: "Что чувствует {name}" },
+    youSaid: { tj: "Шумо гуфтед", ru: "Вы сказали" },
+    compareTitle: { tj: "Ҷавобҳои худро муқоиса кунед", ru: "Сравните ваши ответы" },
+    tallyTitle: { tj: "Дар ин намоиш интихоб карданд", ru: "В этом показе выбрали" },
+    tryOther: { tj: "Ҷавоби дигарро санҷед", ru: "Попробовать другой ответ" },
+    instead: { tj: "Ба ҷои ин чӣ гуфтан мумкин", ru: "Что сказать вместо этого" },
+    betterLead: {
+      tj: "Се ибора, ки дар чунин лаҳза кӯмак мекунанд. Нусха гиред ва бо суханони худ гӯед.",
+      ru: "Три фразы, которые помогают в такой момент. Скопируйте и скажите своими словами."
+    },
+    copy: { tj: "Нусха гирифтан", ru: "Скопировать" },
+    copied: { tj: "Нусха гирифта шуд ✓", ru: "Скопировано ✓" },
+    truth: {
+      tj: "Дар интернет ҳар чӣ рӯй диҳад, гунаҳкор он касест, ки фиреб дод, таҳдид кард ё таҳқир кард — на он касе, ки зарар дид.",
+      ru: "Что бы ни случилось в интернете, виноват тот, кто обманул, угрожал или унизил, — а не тот, кто пострадал."
+    },
+    nextStory: { tj: "Қиссаи навбатӣ", ru: "Следующая история" },
+    toRoles: { tj: "Ба интихоби нақш", ru: "К выбору роли" },
+    helpTitle: { tj: "Ту гунаҳкор нестӣ", ru: "Ты не виноват(а)" },
+    helpText: {
+      tj: "Агар дар интернет бо ту чизе рӯй дода бошад, ба калонсоле, ки ба ӯ бовар дорӣ, нақл кун: падару модар, муаллим, равоншиноси мактаб.",
+      ru: "Если с тобой что-то случилось в интернете, расскажи взрослому, которому доверяешь: родителю, учителю, школьному психологу."
+    },
+    helpTips: {
+      tj: ["Мукотибаро нест накун — скриншот гир.", "Ба касе, ки таҳдид мекунад, ҷавоб надеҳ ва пул нафирист.", "Ӯро блок кун ва дар худи барнома шикоят кун."],
+      ru: ["Не удаляй переписку — сделай скриншоты.", "Не отвечай тому, кто угрожает, и не отправляй деньги.", "Заблокируй его и пожалуйся в самом приложении."]
+    },
+    contacts: [
+      { name: { tj: "Телефони боварии миллӣ (Кумитаи кор бо занон ва оила)", ru: "Национальный телефон доверия (Комитет по делам женщин и семьи)" }, nums: [{ show: "1313", tel: "1313" }] },
+      { name: { tj: "Телефони боварии ВКД: шантаж, таҳдид, фиреб, рахна кардани аккаунт", ru: "Телефон доверия МВД: шантаж, угрозы, мошенничество, взлом" }, nums: [{ show: "1919", tel: "1919" }, { show: "+992 37 221-21-21", tel: "+992372212121" }] },
+      { name: { tj: "Милитсия (ҳолати фавқулода)", ru: "Милиция (экстренно)" }, nums: [{ show: "102", tel: "102" }] }
+    ],
+    contactsNote: {
+      tj: "Рақамҳо аз рӯи манбаъҳои кушод санҷида шудаанд (октябри 2026). Пеш аз намоиш боз як бор санҷед.",
+      ru: "Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте."
+    },
+    close: { tj: "Пӯшидан", ru: "Закрыть" }
+  },
+
+  games: {
+    card: { tj: "Бозиҳои хурд", ru: "Мини-игры" },
+    cardDesc: { tj: "Ду бозии ором барои 1–2 дақиқа. Бохтан ғайриимкон аст, ҳеҷ чиз нигоҳ дошта намешавад.", ru: "Две спокойные игры на 1–2 минуты. Проиграть нельзя, ничего не сохраняется." },
+    lead: { tj: "Каме дам гиред. Ин ҷо ҷавоби дуруст, вақтсанҷ ва хол нест.", ru: "Передохните. Здесь нет правильных ответов, таймера и очков." },
+    again: { tj: "Боз як бор", ru: "Ещё раз" },
+    toGames: { tj: "Ба бозиҳои хурд", ru: "К мини-играм" },
+    toHome: { tj: "Ба саҳифаи асосӣ", ru: "На главную" },
+    pop: {
+      icon: "🫧",
+      title: { tj: "Ташвишро тарқон", ru: "Лопни тревогу" },
+      desc: { tj: "Ташвишҳое, ки ба нақл кардан халал мерасонанд. Пахш кунед — ва бинед, ки ба онҳо чӣ ҷавоб додан мумкин.", ru: "Тревоги, которые мешают рассказать. Нажмите — и увидите, что на них можно ответить." },
+      hint: { tj: "Ҳубобчаҳоро бо ҳар тартибе пахш кунед.", ru: "Нажимайте на пузыри в любом порядке." },
+      count: { tj: "{n} аз {t}", ru: "{n} из {t}" },
+      empty: { tj: "Ҳамаи ташвишҳо ба суханони гарм табдил ёфтанд.", ru: "Все тревоги превратились в тёплые слова." },
+      listTitle: { tj: "Чӣ гуфтан мумкин", ru: "Что можно сказать" },
+      bridgeT: { tj: "Ҳар ташвишро бо овоз гуфтан мумкин.", ru: "Каждую тревогу можно сказать вслух." },
+      bridge: { tj: "Агар ин дар бораи шумост — ба касе, ки ба ӯ бовар доред, нақл кардан мумкин. Агар ба шумо нақл кунанд — гӯш кардан ва яке аз ин ибораҳоро гуфтан мумкин.", ru: "Если это про вас — можно рассказать тому, кому доверяете. Если рассказывают вам — можно выслушать и сказать одну из этих фраз." },
+      bubbles: [
+        { worry: { tj: "Шарм медорам", ru: "Мне стыдно" }, support: { tj: "Ин ҷо шарм кардан лозим нест. Хуб кардӣ, ки гуфтӣ.", ru: "Тут нечего стыдиться. Хорошо, что ты сказал(а)." } },
+        { worry: { tj: "Маро сарзаниш мекунанд", ru: "Будут ругать" }, support: { tj: "Ман сарзаниш намекунам. Ман дар паҳлӯи ту ҳастам.", ru: "Я не буду ругать. Я рядом." } },
+        { worry: { tj: "Худам гунаҳкорам", ru: "Я сам(а) виноват(а)" }, support: { tj: "Ту гунаҳкор нестӣ. Гунаҳкор он касест, ки ранҷонд.", ru: "Ты не виноват(а). Виноват тот, кто обидел." } },
+        { worry: { tj: "Ҳеҷ кас бовар намекунад", ru: "Никто не поверит" }, support: { tj: "Ман ба ту бовар дорам.", ru: "Я тебе верю." } },
+        { worry: { tj: "Телефонамро мегиранд", ru: "Отберут телефон" }, support: { tj: "Телефонро намегирам. Биё якҷоя ҳал кунем.", ru: "Телефон не отберу. Давай решим вместе." } },
+        { worry: { tj: "Ин чизи майда аст", ru: "Это мелочь, неважно" }, support: { tj: "Ҳар чизе, ки бо ту рӯй медиҳад, барои ман муҳим аст.", ru: "Мне важно всё, что с тобой происходит." } }
+      ]
+    },
+    weather: {
+      icon: "🌦",
+      title: { tj: "Ҳавои дарун", ru: "Погода внутри" },
+      desc: { tj: "Имрӯз дар дилатон ҳаво чӣ хел аст? Бе баҳо ва бе сабт.", ru: "Какая сегодня погода у вас внутри? Без оценок и без записи." },
+      q: { tj: "Ҳоло дар дилатон ҳаво чӣ хел аст?", ru: "Какая погода у вас внутри прямо сейчас?" },
+      note: { tj: "Интихоби шумо дар ҳеҷ ҷо сабт намешавад. Метавонед дигарашро интихоб кунед.", ru: "Ваш выбор нигде не записывается. Можно выбрать другую погоду." },
+      youLbl: { tj: "Барои шумо", ru: "Для вас" },
+      tipLbl: { tj: "Агар одами наздикатон ҳамин хел бошад", ru: "Если такая погода у человека рядом" },
+      bridgeT: { tj: "Дар ҳар ҳаво нақл кардан мумкин — ва гӯш кардан ҳам.", ru: "В любую погоду можно рассказать — и можно выслушать." },
+      bridge: { tj: "Ҳисси шумо дуруст ё нодуруст намешавад. Он танҳо ҳаст.", ru: "Чувства не бывают правильными или неправильными. Они просто есть." },
+      openHelp: { tj: "Кушодани кӯмак", ru: "Открыть помощь" },
+      options: [
+        { id: "sun", em: "☀️", label: { tj: "Офтобӣ", ru: "Ясно" },
+          you: { tj: "Хуб аст, ки ҳоло равшан аст. Дар хотир доред, ки чӣ ба шумо ин ҳисро медиҳад.", ru: "Хорошо, что сейчас светло. Запомните, что помогает вам так себя чувствовать." },
+          tip: { tj: "Ин лаҳзаи хуб барои якҷоя будан аст. Эътимод дар рӯзҳои ором ҳам сохта мешавад.", ru: "Это хороший момент просто побыть вместе. Доверие строится и в спокойные дни." } },
+        { id: "cloud", em: "🌤", label: { tj: "Каме абрнок", ru: "Переменная облачность" },
+          you: { tj: "Каме ин, каме он — ин хел мешавад. Ҳатман фавран фаҳмидан лозим нест, ки абрҳо аз куҷоянд.", ru: "Немного того, немного другого — так бывает. Не обязательно сразу разбираться, откуда облака." },
+          tip: { tj: "Содда пурсед: «Дар асл аҳволат чӣ хел?» — ва барои ҷавоб вақт диҳед. Бе «бас кун, ҳамааш хуб аст».", ru: "Спросите просто: «Как ты на самом деле?» — и дайте время ответить. Без «да ладно, всё нормально»." } },
+        { id: "rain", em: "🌧", label: { tj: "Борон", ru: "Дождь" },
+          you: { tj: "Ғамгин будан муқаррарӣ аст. Борон ба баҳона ниёз надорад. Агар хоҳед, ба касе нақл кунед.", ru: "Грустить — нормально. Дождю не нужно оправдание. Если захочется, можно кому-то рассказать." },
+          tip: { tj: "Барои ислоҳ кардан шитоб накунед. Гӯед: «Ман дар паҳлӯят ҳастам. Агар хоҳӣ нақл кунӣ — гӯш мекунам».", ru: "Не торопитесь чинить. Скажите: «Я рядом. Захочешь рассказать — я слушаю»." } },
+        { id: "storm", em: "⛈", label: { tj: "Раъду барқ", ru: "Гроза" },
+          you: { tj: "Чунин менамояд, ки ҳоло хеле вазнин аст. Шумо набояд танҳо мубориза баред — кӯмак пурсидан мумкин.", ru: "Похоже, сейчас очень тяжело. Не обязательно справляться в одиночку — можно попросить помощи." },
+          tip: { tj: "Ором ва дар паҳлӯ бошед. Сарзаниш ва пурсуҷӯ накунед. Барои ёфтани калонсол ё хадамоти кӯмак ёрӣ диҳед.", ru: "Оставайтесь спокойными и рядом. Не ругайте и не допрашивайте. Помогите найти взрослого или службу помощи." },
+          help: true }
+      ]
+    }
+  },
+
+  types: {
+    blame:    { color: "var(--blame)",    label: { tj: "Айбдор кардан", ru: "Обвинить" } },
+    minimize: { color: "var(--minimize)", label: { tj: "Аҳамият надодан", ru: "Обесценить" } },
+    silence:  { color: "var(--silence)",  label: { tj: "Хомӯш мондан", ru: "Промолчать" } },
+    punish:   { color: "var(--punish)",   label: { tj: "Ҷазо додан", ru: "Наказать" } },
+    expose:   { color: "var(--expose)",   label: { tj: "Дар назди ҳама", ru: "Разбор при всех" } },
+    support:  { color: "var(--support)",  label: { tj: "Дастгирӣ кардан", ru: "Поддержать" } }
+  },
+
+  roles: [
+    { id: "peer", icon: "🧑‍🤝‍🧑", label: { tj: "Ман ҳамсол", ru: "Я сверстник" }, desc: { tj: "Дӯстатон ба шумо дар мессенҷер менависад", ru: "Друг пишет вам в мессенджер" } },
+    { id: "parent", icon: "🏠", label: { tj: "Ман падар ё модар", ru: "Я родитель" }, desc: { tj: "Духтаратон бегоҳ ба шумо менависад", ru: "Дочь пишет вам поздно вечером" } },
+    { id: "teacher", icon: "📚", label: { tj: "Ман муаллим", ru: "Я учитель" }, desc: { tj: "Хонанда ба шумо дар чати мактаб менависад", ru: "Ученик пишет вам в школьный чат" } }
+  ],
+
+  stories: [
+    {
+      id: "s1", role: "peer",
+      name: { tj: "Фируз", ru: "Фируз" },
+      age: { tj: "дӯсти ту, 14-сола", ru: "твой друг, 14 лет" },
+      setup: { tj: "Бегоҳ. Дӯстат Фируз ба ту дар мессенҷер менависад.", ru: "Вечер. Твой друг Фируз пишет тебе в мессенджер." },
+      messages: [
+        { tj: "Салом. Метавонам ба ту чизе гӯям? Фақат ханда накун.", ru: "Привет. Можно тебе кое-что рассказать? Только не смейся." },
+        { tj: "Дар хотир дорӣ, ман бо як бача онлайн бозӣ мекардам? Ӯ мегуфт, ки 15-сола аст.", ru: "Помнишь, я играл онлайн с одним парнем? Он говорил, что ему 15." },
+        { tj: "Ӯ пешниҳод кард, ки як рӯз аккаунтҳоро иваз кунем, то қаҳрамонҳои ҳамдигарро қавӣ кунем. Ман паролро додам.", ru: "Он предложил на день поменяться аккаунтами, чтобы прокачать друг другу персонажей. Я дал пароль." },
+        { tj: "Ҳоло аккаунт дар дасти ӯст. Менависад, ки агар 200 сомонӣ нафиристам, мукотибаҳои шахсии маро ба чати синф мегузорад.", ru: "Теперь аккаунт у него. Он пишет, что выложит мои личные переписки в чат класса, если я не скину ему 200 сомони." },
+        { tj: "Намедонам чӣ кор кунам. Шарм медорам.", ru: "Не знаю, что делать. Мне стыдно." }
+      ],
+      reactions: [
+        {
+          type: "blame",
+          label: { tj: "Ту ҳам аҷаб! Кӣ паролро ба шахси ношинос медиҳад? Худат гунаҳкор.", ru: "Ну ты даёшь. Кто вообще даёт пароль незнакомцу? Сам виноват." },
+          feels: {
+            tj: ["Ман худам тамоми бегоҳ фикр мекунам, ки чӣ қадар соддаам.", "Акнун инро ту ҳам гуфтӣ.", "Ӯ маро қасдан фиреб дод. Аммо ман фақат «худат гунаҳкор»-ро мешунавам.", "Шояд осонтар аст, ки пулро фиристам, то ҳеҷ кас нафаҳмад.", "Хуб. Худам ҳал мекунам. Дигар ба касе намегӯям."],
+            ru: ["Я и так весь вечер думаю, какой я наивный.", "Теперь это сказал и ты.", "Он обманул меня специально. Но слышу я только «сам виноват».", "Может, проще отправить ему деньги, чтобы никто не узнал.", "Ладно. Разберусь сам. Больше никому не скажу."]
+          },
+          summary: { tj: "Шарм. Қарор кард, ки дигар ба касе нагӯяд.", ru: "Стыд. Решил больше никому не рассказывать." }
+        },
+        {
+          type: "minimize",
+          label: { tj: "Парво накун, ин фақат бозӣ аст. Аккаунти нав мекушоӣ.", ru: "Да забей, это просто игра. Заведёшь новый аккаунт." },
+          feels: {
+            tj: ["Гап дар аккаунт нест.", "Ӯ таҳдид мекунад, ки мукотибаҳои маро ба тамоми синф нишон медиҳад. Ин «фақат бозӣ» нест.", "Шояд ман хуб фаҳмонда натавонистам. Ё ба ӯ шавқовар нест.", "Хуб, вонамуд мекунам, ки ҳамааш хуб аст."],
+            ru: ["Дело же не в аккаунте.", "Он грозится показать мои переписки всему классу. Это не «просто игра».", "Наверное, я плохо объяснил. Или ему просто неинтересно.", "Ладно, сделаю вид, что всё нормально."]
+          },
+          summary: { tj: "Ӯро нашуниданд. Бо тарсаш танҳо монд.", ru: "Не услышали. Остался один со страхом." }
+        },
+        {
+          type: "silence",
+          label: { tj: "Воҳ… Хуб… Гӯш кун, ман бояд равам, баъдтар гап мезанем.", ru: "Ого… Ну… Слушай, мне пора, потом поговорим." },
+          feels: {
+            tj: ["Ӯ хонд ва рафт.", "Шояд беҳуда навиштам. Шояд дар бораи ин гап задан аҷиб аст.", "Нишастаам ва ҳар панҷ дақиқа чати синфро месанҷам."],
+            ru: ["Он прочитал и ушёл.", "Может, зря я написал. Может, о таком вообще странно рассказывать.", "Сижу и каждые пять минут проверяю чат класса."]
+          },
+          summary: { tj: "Худро зиёдатӣ ҳис кард. Бадтарин чизро танҳо интизор аст.", ru: "Почувствовал себя лишним. Ждёт худшего в одиночку." }
+        },
+        {
+          type: "support",
+          label: { tj: "Хуб кардӣ, ки ба ман навиштӣ. Ту гунаҳкор нестӣ — туро қасдан фиреб доданд. Пул нафирист ва мукотибаро нест накун. Биё якҷоя ба калонсол гӯем, хоҳӣ, ман бо ту меравам?", ru: "Хорошо, что ты мне написал. Ты не виноват — тебя обманули специально. Не плати ему и не удаляй переписку. Давай вместе расскажем взрослому, хочешь, я пойду с тобой?" },
+          feels: {
+            tj: ["Ӯ намехандад. Ӯ гуфт, ки ман гунаҳкор нестам.", "Гӯё метавонам нафаси осуда кашам.", "Ҳоло ҳам метарсам. Аммо акнун танҳо нестам.", "Пагоҳ ба бародари калонам мегӯям. Дутоӣ он қадар тарсовар нест."],
+            ru: ["Он не смеётся. Он сказал, что я не виноват.", "Кажется, можно выдохнуть.", "Страшно всё ещё. Но теперь я не один.", "Завтра скажу старшему брату. Вдвоём не так страшно."]
+          },
+          summary: { tj: "Сабукӣ. Тайёр аст аз калонсол кӯмак пурсад.", ru: "Облегчение. Готов попросить помощи у взрослого." }
+        }
+      ],
+      better: [
+        { tj: "Ташаккур, ки гуфтӣ. Ин осон набуд.", ru: "Спасибо, что рассказал. Это было непросто." },
+        { tj: "Ту гунаҳкор нестӣ. Гунаҳкор он касест, ки фиреб дод ва таҳдид мекунад.", ru: "Ты не виноват. Виноват тот, кто обманул и угрожает." },
+        { tj: "Биё скриншотҳоро нигоҳ дорем ва якҷоя назди калонсоле, ки ба ӯ бовар дорӣ, равем.", ru: "Давай сохраним скриншоты и вместе пойдём к взрослому, которому ты доверяешь." }
+      ]
+    },
+    {
+      id: "s2", role: "parent",
+      name: { tj: "Мадина", ru: "Мадина" },
+      age: { tj: "духтаратон, 13-сола", ru: "ваша дочь, 13 лет" },
+      setup: { tj: "Бегоҳии дер. Духтаратон Мадина аз ҳуҷраи паҳлӯ ба шумо менависад.", ru: "Поздний вечер. Ваша дочь Мадина пишет вам из соседней комнаты." },
+      messages: [
+        { tj: "Хоб накардед? Метавонам нависам? Бо овоз гуфта наметавонам.", ru: "Вы не спите? Можно я напишу? Вслух не могу." },
+        { tj: "Писарони синфи параллелӣ гурӯҳ сохтанд. Он ҷо акси духтаронро аз профилҳои мо мегузоранд ва баҳо медиҳанд.", ru: "Мальчики из параллели сделали группу. Туда скидывают фото девочек из наших профилей и ставят оценки." },
+        { tj: "Он ҷо акси ман аз зодрӯз ҳам ҳаст. Зераш менависанд, ки «духтари боодоб ин хел акс намегирад» ва бародарам бояд маро «ба ҷоям шинонад».", ru: "Там есть моя фотка с дня рождения. Под ней пишут, что «приличная девушка так не фотографируется» и что брат должен «поставить меня на место»." },
+        { tj: "Ман ҳеҷ чизи бад нагузоштаам. Ин акси оддӣ бо торт аст.", ru: "Я ничего плохого не выкладывала. Это обычное фото с тортом." },
+        { tj: "Фақат телефонамро нагиред, илтимос.", ru: "Только не забирайте телефон, пожалуйста." }
+      ],
+      reactions: [
+        {
+          type: "minimize",
+          label: { tj: "Писарбачаҳо ҳамин хел мешаванд. Аҳамият надеҳ, худаш мегузарад.", ru: "Мальчики есть мальчики. Не обращай внимания, само пройдёт." },
+          feels: {
+            tj: ["Инро тамоми параллел мебинад. Пагоҳ ман бояд ба мактаб равам.", "Агар «писарбачаҳо ҳамин хел» бошанд, пас ман бояд тоқат кунам?", "Ба онҳо мумкин аст, ман бошам бояд вонамуд кунам, ки дард намекунад."],
+            ru: ["Это видит вся параллель. Завтра мне идти в школу.", "Если «мальчики есть мальчики», мне что — терпеть?", "Им можно, а мне надо делать вид, что не больно."]
+          },
+          summary: { tj: "Ранҷиш. Фаҳмид, ки дарди ӯ ба ҳисоб намеравад.", ru: "Обида. Поняла, что её боль не считается." }
+        },
+        {
+          type: "support",
+          label: { tj: "Ташаккур, ки ба ман гуфтӣ. Ту ҳеҷ кори бад накардӣ — бад рафтор онҳоянд, ки инро менависанд. Телефон дар дасти ту мемонад. Биё скриншот гирем, аз гурӯҳ шикоят кунем ва пагоҳ якҷоя бо роҳбари синф гап занем.", ru: "Спасибо, что сказала мне. Ты ничего плохого не сделала — плохо поступают те, кто это пишет. Телефон останется у тебя. Давай сохраним скриншоты, пожалуемся на группу и завтра вместе поговорим с классным руководителем." },
+          feels: {
+            tj: ["Ман метарсидам, ки маро сарзаниш мекунанд. Аммо маро ҳимоя мекунанд.", "Ман дар муқобили тамоми параллел танҳо нестам.", "Ҳоло ҳам нохуш аст. Аммо акнун ин кори умумии мост, на сирри ман."],
+            ru: ["Я боялась, что меня будут ругать. А меня защищают.", "Я не одна против всей параллели.", "Всё ещё неприятно. Но теперь это наше общее дело, а не мой секрет."]
+          },
+          summary: { tj: "Ҳимоятшудагӣ. Медонад, ки дар хона тарафдори ӯ ҳастанд.", ru: "Защищённость. Знает, что дома — на её стороне." }
+        },
+        {
+          type: "punish",
+          label: { tj: "Бас, телефонро деҳ. То ман фаҳмам — бе интернет мемонӣ.", ru: "Всё, давай телефон. Пока не разберусь — без интернета." },
+          feels: {
+            tj: ["Ман фақат як чиз хоҳиш карда будам.", "Онҳо ба ман механданд, вале ҷазоро ман гирифтам.", "Акнун ҳатто намедонам, ки он ҷо боз чӣ менависанд.", "Агар боз чизе рӯй диҳад — хомӯш мемонам. Ин бехатартар аст."],
+            ru: ["Я ведь просила только об одном.", "Смеются они, а наказали меня.", "Теперь я даже не узнаю, что там пишут дальше.", "Если что-то случится снова — промолчу. Так безопаснее."]
+          },
+          summary: { tj: "Барои кори дигарон ҷазо гирифт. Фаҳмид, ки нақл кардан хатарнок аст.", ru: "Наказана за чужой поступок. Поняла, что рассказывать опасно." }
+        },
+        {
+          type: "blame",
+          label: { tj: "Ман гуфта будам-ку: духтар набояд аксҳояшро гузорад. Худат баҳона додӣ.", ru: "Я же говорил(а): девочке не нужно выкладывать свои фото. Сама дала повод." },
+          feels: {
+            tj: ["Пас дар хона ҳам мисли онҳо фикр мекунанд.", "Гап на дар он ки онҳо чӣ карданд, балки дар он ки ман духтарам ва акс дорам.", "Дафъаи дигар, агар бадтар шавад, ба ҳеҷ кас намегӯям.", "Ҳамаи аксҳоро нест мекунам. Ва дигар чизе нақл намекунам."],
+            ru: ["Значит, и дома думают, как они.", "Дело не в том, что сделали они, а в том, что я — девочка с фотографией.", "В следующий раз, если будет хуже, я никому не скажу.", "Удалю все фото. И больше ничего не буду рассказывать."]
+          },
+          summary: { tj: "Танҳоӣ. Фаҳмид, ки дар хона ҳам маҳкум мекунанд.", ru: "Одиночество. Поняла, что дома тоже осудят." }
+        }
+      ],
+      better: [
+        { tj: "Ту ҳеҷ кори бад накардӣ. Онҳое, ки инро менависанд, бояд шарм кунанд.", ru: "Ты ничего плохого не сделала. Стыдно должно быть тем, кто это пишет." },
+        { tj: "Ман тарафдори ту ҳастам. Телефонро намегирам — хуб кардӣ, ки гуфтӣ.", ru: "Я на твоей стороне. Телефон не заберу — ты правильно сделала, что рассказала." },
+        { tj: "Биё якҷоя қарор кунем, ки чӣ кор кунем: скриншот, шикоят, сӯҳбат бо мактаб.", ru: "Давай вместе решим, что делать: скриншоты, жалоба, разговор со школой." }
+      ]
+    },
+    {
+      id: "s3", role: "teacher",
+      name: { tj: "Рустам", ru: "Рустам" },
+      age: { tj: "хонандаи синфи 8", ru: "ученик 8 класса" },
+      setup: { tj: "Хонандаи шумо Рустам ба шумо дар чати мактаб менависад.", ru: "Ваш ученик Рустам пишет вам в школьный чат." },
+      messages: [
+        { tj: "Устод, бубахшед, ки бегоҳӣ менависам. Метавонам чизеро пурсам, ки ба дарс алоқа надорад?", ru: "Устоз, извините, что пишу вечером. Можно спросить не про уроки?" },
+        { tj: "Касе бо ному акси ман аккаунт сохтааст. Расмҳои хандаовар мегузорад, гӯё ин ман бошам, ва дар бораи оилаам суханони бад менависад.", ru: "Кто-то создал аккаунт с моим именем и фото. Выкладывает смешные картинки, будто это я, и пишет гадости про мою семью." },
+        { tj: "Нисфи синф ба он обуна шуданд. Имрӯз дар танаффус инро ба ман нишон дода хандиданд.", ru: "Полкласса подписались. Сегодня на перемене мне это показывали и смеялись." },
+        { tj: "Намедонам ин кист. Шояд худам ягон хатое кардам, ки маро интихоб карданд.", ru: "Не знаю, кто это. Может, я сам что-то не так сделал, раз выбрали меня." },
+        { tj: "Ба волидонам гуфтан намехоҳам, падарам ғамгин мешавад.", ru: "Родителям говорить не хочу, отец расстроится." }
+      ],
+      reactions: [
+        {
+          type: "expose",
+          label: { tj: "Пагоҳ дар дарс дар назди ҳама мепурсам, ки инро кӣ кардааст. Бигзор иқрор шаванд.", ru: "Завтра на уроке я при всех спрошу, кто это сделал. Пусть признаются." },
+          feels: {
+            tj: ["Ман мефаҳмам, ки устод кӯмак кардан мехоҳад.", "Аммо агар дар назди ҳама пурсад, ҳама мефаҳманд, ки ман шикоят кардам.", "Он гоҳ боз бадтар мешавад. Беҳтар буд, ки наменавиштам."],
+            ru: ["Я понимаю, что устоз хочет помочь.", "Но если спросить при всех, все узнают, что это я пожаловался.", "Тогда станет только хуже. Лучше бы я не писал."]
+          },
+          summary: { tj: "Тарс. Кӯмак бе розигии ӯ аз худи масхара тарсовартар аст.", ru: "Страх. Помощь без его согласия пугает сильнее травли." }
+        },
+        {
+          type: "blame",
+          label: { tj: "Худат баҳона надодӣ? Бесабаб бо касе ин корро намекунанд.", ru: "А ты сам не давал повода? Просто так такое ни с кем не делают." },
+          feels: {
+            tj: ["Ман худам тамоми рӯз меҷӯям, ки гуноҳам дар чист.", "Акнун калонсол ҳам ҳамонро меҷӯяд.", "Пас, воқеан бо ман чизе дуруст нест.", "Дигар дар ин бора гап намезанам."],
+            ru: ["Я и так весь день ищу, в чём я виноват.", "Теперь и взрослый ищет то же самое.", "Значит, со мной правда что-то не так.", "Больше не буду поднимать эту тему."]
+          },
+          summary: { tj: "Барои кори каси дигар худро гунаҳкор ҳис мекунад. Дар худ фурӯ рафт.", ru: "Чувствует вину за чужой поступок. Закрылся." }
+        },
+        {
+          type: "support",
+          label: { tj: "Ташаккур, ки ба ман бовар кардӣ. Ту ҳеҷ гуноҳ надорӣ — инро он касе кард, ки аккаунтро сохт. Биё пагоҳ баъди дарс якҷоя фикр кунем, ки чӣ тавр аз аккаунти қалбакӣ шикоят кунем ва киро ҷалб намоем. Бе розигии ту дар назди синф ҳеҷ кор намекунам.", ru: "Спасибо, что доверился. Ты ни в чём не виноват — это сделал тот, кто создал аккаунт. Давай завтра после уроков вместе подумаем, как пожаловаться на фейк и кого подключить. Без твоего согласия я ничего не буду делать при классе." },
+          feels: {
+            tj: ["Ӯ нагуфт «фаромӯш кун» ва нагуфт «худат гунаҳкор».", "Ва дар назди ҳама ҷанҷол намехезонад. Ман метавонам бо ӯ якҷоя қарор қабул кунам.", "Гӯё ба падарам ҳам гуфта метавонам — агар устод дар паҳлӯям бошад."],
+            ru: ["Он не сказал «забудь» и не сказал «сам виноват».", "И не будет устраивать разбор при всех. Я могу решать вместе с ним.", "Кажется, и отцу смогу рассказать — если устоз будет рядом."]
+          },
+          summary: { tj: "Эътимод. Ҳис мекунад, ки вазъиятро идора карда метавонад.", ru: "Доверие. Чувствует, что ситуация под контролем." }
+        },
+        {
+          type: "minimize",
+          label: { tj: "Ин фақат шӯхии беақлона аст. Ҷиддӣ қабул накун, зуд фаромӯш мекунанд.", ru: "Это просто глупая шутка. Не принимай всерьёз, скоро забудут." },
+          feels: {
+            tj: ["Шӯхӣ он аст, ки ба ҳама хандаовар бошад. Ба ман хандаовар нест.", "Агар ҳатто муаллим ҳамин тавр фикр кунад, пас шикоят кардан бефоида аст.", "Пагоҳ боз танаффус аст."],
+            ru: ["Шутка — это когда смешно всем. Мне не смешно.", "Если даже учитель так думает, жаловаться бесполезно.", "Завтра опять перемена."]
+          },
+          summary: { tj: "Ноумедӣ. Қарор кард, ки шикоят кардан бефоида аст.", ru: "Безнадёжность. Решил, что жаловаться бесполезно." }
+        }
+      ],
+      better: [
+        { tj: "Ташаккур, ки навиштӣ. Хуб кардӣ, ки хомӯш намондӣ.", ru: "Спасибо, что написал. Хорошо, что ты не стал молчать." },
+        { tj: "Ту ҳеҷ гуноҳ надорӣ. Инро он касе мекунад, ки аккаунтро сохтааст.", ru: "Ты ни в чём не виноват. Это делает тот, кто создал аккаунт." },
+        { tj: "Биё якҷоя қарор кунем, ки минбаъд чӣ кор кунем. Бе розигии ту дар назди синф ҳеҷ кор намекунам.", ru: "Давай вместе решим, что делать дальше. Без твоего согласия я ничего не буду делать при классе." }
+      ]
+    }
+  ]
+};
+
+/* ================= LOGIC ================= */
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lang = "tj";
+try { const l = localStorage.getItem("c07-lang"); if (l === "ru" || l === "tj") lang = l; } catch (e) {}
+
+const S = { pop: [], weather: null, screen: "home", si: 0, shown: 0, ri: null, inner: 0, cls: false, tried: {}, tally: {} };
+let timers = [];
+const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+const later = (fn, ms) => timers.push(setTimeout(fn, reduce ? 0 : ms));
+
+const L = o => (o && typeof o === "object" && lang in o) ? o[lang] : o;
+const U = (k, vars) => { let s = L(content.ui[k]); if (vars) for (const v in vars) s = s.replace("{" + v + "}", vars[v]); return s; };
+/* all dynamic text passes through esc(); markup comes only from this file */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const put = (el, markup) => { el.textContent = ""; el.appendChild(document.createRange().createContextualFragment(markup)); };
+const story = () => content.stories[S.si];
+const T = t => content.types[t];
+
+function chrome() {
+  document.documentElement.lang = lang === "tj" ? "tg" : "ru";
+  document.documentElement.classList.toggle("cls", S.cls);
+  $("#brand").textContent = U("brand");
+  $("#logo").setAttribute("aria-label", U("brand"));
+  $("#helpBtn").textContent = U("help");
+  $("#langBtn").textContent = U("langSwitch");
+  $("#langBtn").setAttribute("aria-label", U("langAria"));
+}
+
+function go(screen, patch) {
+  clearTimers();
+  $("#modalRoot").textContent = "";
+  Object.assign(S, patch || {}, { screen });
+  render(false);
+  window.scrollTo(0, 0);
+}
+
+function render(isStatic) {
+  chrome();
+  const html = document.documentElement;
+  if (isStatic) html.classList.add("static");
+  ({ home: renderHome, story: renderStory, feels: renderFeels, better: renderBetter, games: renderGames, pop: renderPop, weather: renderWeather })[S.screen]();
+  if (isStatic) requestAnimationFrame(() => requestAnimationFrame(() => html.classList.remove("static")));
+}
+
+function classToggle() {
+  return `<button class="chip ${S.cls ? "on" : ""}" data-act="cls" aria-pressed="${S.cls}">▣ ${esc(U("classTitle"))}</button>`;
+}
+function metaBar(backAct, extra) {
+  return `<div class="meta"><button class="back" data-act="${backAct}" aria-label="${esc(U("back"))}">←</button>
+    <span class="lbl">${esc(U("storyOf", { n: S.si + 1 }))}${extra ? " · " + esc(extra) : ""}</span>${classToggle()}</div>`;
+}
+
+/* ---- home ---- */
+function renderHome() {
+  put(app, `<section class="screen">
+    <div class="hero">
+      <div class="duo" aria-hidden="true"><div class="b b1">${esc(U("duo1"))}</div><div class="b b2">${esc(U("duo2"))}</div></div>
+      <h1>${esc(U("heroA"))}<em>${esc(U("heroB"))}</em></h1>
+      <p>${esc(U("heroP"))}</p>
+    </div>
+    <h2>${esc(U("roleQ"))}</h2>
+    <div class="roles">${content.roles.map(r => `
+      <button class="role" data-role="${r.id}"><span class="ico" aria-hidden="true">${r.icon}</span>
+      <span><b>${esc(L(r.label))}</b><small>${esc(L(r.desc))}</small></span></button>`).join("")}
+    </div>
+    <button class="toggle" data-act="cls" aria-pressed="${S.cls}"><span><b>${esc(U("classTitle"))}</b><small>${esc(U("classDesc"))}</small></span><span class="sw ${S.cls ? "on" : ""}" aria-hidden="true"></span></button>
+    <button class="gamecard" data-act="games"><span class="ico" aria-hidden="true">🫧</span><span><b>${esc(L(content.games.card))}</b><small>${esc(L(content.games.cardDesc))}</small></span></button>
+    <p class="note">${esc(U("fiction"))}</p>
+  </section>`);
+}
+
+/* ---- story / chat ---- */
+function renderStory() {
+  const st = story(), msgs = st.messages;
+  put(app, `<section class="screen">
+    ${metaBar("home")}
+    <p class="setup">${esc(L(st.setup))}</p>
+    <div class="phone ${S.cls && S.shown < msgs.length ? "tapzone" : ""}" id="phone">
+      <div class="who"><span class="ava" aria-hidden="true">${esc(L(st.name).charAt(0))}</span><span><b>${esc(L(st.name))}</b><small>${esc(L(st.age))}</small></span></div>
+      <div class="msgs" id="msgs">${msgs.slice(0, S.shown).map(m => `<div class="msg">${esc(L(m))}</div>`).join("")}</div>
+    </div>
+    <div id="after"></div>
+  </section>`);
+  if (S.shown >= msgs.length) showChoices(false);
+  else if (S.cls) put($("#after"), `<button class="next" data-act="adv">${esc(U("next"))}</button>`);
+  else autoPlay();
+}
+
+function appendMsg() {
+  const el = document.createElement("div");
+  el.className = "msg"; el.textContent = L(story().messages[S.shown]);
+  $("#msgs").appendChild(el);
+  S.shown++;
+  el.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+}
+
+function autoPlay() {
+  const msgs = story().messages;
+  if (S.screen !== "story" || S.cls) return;
+  if (S.shown >= msgs.length) { showChoices(true); return; }
+  const ty = document.createElement("div");
+  ty.className = "typing";
+  put(ty, `<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>${esc(L(story().name))} ${esc(U("typing"))}</span>`);
+  $("#msgs").appendChild(ty);
+  const len = L(msgs[S.shown]).length;
+  later(() => { ty.remove(); appendMsg(); later(autoPlay, 450); }, Math.min(650 + len * 9, 1500));
+}
+
+function advance() {
+  if (S.screen === "story" && S.shown < story().messages.length) {
+    appendMsg();
+    if (S.shown >= story().messages.length) { $("#phone").classList.remove("tapzone"); showChoices(true); }
+  } else if (S.screen === "feels") {
+    if (S.inner < L(story().reactions[S.ri].feels).length) { S.inner++; renderFeels(true); }
+  }
+}
+
+function showChoices(scroll) {
+  const st = story(), tried = S.tried[st.id] || [];
+  put($("#after"), `<div class="choices" id="choices"><h2>${esc(U("answerQ"))}</h2>
+    <p class="setup">${esc(U("answerHint"))}</p>
+    ${st.reactions.map((r, i) => {
+      const was = tried.includes(i);
+      return `<button class="choice ${was ? "tried" : ""}" data-ri="${i}">«${esc(L(r.label))}»${was ? `<span class="t" style="color:${T(r.type).color}">${esc(L(T(r.type).label))} · ${esc(U("tried"))}</span>` : ""}</button>`;
+    }).join("")}</div>`);
+  if (scroll) $("#choices").scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+}
+
+function choose(i) {
+  const st = story();
+  const list = S.tried[st.id] = S.tried[st.id] || [];
+  if (!list.includes(i)) list.push(i);
+  const t = S.tally[st.id] = S.tally[st.id] || {};
+  const type = st.reactions[i].type;
+  t[type] = (t[type] || 0) + 1;
+  go("feels", { ri: i, inner: S.cls ? 1 : 0 });
+}
+
+/* ---- feels: the other side ---- */
+function renderFeels(partial) {
+  const st = story(), r = st.reactions[S.ri], lines = L(r.feels);
+  const tried = S.tried[st.id] || [];
+  const done = S.inner >= lines.length;
+  const typ = T(r.type);
+  let cmp = "";
+  if (done && tried.length > 1) {
+    cmp = `<div class="cmp"><h2>${esc(U("compareTitle"))}</h2>${tried.map(i => {
+      const rr = st.reactions[i], tt = T(rr.type);
+      return `<div class="row"><span class="tag" style="background:${tt.color}">${esc(L(tt.label))}</span><span>${esc(L(rr.summary))}</span></div>`;
+    }).join("")}</div>`;
+  }
+  let tally = "";
+  if (done && S.cls) {
+    const tl = S.tally[st.id] || {}, total = Object.values(tl).reduce((a, b) => a + b, 0) || 1;
+    tally = `<div class="tally"><h2>${esc(U("tallyTitle"))}</h2>${st.reactions.map(x => {
+      const n = tl[x.type] || 0, tt = T(x.type);
+      return `<div class="bar"><span>${esc(L(tt.label))}</span><span class="track"><span class="fill" style="background:${tt.color};transform:scaleX(${n / total})"></span></span><b>${n}</b></div>`;
+    }).join("")}</div>`;
+  }
+  const actions = done
+    ? `<div class="actions">
+        <button class="btn ${r.type === "support" ? "ghost" : "pri"}" data-act="retry">${esc(U("tryOther"))}</button>
+        <button class="btn ${r.type === "support" ? "pri" : "ghost"}" data-act="better">${esc(U("instead"))}</button>
+      </div>`
+    : (S.cls ? `<button class="next warm" data-act="adv">${esc(U("next"))}</button>` : "");
+  put(app, `<section class="${partial ? "" : "screen"}">
+    ${metaBar("story")}
+    <div class="other ${partial ? "still" : ""}">
+      <div class="kick">${esc(U("otherSide"))}</div>
+      <h1>${esc(U("feelsTitle", { name: L(st.name) }))}</h1>
+      <div class="said"><span class="t">${esc(U("youSaid"))} · ${esc(L(typ.label))}</span>«${esc(L(r.label))}»</div>
+      <ul class="inner">${lines.slice(0, S.inner).map((l, i) => `<li class="${partial && i < S.inner - 1 ? "still" : ""}">${esc(l)}</li>`).join("")}</ul>
+      ${done ? `<div class="sum"><span class="dot" style="background:${typ.color}"></span><span>${esc(L(r.summary))}</span></div>` : ""}
+      ${cmp}${tally}${actions}
+    </div>
+  </section>`);
+  if (!done && !S.cls) later(() => { S.inner++; renderFeels(true); }, S.inner === 0 ? 420 : 950);
+  if (partial) {
+    const last = app.querySelector(done ? ".actions" : ".inner li:last-child, .next");
+    if (last) last.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+  }
+}
+
+/* ---- better ---- */
+/* ---- mini-games (nothing is saved; state lives only in memory) ---- */
+const G = content.games;
+function gameBar(backAct, title) {
+  return `<div class="meta"><button class="back" data-act="${backAct}" aria-label="${esc(U("back"))}">←</button>
+    <span class="lbl">${esc(title)}</span>${classToggle()}</div>`;
+}
+function renderGames() {
+  put(app, `<section class="screen">
+    ${gameBar("home", L(G.card))}
+    <h1 class="gtitle">${esc(L(G.card))}</h1>
+    <p class="glead">${esc(L(G.lead))}</p>
+    ${["pop", "weather"].map(k => `<button class="gpick" data-act="${k}"><span class="em" aria-hidden="true">${G[k].icon}</span><span><b>${esc(L(G[k].title))}</b><small>${esc(L(G[k].desc))}</small></span></button>`).join("")}
+  </section>`);
+}
+
+function popListItem(i) {
+  const b = G.pop.bubbles[i];
+  return `<li><s>${esc(L(b.worry))}</s><b>«${esc(L(b.support))}»</b></li>`;
+}
+function popBridge() {
+  return `<div class="bridge" id="popBridge"><b>${esc(L(G.pop.bridgeT))}</b><p>${esc(L(G.pop.bridge))}</p></div>
+    <div class="actions"><button class="btn pri" data-act="popAgain">${esc(L(G.again))}</button>
+    <button class="btn sec" data-act="games">${esc(L(G.toGames))}</button></div>`;
+}
+function renderPop() {
+  const all = G.pop.bubbles, done = S.pop.length >= all.length;
+  put(app, `<section class="screen">
+    ${gameBar("games", L(G.card))}
+    <h1 class="gtitle">${esc(L(G.pop.title))}</h1>
+    <p class="glead">${esc(L(G.pop.hint))}</p>
+    <p class="gcount" id="popCount">${esc(L(G.pop.count).replace("{n}", S.pop.length).replace("{t}", all.length))}</p>
+    <div class="pond" id="pond">${done ? `<p class="pondDone">${esc(L(G.pop.empty))}</p>` :
+      all.map((b, i) => S.pop.includes(i) ? "" : `<button class="bub" data-pop="${i}" style="animation-delay:${(i % 6) * 60}ms">${esc(L(b.worry))}</button>`).join("")}</div>
+    <ul class="said2" id="said2" aria-live="polite">${S.pop.map(popListItem).join("")}</ul>
+    <div id="popEnd">${done ? popBridge() : ""}</div>
+  </section>`);
+}
+function popBubble(btn) {
+  const i = +btn.dataset.pop;
+  if (S.pop.includes(i)) return;
+  S.pop.push(i);
+  btn.classList.add("gone");
+  $("#said2").insertAdjacentHTML("beforeend", popListItem(i));
+  $("#popCount").textContent = L(G.pop.count).replace("{n}", S.pop.length).replace("{t}", G.pop.bubbles.length);
+  later(() => {
+    btn.remove();
+    if (S.pop.length >= G.pop.bubbles.length) {
+      put($("#pond"), `<p class="pondDone">${esc(L(G.pop.empty))}</p>`);
+      put($("#popEnd"), popBridge());
+      $("#popBridge").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    }
+  }, 230);
+}
+
+function renderWeather() {
+  const W = G.weather, sel = W.options.find(o => o.id === S.weather);
+  put(app, `<section class="screen">
+    ${gameBar("games", L(G.card))}
+    <h1 class="gtitle">${esc(L(W.title))}</h1>
+    <p class="glead">${esc(L(W.q))}</p>
+    <div class="wgrid">${W.options.map(o => `<button class="wbtn" data-weather="${o.id}" aria-pressed="${o.id === S.weather}"><span class="em" aria-hidden="true">${o.em}</span><span>${esc(L(o.label))}</span></button>`).join("")}</div>
+    <p class="note">${esc(L(W.note))}</p>
+    <div id="wans">${sel ? `<div class="wans" id="wansIn">
+      <div class="box"><span class="k">${esc(L(W.youLbl))}</span><p>${esc(L(sel.you))}</p>
+        ${sel.help ? `<div class="actions"><button class="btn pri" data-act="openHelp">${esc(L(W.openHelp))}</button></div>` : ""}</div>
+      <div class="box dark"><span class="k">${esc(L(W.tipLbl))}</span><p>${esc(L(sel.tip))}</p></div>
+      <div class="bridge"><b>${esc(L(W.bridgeT))}</b><p>${esc(L(W.bridge))}</p></div>
+      <div class="actions"><button class="btn sec" data-act="games">${esc(L(G.toGames))}</button></div>
+    </div>` : ""}</div>
+  </section>`);
+}
+
+function renderBetter() {
+  const st = story();
+  put(app, `<section class="screen better">
+    ${metaBar("feelsBack", L(st.name))}
+    <h1>${esc(U("instead"))}</h1>
+    <p class="lead">${esc(U("betterLead"))}</p>
+    <div>${st.better.map((b, i) => `<div class="phrase"><p>«${esc(L(b))}»</p><button class="copy" data-copy="${i}">${esc(U("copy"))}</button></div>`).join("")}</div>
+    <p class="truth">${esc(U("truth"))}</p>
+    <div class="actions">
+      <button class="btn pri" data-act="nextStory">${esc(U("nextStory"))} →</button>
+      <button class="btn sec" data-act="home">${esc(U("toRoles"))}</button>
+    </div>
+  </section>`);
+}
+
+async function copyText(text, btn) {
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {}
+  if (!ok) {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    ta.remove();
+  }
+  btn.textContent = U("copied"); btn.classList.add("ok");
+  setTimeout(() => { btn.textContent = U("copy"); btn.classList.remove("ok"); }, 1800);
+}
+
+/* ---- help sheet ---- */
+function openHelp() {
+  const ui = content.ui;
+  put($("#modalRoot"), `<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="hT">
+    <div class="sheet">
+      <h2 id="hT">${esc(U("helpTitle"))}</h2>
+      <p>${esc(U("helpText"))}</p>
+      <ul>${L(ui.helpTips).map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      ${ui.contacts.map(c => `<div class="contact"><span>${esc(L(c.name))}</span><span class="nums">${c.nums.map(n => `<a href="tel:${esc(n.tel)}">${esc(n.show)}</a>`).join("")}</span></div>`).join("")}
+      <p class="note">${esc(U("contactsNote"))}</p>
+      <button class="btn pri close" data-act="closeHelp">${esc(U("close"))}</button>
+    </div></div>`);
+  $("#modalRoot .close").focus();
+}
+const closeHelp = () => { $("#modalRoot").textContent = ""; $("#helpBtn").focus(); };
+
+/* ---- events ---- */
+document.addEventListener("click", e => {
+  if (e.target.id === "modal") return closeHelp();
+  const b = e.target.closest("button, .tapzone");
+  if (!b) return;
+  if (b.id === "logo") return go("home");
+  if (b.id === "helpBtn") return $("#modal") ? closeHelp() : openHelp();
+  if (b.id === "langBtn") {
+    lang = lang === "tj" ? "ru" : "tj";
+    try { localStorage.setItem("c07-lang", lang); } catch (e) {}
+    clearTimers();
+    render(true);
+    if ($("#modal")) openHelp();
+    return;
+  }
+  if (b.classList.contains("tapzone")) return advance();
+  if (b.dataset.pop !== undefined) return popBubble(b);
+  if (b.dataset.weather) {
+    S.weather = b.dataset.weather;
+    render(true);
+    $("#wansIn").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    return;
+  }
+  if (b.dataset.role) return go("story", { si: content.stories.findIndex(s => s.role === b.dataset.role), shown: 0 });
+  if (b.dataset.ri !== undefined) return choose(+b.dataset.ri);
+  if (b.dataset.copy !== undefined) return copyText(L(story().better[+b.dataset.copy]), b);
+  const act = b.dataset.act;
+  if (act === "cls") {
+    S.cls = !S.cls;
+    if (S.screen === "feels" && S.cls && S.inner === 0) S.inner = 1;
+    clearTimers(); render(true); return;
+  }
+  if (act === "home") return go("home");
+  if (act === "adv") return advance();
+  if (act === "story" || act === "retry") return go("story", {});
+  if (act === "better") return go("better");
+  if (act === "feelsBack") return go("feels", { inner: L(story().reactions[S.ri].feels).length });
+  if (act === "nextStory") return go("story", { si: (S.si + 1) % content.stories.length, shown: 0 });
+  if (act === "closeHelp") return closeHelp();
+  if (act === "openHelp") return openHelp();
+  if (act === "games") return go("games");
+  if (act === "pop" || act === "popAgain") return go("pop", { pop: [] });
+  if (act === "weather") return go("weather", { weather: null });
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#modal")) return closeHelp();
+  if (!S.cls || $("#modal")) return;
+  if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && !e.target.closest("button"))) { e.preventDefault(); advance(); }
+});
+
+render(false);
+</script>
+</body>
+</html>

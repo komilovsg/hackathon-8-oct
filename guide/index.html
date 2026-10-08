@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сайт с ИИ по шагам</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d1f24; --muted:#5d6370; --line:#e3dfd6;
+  --accent:#0f6e5b; --accent-soft:#e2f1ec; --warn:#a64b00; --warn-soft:#fbeedd;
+  --code-bg:#14171c; --code-ink:#e8eaee;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --card:#1b1e23; --ink:#eceef1; --muted:#a2a8b3; --line:#2c3037;
+    --accent:#4fc3a1; --accent-soft:#16312a; --warn:#f0a35c; --warn-soft:#33240f;
+    --code-bg:#0b0d10; --code-ink:#e8eaee;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121417; --card:#1b1e23; --ink:#eceef1; --muted:#a2a8b3; --line:#2c3037;
+  --accent:#4fc3a1; --accent-soft:#16312a; --warn:#f0a35c; --warn-soft:#33240f;
+  --code-bg:#0b0d10; --code-ink:#e8eaee;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:32px 16px 80px}
+header h1{font-size:clamp(28px,6vw,44px);line-height:1.1;margin:0 0 8px;font-weight:800;letter-spacing:-.02em}
+header p{color:var(--muted);margin:0 0 20px;font-size:18px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:0;list-style:none}
+.flow li{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px}
+.flow li b{color:var(--accent)}
+nav.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:28px}
+nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:28px}
+nav.toc a{color:var(--ink)}
+@media (max-width:560px){nav.toc ol{columns:1}}
+section.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 22px 18px;margin:0 0 18px}
+.step h2{display:flex;gap:12px;align-items:baseline;margin:0 0 6px;font-size:22px;line-height:1.25}
+.num{flex:none;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--accent);color:#fff;font-size:16px;font-weight:800}
+.where{color:var(--muted);font-size:14px;margin:0 0 12px}
+.step ol,.step ul{padding-left:22px;margin:8px 0}
+.step li{margin:4px 0}
+.tip{background:var(--accent-soft);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:15px}
+.warn{background:var(--warn-soft);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:15px}
+.warn b{color:var(--warn)}
+.prompt{position:relative;margin:12px 0}
+.prompt .label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.prompt pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px 16px 16px;white-space:pre-wrap;word-break:break-word;font:14px/1.55 "JetBrains Mono",ui-monospace,monospace;max-height:520px;overflow:auto}
+.copy{position:absolute;top:26px;right:8px;border:0;border-radius:8px;padding:6px 12px;background:var(--accent);color:#fff;font:600 13px "Noto Sans",sans-serif;cursor:pointer}
+.copy:active{transform:scale(.96)}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.9em;background:var(--accent-soft);padding:1px 6px;border-radius:6px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:13px}
+td a{color:var(--accent);font-weight:600;white-space:nowrap}
+.check li{list-style:none;margin-left:-22px}
+.check li::before{content:"☐ ";color:var(--accent)}
+footer{color:var(--muted);font-size:13px;margin-top:28px}
+.theme{position:fixed;top:12px;right:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font:600 13px "Noto Sans",sans-serif}
+@media print{.copy,.theme{display:none}.prompt pre{max-height:none}section.step{break-inside:avoid}}
+</style>
+</head>
+<body>
+<button class="theme" id="theme" aria-label="Сменить тему">◐ Тема</button>
+<div class="wrap">
+<header>
+  <h1>Сайт с помощью ИИ — по шагам</h1>
+  <p>От идеи до живой ссылки за 1–2 часа. Без программирования, без установки программ. Хакатон «Безопасность детей в интернете», 8 октября.</p>
+  <ul class="flow">
+    <li><b>1</b> Чат-ИИ: идея и бриф</li>
+    <li><b>2</b> Чат-ИИ: контент TJ/RU</li>
+    <li><b>3</b> Stitch: дизайн</li>
+    <li><b>4</b> Чат-ИИ: сборка index.html</li>
+    <li><b>5</b> GitHub: хранение</li>
+    <li><b>6</b> Vercel: публикация</li>
+  </ul>
+</header>
+
+<nav class="toc"><ol>
+  <li><a href="#s0">Что подготовить</a></li>
+  <li><a href="#s1">Определиться с идеей</a></li>
+  <li><a href="#s2">Написать контент</a></li>
+  <li><a href="#s3">Дизайн в Stitch</a></li>
+  <li><a href="#s4">Собрать приложение</a></li>
+  <li><a href="#s5">Проверить и поправить</a></li>
+  <li><a href="#s6">Залить на GitHub</a></li>
+  <li><a href="#s7">Опубликовать на Vercel</a></li>
+  <li><a href="#s8">QR, офлайн, финал</a></li>
+  <li><a href="#help">Номера для кнопки помощи</a></li>
+</ol></nav>
+
+<section class="step" id="s0">
+  <h2><span class="num">0</span>Что подготовить (5 минут)</h2>
+  <ul>
+    <li><b>Чат-ИИ</b> — любой: ChatGPT, Gemini, Claude. Лучше тот, где можно прикрепить картинку и получить длинный ответ.</li>
+    <li><b>Google-аккаунт</b> — для <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a>.</li>
+    <li><b>GitHub-аккаунт</b> — <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>.</li>
+    <li><b>Vercel-аккаунт</b> — <a href="https://vercel.com/signup" target="_blank" rel="noopener">vercel.com/signup</a>, входить <b>через GitHub</b> (так проще связать).</li>
+    <li>Ноутбук + один дешёвый Android для проверки.</li>
+  </ul>
+  <div class="tip">Роли в команде: 1 человек ведёт чат-ИИ, 1 — Stitch, 1 — контент и вычитка таджикского, 1 — тестирует на телефоне.</div>
+</section>
+
+<section class="step" id="s1">
+  <h2><span class="num">1</span>Определиться с идеей и тонкостями</h2>
+  <p class="where">Где: ChatGPT / Gemini / Claude · 15–20 минут</p>
+  <p>Не просите ИИ сразу «сделай сайт». Сначала пусть он задаст вам вопросы — так всплывут все тонкости: кто пользователь, какой телефон, какой язык, что опасно.</p>
+  <div class="prompt"><span class="label">Промпт 1 — ИИ как наставник, выдаёт бриф</span><pre>Ты — продуктовый наставник на хакатоне «Безопасность детей в интернете» в Таджикистане. Мы делаем простое веб-приложение (один HTML-файл, без сервера, без регистрации).
+
+Наша тема: [вставьте кейс или идею одной фразой].
+
+Задавай мне вопросы ПО ОДНОМУ (максимум 7), чтобы уточнить:
+— кто пользователь (возраст, роль: ребёнок / подросток / родитель / учитель), какой у него телефон и интернет;
+— какую одну проблему решаем и в какой момент человек откроет приложение;
+— какие 3 экрана главного сценария;
+— какие риски: что может напугать, пристыдить или навредить ребёнку;
+— какие данные НЕ собираем (имя, фото, номер — не собираем никогда).
+
+После ответов выдай БРИФ на одну страницу:
+1) Пользователь. 2) Проблема одной фразой. 3) Главный сценарий: экран 1 → экран 2 → экран 3 (что на каждом). 4) Тон и стиль. 5) Что делаем в MVP и что НЕ делаем. 6) Куда ведёт кнопка «Мне нужна помощь». 7) Как поймём, что работает (1–2 проверки на людях).</pre><button class="copy">Копировать</button></div>
+  <div class="tip">Сохраните бриф в отдельный файл или заметку — он понадобится в шагах 2–4.</div>
+</section>
+
+<section class="step" id="s2">
+  <h2><span class="num">2</span>Написать контент на двух языках</h2>
+  <p class="where">Где: тот же чат · 15 минут · контент — это 70% работы</p>
+  <div class="prompt"><span class="label">Промпт 2 — контент в JSON</span><pre>По нашему брифу напиши весь текст приложения на таджикском и русском.
+Требования:
+— простые короткие фразы, не больше 25 слов на карточку;
+— без морали, без стыда, без пугающих слов; никогда не обвинять пострадавшего;
+— только вымышленные ситуации и имена;
+— таджикский — живой разговорный, буквы ӣ ӯ ҳ қ ҷ ғ.
+Выдай результат одним JavaScript-объектом:
+const content = { tj: { ... }, ru: { ... } }
+с одинаковой структурой ключей для обоих языков (заголовки экранов, кнопки, карточки, тексты помощи).</pre><button class="copy">Копировать</button></div>
+  <div class="warn"><b>Обязательно:</b> таджикский текст должен прочитать носитель языка. ИИ ошибается в словах и окончаниях.</div>
+</section>
+
+<section class="step" id="s3">
+  <h2><span class="num">3</span>Дизайн в Google Stitch</h2>
+  <p class="where">Где: <a href="https://stitch.withgoogle.com" target="_blank" rel="noopener">stitch.withgoogle.com</a> · 15–20 минут</p>
+  <ol>
+    <li>Войти через Google → <b>New project</b> → выбрать <b>Mobile</b> (наши пользователи — с телефона).</li>
+    <li>Вставить промпт ниже. Stitch нарисует экраны.</li>
+    <li>Поправить словами: «сделай кнопки крупнее», «цвета спокойнее», «добавь красную кнопку помощи внизу каждого экрана».</li>
+    <li>Когда нравится — выбрать экран → иконка кода <code>&lt;/&gt;</code> → скопировать или скачать HTML. Можно также <b>Export → .zip</b>. Плюс сделать скриншоты всех экранов.</li>
+  </ol>
+  <div class="prompt"><span class="label">Промпт 3 — для Stitch (пример под тему «Щит аккаунта»)</span><pre>Mobile web app for teenagers 12–17 in Tajikistan: "Щит аккаунта / Сипари аккаунт" — protect your social media account in 5 minutes.
+
+3 screens:
+1) Home: big title, short subtitle, 3 large platform cards (Telegram, Instagram, TikTok) with icons, language switch "TJ | RU" top right.
+2) Checklist for chosen platform: progress bar on top ("2 of 5"), 5 step cards (strong password, 2-step verification, who can message me, hide phone number, check active sessions). Each card: icon, short title, 1-line explanation, big "Done" toggle.
+3) Result: shield illustration filling up, "Your account is protected", what to do if hacked (3 short steps), button "Check another app".
+
+Fixed red button at the bottom of every screen: "Мне нужна помощь".
+Style: modern, friendly, calm; deep teal + warm yellow accent on off-white; rounded cards, large tap targets (min 48px), large readable font, lots of white space. No photos of people. Cyrillic text.</pre><button class="copy">Копировать</button></div>
+  <div class="tip">Stitch часто лучше понимает английский промпт, а текст на экранах можно оставить русский/таджикский. Если результат слабый — прикрепите скриншот приложения, которое нравится, и напишите «в таком стиле».</div>
+</section>
+
+<section class="step" id="s4">
+  <h2><span class="num">4</span>Собрать приложение — один <code>index.html</code></h2>
+  <p class="where">Где: чат-ИИ · 15 минут</p>
+  <p>Даём ИИ три вещи: <b>бриф</b> (шаг 1), <b>контент</b> (шаг 2), <b>дизайн</b> (HTML из Stitch или скриншоты, шаг 3). Ниже — готовый промпт, на котором можно собрать приложение вживую.</p>
+  <div class="prompt"><span class="label">Промпт 4 — сборка (живой пример «Щит аккаунта»)</span><pre>Создай одностраничное веб-приложение в ОДНОМ HTML-файле на чистом HTML, CSS и JavaScript (без React, без фреймворков и npm — ничего не нужно устанавливать).
+
+Название: «Сипари аккаунт / Щит аккаунта».
+Пользователь: подростки 12–17 лет в Таджикистане, дешёвый Android, слабый интернет, таджикский и русский язык.
+Проблема: аккаунты подростков взламывают и через них шантажируют или обманывают друзей, потому что никто не включил двухэтапную проверку и не настроил приватность.
+
+Главный сценарий из 3 экранов:
+1) «Что защищаем?» — 3 крупные карточки: Telegram, Instagram, TikTok.
+2) Чек-лист из 5 шагов для выбранного приложения: надёжный пароль; двухэтапная проверка; кто может мне писать; скрыть номер телефона; проверить активные сеансы и выйти с чужих устройств. У каждого шага: заголовок, одно предложение «зачем», раскрывающаяся инструкция «где нажать» (3–4 коротких пункта), кнопка «Сделано». Сверху полоса прогресса «N из 5».
+3) Итог: щит заполняется по числу выполненных шагов, фраза поддержки, блок «Если аккаунт уже взломали» (не плати и не отвечай шантажисту; сохрани скриншоты; восстанови доступ через «Забыли пароль»; предупреди друзей; расскажи взрослому), кнопка «Проверить другое приложение».
+
+Кнопка «Мне нужна помощь / Ба ман кӯмак лозим» внизу на каждом экране, открывает окно с контактами (кнопки tel:):
+102 — милиция; 1919 — телефон доверия МВД; 1313 — национальный телефон доверия.
+
+Языки: таджикский (по умолчанию) и русский, переключатель «TJ | RU» вверху, выбор запоминается в localStorage.
+Весь текст храни в одном JavaScript-объекте content = { tj: {...}, ru: {...} }.
+Требования: мобильный экран от 360px, кнопки не меньше 48px, шрифт не меньше 16px, шрифт Noto Sans с поддержкой букв ӣ ӯ ҳ қ ҷ ғ (Google Fonts + системный запасной), без входа и регистрации, без сбора имени, фото и номера телефона, без внешних запросов кроме шрифта. Прогресс чек-листа храни только в памяти страницы.
+Стиль: современный, дружелюбный, спокойный; глубокий бирюзовый + тёплый жёлтый на светлом фоне; скруглённые карточки. [Если есть — прикрепляю HTML/скриншоты из Stitch: повтори этот дизайн.]
+Анимации: плавная смена экранов, появление карточек по очереди, щит заполняется, «Сделано» с лёгким отскоком. Только CSS (transition и @keyframes), 150–400 мс, только transform и opacity, без мигания; при prefers-reduced-motion анимации отключаются.
+
+Выдай весь файл целиком одним блоком кода.</pre><button class="copy">Копировать</button></div>
+  <ol>
+    <li>Скопировать код из ответа → сохранить как <code>index.html</code> (в Блокноте/TextEdit: «Сохранить как», кодировка UTF-8, расширение <code>.html</code>).</li>
+    <li>Открыть двойным щелчком в Chrome.</li>
+    <li>Проверить как телефон: <code>F12</code> → значок телефона (Toggle device toolbar) → ширина 360.</li>
+  </ol>
+  <div class="tip">Если ответ обрезался — напишите «продолжи с того места, где остановился» или «выдай файл частями 1/3, 2/3, 3/3».</div>
+</section>
+
+<section class="step" id="s5">
+  <h2><span class="num">5</span>Проверить и поправить</h2>
+  <p class="where">Где: чат-ИИ · по одной правке за раз</p>
+  <p>Правило: <b>одна правка → сохранить → проверить</b>. Не просите 10 изменений сразу.</p>
+  <div class="prompt"><span class="label">Промпт 5 — примеры правок</span><pre>Вот текущий index.html: [вставить код].
+Исправь только одно: [кнопка «Сделано» не меняет прогресс / на экране 360px текст вылезает за край / язык не переключается на 2-м экране].
+Ничего другого не меняй. Выдай файл целиком.</pre><button class="copy">Копировать</button></div>
+  <div class="prompt"><span class="label">Промпт 6 — самопроверка от ИИ</span><pre>Проверь этот index.html как строгий тестировщик: пройди весь сценарий на обоих языках, найди ошибки JavaScript, тексты без перевода, кнопки меньше 48px, места, где ребёнка могут напугать или пристыдить, и любой сбор личных данных. Дай список проблем, затем исправленный файл целиком.</pre><button class="copy">Копировать</button></div>
+</section>
+
+<section class="step" id="s6">
+  <h2><span class="num">6</span>Залить на GitHub (без командной строки)</h2>
+  <p class="where">Где: <a href="https://github.com/new" target="_blank" rel="noopener">github.com/new</a> · 5 минут</p>
+  <ol>
+    <li><b>New repository</b> → имя латиницей, например <code>shield-account</code> → <b>Public</b> → галочка <b>Add a README</b> → <b>Create repository</b>.</li>
+    <li>В репозитории: <b>Add file → Upload files</b> → перетащить <code>index.html</code> (и позже <code>manifest.json</code>, <code>sw.js</code>, иконки).</li>
+    <li>Внизу <b>Commit changes</b>.</li>
+    <li>Чтобы обновить: снова <b>Upload files</b> с тем же именем файла → <b>Commit</b>. Старый файл заменится.</li>
+  </ol>
+  <div class="warn"><b>Никогда</b> не загружайте на GitHub ключи API, пароли и личные данные — публичный репозиторий видят все.</div>
+</section>
+
+<section class="step" id="s7">
+  <h2><span class="num">7</span>Опубликовать на Vercel (бесплатно)</h2>
+  <p class="where">Где: <a href="https://vercel.com/new" target="_blank" rel="noopener">vercel.com/new</a> · 3 минуты</p>
+  <ol>
+    <li>Войти в Vercel <b>через GitHub</b> (Continue with GitHub). План — <b>Hobby</b> (бесплатный).</li>
+    <li><b>Add New… → Project</b> → в списке репозиториев нажать <b>Import</b> напротив своего. Если репозитория нет — <b>Adjust GitHub App Permissions</b> и дать доступ.</li>
+    <li><b>Framework Preset: Other</b>. Build Command и Output Directory оставить пустыми.</li>
+    <li><b>Deploy</b>. Через ~30 секунд будет ссылка вида <code>shield-account.vercel.app</code>.</li>
+    <li>Дальше всё автоматически: каждый новый Commit на GitHub = новая версия сайта через минуту.</li>
+  </ol>
+  <div class="tip">Имя ссылки можно поменять: Project → Settings → Domains → изменить <code>*.vercel.app</code>.</div>
+</section>
+
+<section class="step" id="s8">
+  <h2><span class="num">8</span>QR-код, офлайн-режим и финальная проверка</h2>
+  <p class="where">Перед пре-питчем 13 октября</p>
+  <ol>
+    <li><b>QR-код</b>: в Chrome открыть свою ссылку → «Поделиться» → «QR-код». Распечатать или вставить в слайд.</li>
+    <li><b>Офлайн (PWA)</b> — промпт ниже, затем загрузить новые файлы на GitHub (шаг 6).</li>
+    <li>Открыть ссылку на дешёвом Android при слабом интернете, затем в авиарежиме.</li>
+  </ol>
+  <div class="prompt"><span class="label">Промпт 7 — офлайн-режим</span><pre>Сделай это приложение PWA: добавь manifest.json и service worker (sw.js), чтобы после первого открытия оно работало без интернета и устанавливалось на главный экран. Иконку сделай как inline SVG или дай мне простую SVG-иконку отдельным файлом. Покажи, какие строки добавить в index.html, и выдай manifest.json и sw.js целиком.</pre><button class="copy">Копировать</button></div>
+  <ul class="check">
+    <li>Открывается по ссылке и QR на дешёвом Android.</li>
+    <li>Главный сценарий проходится без подсказок.</li>
+    <li>Таджикский проверен носителем языка.</li>
+    <li>Нет входа, не собираются имя, фото, номер.</li>
+    <li>Кнопка помощи ведёт на проверенные номера.</li>
+    <li>Работает без интернета после первого открытия.</li>
+    <li>Протестировано на 2 людях из целевой группы.</li>
+  </ul>
+</section>
+
+<section class="step" id="help">
+  <h2><span class="num">☎</span>Номера для кнопки «Мне нужна помощь» (Таджикистан)</h2>
+  <p class="where">Найдено в открытых источниках, октябрь 2026. Перед показом перепроверьте звонком.</p>
+  <table>
+    <thead><tr><th>Номер</th><th>Кто это</th><th>Когда звонить</th></tr></thead>
+    <tbody>
+      <tr><td><a href="tel:102">102</a></td><td>Милиция</td><td>Угроза жизни, срочная опасность</td></tr>
+      <tr><td><a href="tel:103">103</a></td><td>Скорая помощь</td><td>Нужна медицинская помощь</td></tr>
+      <tr><td><a href="tel:1313">1313</a></td><td>Национальный телефон доверия (Комитет по делам женщин и семьи)</td><td>Насилие, давление, нужна консультация</td></tr>
+      <tr><td><a href="tel:1919">1919</a><br><a href="tel:+992372212121">+992 37 221-21-21</a></td><td>Телефон доверия МВД</td><td>Шантаж, угрозы, мошенничество, взлом</td></tr>
+      <tr><td><a href="tel:+992372333353">+992 37 233-33-53</a><br><a href="tel:+992488880707">+992 48 888-07-07</a></td><td>Республиканский центр соцуслуг для пострадавших от насилия (Душанбе)</td><td>Помощь пострадавшим от насилия</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:var(--muted)">Источники: <a href="https://tajikistan.iom.int/sites/g/files/tmzbdl2216/files/documents/2026-01/tajikistan_gbv-module_handbook.pdf" target="_blank" rel="noopener">справочник МОМ (IOM) Таджикистан, январь 2026</a>, <a href="https://www.mvd.tj" target="_blank" rel="noopener">mvd.tj</a>. Отдельного подтверждённого детского телефона доверия в открытых источниках не найдено — уточните у организаторов и ЮНИСЕФ.</p>
+</section>
+
+<footer>Раздаточный материал к хакатону · 8 октября · Душанбе</footer>
+</div>
+<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.parentNode.querySelector('pre').innerText;
+    var done=function(){b.textContent='Скопировано ✓';setTimeout(function(){b.textContent='Копировать'},1500)};
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done)}
+    else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done()}
+  });
+});
+document.getElementById('theme').addEventListener('click',function(){
+  var r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+});
+</script>
+</body>
+</html>

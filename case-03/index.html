@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#18584A">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 28 28%22%3E%3Crect width=%2228%22 height=%2228%22 rx=%226%22 fill=%22%2318584A%22/%3E%3Cpath d=%22M5 8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-6l-4 4v-4a3 3 0 0 1-3-3z%22 fill=%22%23E2B33C%22/%3E%3C/svg%3E">
+<title>Гуфтугӯ дар хона</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#EEF3EE;      /* шир — pale green-milk */
+  --card:#FFFFFF;
+  --ink:#13231F;
+  --ink-soft:#4A5C57;
+  --choi:#18584A;        /* tea-pot green, primary */
+  --choi-deep:#0F3F35;
+  --anor:#C23B4A;        /* pomegranate, "don't" */
+  --zar:#E2B33C;         /* gold */
+  --line:#D5E0DA;
+  --ok:#1E7A55;
+  --sans:"Noto Sans", Roboto, "Segoe UI", Arial, sans-serif;
+  --serif:"Noto Serif", Georgia, "Times New Roman", serif;
+  --r:20px;
+  --nav-h:76px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:18px;line-height:1.45;-webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--zar);outline-offset:3px}
+
+/* ---------- ikat (atlas) band: the signature ---------- */
+.ikat{
+  height:14px;
+  background:
+    linear-gradient(135deg,var(--choi) 25%,transparent 25%) 0 0/28px 14px,
+    linear-gradient(225deg,var(--choi) 25%,transparent 25%) 0 0/28px 14px,
+    linear-gradient(315deg,var(--anor) 25%,transparent 25%) 14px 0/28px 14px,
+    linear-gradient(45deg,var(--anor) 25%,transparent 25%) 14px 0/28px 14px,
+    var(--zar);
+}
+.ikat.thin{height:8px;
+  background:
+    linear-gradient(135deg,var(--choi) 25%,transparent 25%) 0 0/16px 8px,
+    linear-gradient(225deg,var(--choi) 25%,transparent 25%) 0 0/16px 8px,
+    linear-gradient(315deg,var(--anor) 25%,transparent 25%) 8px 0/16px 8px,
+    linear-gradient(45deg,var(--anor) 25%,transparent 25%) 8px 0/16px 8px,
+    var(--zar);}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:20;background:var(--choi);color:#fff}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 16px;min-height:62px;max-width:560px;margin:0 auto}
+.brand{flex:1;min-width:0;font-weight:800;font-size:18px;line-height:1.15;display:flex;align-items:center;gap:8px}
+.brand svg{flex:none}
+.lang-btn{
+  min-height:48px;padding:0 14px;border-radius:999px;background:#fff;color:var(--choi-deep);
+  font-weight:700;font-size:16px;display:flex;align-items:center;gap:6px;flex:none;
+}
+.age-chip{
+  min-height:48px;padding:0 12px;border-radius:999px;border:2px solid rgba(255,255,255,.55);
+  color:#fff;font-weight:700;font-size:15px;flex:none;white-space:nowrap;
+}
+.age-chip[hidden]{display:none}
+@media (max-width:419px){ .bar.compact .brand span{display:none} }
+
+main{max-width:560px;margin:0 auto;padding:0 0 calc(var(--nav-h) + 24px)}
+.screen{display:none}
+.screen.on{display:block;animation:fadeIn .32s ease-out both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- start ---------- */
+.start{padding:28px 16px 24px}
+.start h1{font-family:var(--serif);font-size:30px;line-height:1.2;font-weight:700;color:var(--choi-deep);margin-bottom:22px}
+.ages{display:grid;gap:14px}
+.age{
+  display:flex;align-items:center;gap:16px;width:100%;min-height:96px;padding:12px 20px;
+  background:var(--card);border-radius:var(--r);border:2px solid var(--line);text-align:left;
+  box-shadow:0 2px 0 var(--line);transition:transform .15s ease-out;
+}
+.age:active{transform:scale(.97)}
+.age .fig{width:64px;height:72px;flex:none;display:flex;align-items:flex-end;justify-content:center}
+.age b{font-size:30px;font-weight:800;color:var(--choi-deep);line-height:1}
+.age span span{display:block;font-size:17px;color:var(--ink-soft);margin-top:4px}
+.age .go{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--choi);display:grid;place-items:center;flex:none}
+.privacy{margin-top:22px;display:flex;gap:10px;align-items:flex-start;color:var(--ink-soft);font-size:16px}
+.privacy svg{flex:none}
+
+/* ---------- section head ---------- */
+.shead{padding:20px 16px 10px}
+.shead h2{font-family:var(--serif);font-size:25px;line-height:1.2;color:var(--choi-deep)}
+
+/* ---------- swipe deck ---------- */
+.deck{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 24px 14px;scroll-padding:0 24px;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;overscroll-behavior-x:contain;
+}
+.deck::-webkit-scrollbar{display:none}
+.card{
+  flex:0 0 calc(100% - 48px);scroll-snap-align:center;scroll-snap-stop:always;
+  background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 0 var(--line),0 8px 24px -14px rgba(19,35,31,.35);
+  display:flex;flex-direction:column;
+}
+.card-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:14px;flex:1}
+.say{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--choi)}
+.phrase{font-family:var(--serif);font-size:25px;line-height:1.32;font-weight:600;color:var(--ink)}
+.phrase::before{content:"«";color:var(--zar)}
+.phrase::after{content:"»";color:var(--zar)}
+.tip{display:flex;gap:10px;align-items:flex-start;background:#F4F7F2;border-radius:14px;padding:12px 14px;font-size:17px;color:var(--ink-soft)}
+.tip svg{flex:none;margin-top:2px}
+.actions{display:flex;gap:10px;align-items:center;margin-top:auto}
+.listen{
+  position:relative;flex:1;width:100%;min-height:60px;border-radius:999px;background:var(--choi);color:#fff;
+  font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .15s ease-out;
+}
+.listen:active{transform:scale(.97)}
+.listen::after{
+  content:"";position:absolute;inset:-5px;border-radius:inherit;border:3px solid var(--zar);
+  opacity:0;pointer-events:none;
+}
+.listen.playing{background:var(--choi-deep)}
+.listen.playing::after{animation:pulse .4s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.35;transform:scale(.98)}to{opacity:1;transform:scale(1.04)}}
+.share{width:60px;height:60px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+
+.pager{display:flex;align-items:center;justify-content:space-between;padding:0 16px;gap:8px}
+.arrow{width:52px;height:52px;border-radius:50%;background:var(--card);border:2px solid var(--line);display:grid;place-items:center;transition:opacity .2s}
+.arrow[disabled]{opacity:.35;cursor:default}
+.dots{display:flex;gap:8px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line);transition:transform .2s ease-out,background-color .2s}
+.dot.on{background:var(--choi);transform:scale(1.35)}
+.count{font-size:15px;color:var(--ink-soft);font-weight:600;min-width:44px;text-align:center}
+
+/* ---------- told: do / don't ---------- */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px 16px 10px}
+.seg button{
+  min-height:64px;border-radius:16px;border:2px solid var(--line);background:var(--card);
+  font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.15;padding:6px 10px;
+}
+.seg button.on.do{background:var(--ok);border-color:var(--ok);color:#fff}
+.seg button.on.dont{background:var(--anor);border-color:var(--anor);color:#fff}
+.mark{width:52px;height:52px;border-radius:50%;display:grid;place-items:center}
+.mark.do{background:#E3F1EA}
+.mark.dont{background:#F8E3E5}
+.card.dont .listen{background:var(--anor)}
+.card.dont .listen.playing{background:#8E2632}
+.card.do{border-top:6px solid var(--ok)}
+.card.dont{border-top:6px solid var(--anor)}
+.told-text{font-size:23px;line-height:1.35;font-weight:700}
+
+/* ---------- glossary ---------- */
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:6px 16px}
+.term{
+  min-height:120px;background:var(--card);border-radius:var(--r);border:2px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px;
+  font-weight:700;font-size:17px;text-align:center;line-height:1.2;transition:transform .15s ease-out;
+}
+.term:active{transform:scale(.96)}
+.term .ico{font-size:40px;line-height:1}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(15,35,30,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;overflow:hidden;
+  background:var(--card);border-radius:24px 24px 0 0;transform:translateY(105%);visibility:hidden;
+  transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s .32s;padding-bottom:max(18px,env(safe-area-inset-bottom));
+}
+.sheet.on{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet .inner{padding:18px 20px 8px;display:flex;flex-direction:column;gap:14px}
+.sheet .big{font-size:64px;line-height:1;text-align:center}
+.sheet h3{font-family:var(--serif);font-size:27px;text-align:center;color:var(--choi-deep)}
+.sheet p{font-size:20px;line-height:1.4}
+.close{position:absolute;top:22px;right:12px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#F1F4F2}
+
+/* ---------- help ---------- */
+.contacts{display:grid;gap:12px;padding:6px 16px}
+.contact{background:var(--card);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;border:2px solid var(--line)}
+.contact b{font-size:19px}
+.contact .num{font-size:22px;font-weight:800;color:var(--choi-deep);letter-spacing:.02em}
+.call{
+  min-height:56px;border-radius:999px;background:var(--choi);color:#fff;font-weight:800;font-size:18px;
+  display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;
+}
+.note{padding:14px 16px;font-size:15px;color:var(--ink-soft)}
+
+/* ---------- bottom nav ---------- */
+nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
+}
+nav .row{display:grid;grid-template-columns:repeat(5,1fr);max-width:560px;margin:0 auto;height:var(--nav-h)}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:700;color:var(--ink-soft);line-height:1.1;padding:4px 2px;text-align:center}
+nav button .pill{width:56px;height:34px;border-radius:999px;display:grid;place-items:center;transition:background-color .2s}
+nav button.on{color:var(--choi-deep)}
+nav button.on .pill{background:#D7EAE1}
+nav[hidden]{display:none}
+
+.toast{
+  position:fixed;left:16px;right:16px;bottom:calc(var(--nav-h) + 14px);z-index:50;max-width:528px;margin:0 auto;
+  background:var(--ink);color:#fff;border-radius:16px;padding:14px 16px;font-size:16px;
+  opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;
+}
+.toast.on{opacity:1;transform:none}
+
+/* ---------- games ---------- */
+.games{display:grid;gap:14px;padding:6px 16px}
+.game-entry{
+  display:flex;align-items:center;gap:16px;width:100%;min-height:112px;padding:16px 18px;text-align:left;
+  background:var(--card);border-radius:var(--r);border:2px solid var(--line);box-shadow:0 2px 0 var(--line);
+  transition:transform .15s ease-out;
+}
+.game-entry:active{transform:scale(.97)}
+.game-entry .gi{font-size:44px;line-height:1;flex:none}
+.game-entry b{display:block;font-family:var(--serif);font-size:22px;color:var(--choi-deep);line-height:1.2}
+.game-entry span span{display:block;font-size:16px;color:var(--ink-soft);margin-top:4px}
+.back{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 14px 0 8px;margin:12px 12px 0;border-radius:999px;font-weight:700;color:var(--choi-deep)}
+.game-rule{margin:0 16px 12px;display:flex;gap:10px;align-items:flex-start;font-size:16px;color:var(--ink-soft)}
+.game-rule svg{flex:none}
+.qq-meta{display:flex;justify-content:space-between;align-items:center;padding:0 16px 10px;font-weight:700;color:var(--ink-soft);font-size:15px}
+.flip{padding:0 16px;perspective:1200px}
+.flip-inner{position:relative;min-height:330px;transform-style:preserve-3d;transition:transform .4s cubic-bezier(.3,.7,.3,1)}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:var(--r);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.face.front{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:100%;color:#fff;
+  background:
+    linear-gradient(135deg,var(--choi-deep) 25%,transparent 25%) 0 0/48px 48px,
+    linear-gradient(225deg,var(--choi-deep) 25%,transparent 25%) 0 0/48px 48px,
+    linear-gradient(315deg,var(--anor) 25%,transparent 25%) 24px 0/48px 48px,
+    linear-gradient(45deg,var(--anor) 25%,transparent 25%) 24px 0/48px 48px,
+    var(--choi);
+}
+.face.front .open{background:var(--card);color:var(--choi-deep);border-radius:999px;padding:14px 22px;font-weight:800;font-size:19px;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+.face.front .q-mark{width:84px;height:84px;border-radius:50%;background:var(--zar);color:var(--choi-deep);display:grid;place-items:center;font-family:var(--serif);font-size:48px;font-weight:700}
+.face.back{transform:rotateY(180deg);background:var(--card);display:flex;flex-direction:column;gap:14px;padding:20px;box-shadow:0 8px 24px -14px rgba(19,35,31,.35)}
+.flip:not(.flipped) .face.back,.flip.flipped .face.front{pointer-events:none}
+.who{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-weight:800;font-size:15px}
+.who.parent{background:#E3F1EA;color:var(--choi-deep)}
+.who.child{background:#FBF0D6;color:#7A5A0B}
+.who .e{font-size:22px}
+.qtext{font-family:var(--serif);font-size:25px;line-height:1.32;font-weight:600}
+.face.back .listen{margin-top:auto;flex:none}
+.big-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 32px);margin:16px 16px 0;min-height:60px;
+  border-radius:999px;background:var(--choi);color:#fff;font-weight:800;font-size:19px;transition:transform .15s ease-out;
+}
+.big-btn:active{transform:scale(.97)}
+.big-btn.ghost{background:var(--card);color:var(--choi-deep);border:2px solid var(--line)}
+.bridge{
+  margin:6px 16px 0;padding:22px 20px;border-radius:var(--r);background:var(--choi);color:#fff;text-align:center;
+  display:flex;flex-direction:column;gap:14px;align-items:center;animation:rise .35s ease-out both;
+}
+.bridge .heart{font-size:48px;line-height:1}
+.bridge p{font-family:var(--serif);font-size:24px;line-height:1.3;font-weight:600}
+.bridge .listen{background:#fff;color:var(--choi-deep);width:100%}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.wx{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.wx button{
+  min-height:132px;border-radius:var(--r);background:var(--card);border:2px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:18px;
+  transition:transform .2s ease-out,opacity .2s;
+}
+.wx button .e{font-size:52px;line-height:1;transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.wx button.on{border-color:var(--zar);box-shadow:0 0 0 3px var(--zar) inset}
+.wx button.on .e{transform:scale(1.18)}
+.wx.picked button:not(.on){opacity:.5}
+.wx-answer{scroll-margin-top:84px;margin:14px 16px 0;background:var(--card);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:14px;animation:rise .35s ease-out both;box-shadow:0 8px 24px -14px rgba(19,35,31,.35)}
+.wx-answer .child-say{font-family:var(--serif);font-size:23px;line-height:1.32;font-weight:600}
+.adult{border-left:5px solid var(--zar);background:#F4F7F2;border-radius:12px;padding:12px 14px;font-size:17px}
+.adult b{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--choi);margin-bottom:4px}
+.link-help{display:inline-flex;align-items:center;gap:8px;min-height:48px;color:var(--anor);font-weight:800;text-decoration:underline;padding:0 4px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .listen.playing::after{opacity:1}
+}
+@media (min-width:480px){ .card{flex-basis:420px} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand" id="brand"></div>
+    <button class="age-chip" id="ageChip" hidden></button>
+    <button class="lang-btn" id="langBtn"></button>
+  </div>
+  <div class="ikat thin" aria-hidden="true"></div>
+</header>
+
+<main>
+  <section class="screen" id="s-start"></section>
+  <section class="screen" id="s-cards"></section>
+  <section class="screen" id="s-told"></section>
+  <section class="screen" id="s-games"></section>
+  <section class="screen" id="s-gloss"></section>
+  <section class="screen" id="s-help"></section>
+</main>
+
+<nav id="nav" hidden><div class="row" id="navRow"></div></nav>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONTENT — all text lives here, separate from logic (О-5).
+   Tajik text must be checked by a native speaker.
+   audio.tj: paths for human-recorded MP3s (Ф-3). Set AUDIO_READY = true
+   once the files are placed into ./audio/.
+   ===================================================================== */
+const content = {
+  ages: ["6-9", "10-13", "14-17"],
+  ui: {
+    tj: {
+      app: "Гуфтугӯ дар хона",
+      switchTo: "Русский",
+      startQ: "Фарзанди шумо чандсола аст?",
+      ageUnit: "сола",
+      ageHint: { "6-9": "Хурдсол", "10-13": "Мактаббача", "14-17": "Наврас" },
+      privacy: "Мо ҳеҷ чизро дар бораи шумо ва фарзандатон нигоҳ намедорем.",
+      tabs: { cards: "Оғози сӯҳбат", told: "Кӯдак гуфт", games: "Бозиҳо", gloss: "Луғат", help: "Кумак" },
+      cardsTitle: "Чӣ тавр гапро сар кунем",
+      say: "Гӯед",
+      listen: "Гӯш кунед",
+      stop: "Бас",
+      share: "Фиристодан",
+      prev: "Пешина", next: "Баъдӣ",
+      toldTitle: "Фарзанд мушкилашро гуфт",
+      doLabel: "Чӣ кунем", dontLabel: "Чӣ накунем",
+      glossTitle: "Калимаҳои нав",
+      helpTitle: "Ба куҷо муроҷиат кунем",
+      call: "Занг задан",
+      helpNote: "Рақамҳо аз манбаъҳои кушод санҷида шудаанд (октябри 2026). Пеш аз намоиш боз санҷед.",
+      close: "Пӯшидан",
+      tmpVoice: "Овози тоҷикӣ ҳанӯз сабт нашудааст. Ҳоло овози муваққатӣ.",
+      noVoice: "Дар ин телефон овоз кор намекунад. Матнро баланд хонед.",
+      shared: "Матн нусха шуд"
+    },
+    ru: {
+      app: "Разговор дома",
+      switchTo: "Тоҷикӣ",
+      startQ: "Сколько лет вашему ребёнку?",
+      ageUnit: "лет",
+      ageHint: { "6-9": "Малыш", "10-13": "Школьник", "14-17": "Подросток" },
+      privacy: "Мы ничего не сохраняем о вас и вашем ребёнке.",
+      tabs: { cards: "Начать разговор", told: "Ребёнок рассказал", games: "Игры", gloss: "Словарик", help: "Помощь" },
+      cardsTitle: "Как начать разговор",
+      say: "Скажите",
+      listen: "Прослушать",
+      stop: "Стоп",
+      share: "Поделиться",
+      prev: "Назад", next: "Дальше",
+      toldTitle: "Ребёнок рассказал о проблеме",
+      doLabel: "Что делать", dontLabel: "Чего не делать",
+      glossTitle: "Новые слова",
+      helpTitle: "Куда обратиться",
+      call: "Позвонить",
+      helpNote: "Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте.",
+      close: "Закрыть",
+      tmpVoice: "",
+      noVoice: "На этом телефоне нет озвучки. Прочитайте текст вслух.",
+      shared: "Текст скопирован"
+    }
+  },
+
+  cards: [
+    /* ---- 6–9 ---- */
+    { id:"c1", age:"6-9", kind:"start",
+      phrase:{ tj:"Имрӯз дар телефон чӣ тамошо кардӣ? Ба ман ҳам нишон деҳ.", ru:"Что ты сегодня смотрел в телефоне? Покажи и мне." },
+      tip:{ tj:"Дар паҳлӯяш нишинед ва якҷоя тамошо кунед.", ru:"Сядьте рядом и посмотрите вместе." },
+      audio:{ tj:"audio/c1-tj.mp3" } },
+    { id:"c2", age:"6-9", kind:"start",
+      phrase:{ tj:"Кадом бозӣ ба ту бештар маъқул аст? Маро ҳам ёд деҳ.", ru:"Какая игра тебе больше нравится? Научи и меня." },
+      tip:{ tj:"Бигзор кӯдак муаллим шавад — ӯ хурсанд мешавад.", ru:"Пусть ребёнок побудет учителем — ему приятно." },
+      audio:{ tj:"audio/c2-tj.mp3" } },
+    { id:"c3", age:"6-9", kind:"start",
+      phrase:{ tj:"Агар дар телефон чизи тарсонак бинӣ, ба ман гӯй. Ман туро сарзаниш намекунам.", ru:"Если увидишь в телефоне что-то страшное, скажи мне. Я не буду ругать." },
+      tip:{ tj:"Ваъдаатонро иҷро кунед: ором бошед.", ru:"Сдержите обещание: оставайтесь спокойны." },
+      audio:{ tj:"audio/c3-tj.mp3" } },
+    { id:"c4", age:"6-9", kind:"start",
+      phrase:{ tj:"Агар одами ношинос ба ту нависад, аввал ба ман нишон деҳ.", ru:"Если тебе напишет незнакомый человек, сначала покажи мне." },
+      tip:{ tj:"Гӯед: ин қоида барои ҳама аст, на ҷазо.", ru:"Скажите: это правило для всех, а не наказание." },
+      audio:{ tj:"audio/c4-tj.mp3" } },
+    { id:"c5", age:"6-9", kind:"start",
+      phrase:{ tj:"Сурати худ ва хонаамонро бе пурсидани ман ба касе нафирист.", ru:"Не отправляй никому свои фото и фото дома, не спросив меня." },
+      tip:{ tj:"Содда фаҳмонед: сурат дар интернет ҳамеша мемонад.", ru:"Объясните просто: фото в интернете остаётся навсегда." },
+      audio:{ tj:"audio/c5-tj.mp3" } },
+
+    /* ---- 10–13 ---- */
+    { id:"c6", age:"10-13", kind:"start",
+      phrase:{ tj:"Дар интернет бештар чӣ кор мекунӣ? Имрӯз чӣ нав омӯхтӣ?", ru:"Чем ты чаще всего занят в интернете? Что нового сегодня узнал?" },
+      tip:{ tj:"Бо шавқ пурсед, на бо шубҳа.", ru:"Спрашивайте с интересом, а не с подозрением." },
+      audio:{ tj:"audio/c6-tj.mp3" } },
+    { id:"c7", age:"10-13", kind:"start",
+      phrase:{ tj:"Дар гурӯҳи синфатон касеро масхара мекунанд? Ту чӣ фикр дорӣ?", ru:"В вашем классном чате кого-нибудь дразнят? Что ты об этом думаешь?" },
+      tip:{ tj:"Аввал дар бораи дигарон пурсед — гуфтан осонтар мешавад.", ru:"Сначала спросите о других — так легче рассказать." },
+      audio:{ tj:"audio/c7-tj.mp3" } },
+    { id:"c8", age:"10-13", kind:"start",
+      phrase:{ tj:"Агар касе аз ту пул ё сурат талаб кунад, ин хатар аст. Фавран ба ман гӯй.", ru:"Если кто-то просит у тебя деньги или фото — это опасно. Сразу скажи мне." },
+      tip:{ tj:"Мисолро аз хабарҳо гӯед, на дар бораи худи ӯ.", ru:"Приведите пример из новостей, а не про него самого." },
+      audio:{ tj:"audio/c8-tj.mp3" } },
+    { id:"c9", age:"10-13", kind:"start",
+      phrase:{ tj:"Пароли худро ба ҳеҷ кас нагӯй, ҳатто ба дӯсти наздикат.", ru:"Никому не говори свой пароль, даже близкому другу." },
+      tip:{ tj:"Гӯед: парол мисли калиди хона аст.", ru:"Скажите: пароль — как ключ от дома." },
+      audio:{ tj:"audio/c9-tj.mp3" } },
+    { id:"c10", age:"10-13", kind:"start",
+      phrase:{ tj:"Ҳар чӣ шавад, ман дар паҳлӯи ту ҳастам. Ба ман гуфта метавонӣ.", ru:"Что бы ни случилось, я рядом. Ты можешь мне рассказать." },
+      tip:{ tj:"Инро зуд-зуд такрор кунед, на як бор.", ru:"Повторяйте это часто, а не один раз." },
+      audio:{ tj:"audio/c10-tj.mp3" } },
+
+    /* ---- 14–17 ---- */
+    { id:"c11", age:"14-17", kind:"start",
+      phrase:{ tj:"Нишон деҳ, ки саҳифаатро чӣ тавр пӯшида мекунӣ. Ман ҳам мехоҳам ёд гирам.", ru:"Покажи, как ты закрываешь свою страницу. Я тоже хочу научиться." },
+      tip:{ tj:"Аз наврас омӯзед — ӯ худро калон ҳис мекунад.", ru:"Учитесь у подростка — он почувствует себя взрослым." },
+      audio:{ tj:"audio/c11-tj.mp3" } },
+    { id:"c12", age:"14-17", kind:"start",
+      phrase:{ tj:"Дар интернет бисёриҳо худро одами дигар нишон медиҳанд. Ту инро дидаӣ?", ru:"В интернете многие выдают себя за других. Ты встречал такое?" },
+      tip:{ tj:"Гӯш кунед ва гапашро набуред.", ru:"Слушайте и не перебивайте." },
+      audio:{ tj:"audio/c12-tj.mp3" } },
+    { id:"c13", age:"14-17", kind:"start",
+      phrase:{ tj:"Агар касе бо суратҳоят туро тарсонад, ту гунаҳкор нестӣ. Ба ман гӯй.", ru:"Если кто-то пугает тебя твоими фото — ты не виноват. Скажи мне." },
+      tip:{ tj:"Инро пеш аз мушкилӣ гӯед, на баъд.", ru:"Скажите это заранее, а не после беды." },
+      audio:{ tj:"audio/c13-tj.mp3" } },
+    { id:"c14", age:"14-17", kind:"start",
+      phrase:{ tj:"Ба ту ягон бор кори осон бо пули зиёд пешниҳод кардаанд?", ru:"Тебе предлагали лёгкую работу за большие деньги?" },
+      tip:{ tj:"Фаҳмонед: ин аксар вақт фиреб аст.", ru:"Объясните: чаще всего это обман." },
+      audio:{ tj:"audio/c14-tj.mp3" } },
+    { id:"c15", age:"14-17", kind:"start",
+      phrase:{ tj:"Ман ба ту бовар дорам. Биё қоидаҳои телефонро якҷоя созем.", ru:"Я тебе доверяю. Давай вместе договоримся о правилах телефона." },
+      tip:{ tj:"Бигзор қоидаҳо барои калонсолон ҳам бошанд.", ru:"Пусть правила будут и для взрослых тоже." },
+      audio:{ tj:"audio/c15-tj.mp3" } }
+  ],
+
+  /* 6 cards «если ребёнок рассказал»: each has a "do" and a "don't" side */
+  told: [
+    { id:"t1",
+      do:{ tj:"Гӯед: «Ташаккур, ки гуфтӣ. Ту кори дуруст кардӣ».", ru:"Скажите: «Спасибо, что рассказал. Ты правильно сделал»." },
+      dont:{ tj:"Дод назанед ва нагӯед: «Худат гунаҳкорӣ!»", ru:"Не кричите и не говорите: «Сам виноват!»" },
+      audio:{ tj:"audio/t1-tj.mp3" } },
+    { id:"t2",
+      do:{ tj:"Нафаси чуқур кашед. Аввал то охир гӯш кунед.", ru:"Глубоко вдохните. Сначала выслушайте до конца." },
+      dont:{ tj:"Гапашро набуред ва фавран ҷазо надиҳед.", ru:"Не перебивайте и не наказывайте сразу." },
+      audio:{ tj:"audio/t2-tj.mp3" } },
+    { id:"t3",
+      do:{ tj:"Гӯед: «Мо инро якҷоя ҳал мекунем».", ru:"Скажите: «Мы решим это вместе»." },
+      dont:{ tj:"Телефонро нагиред — вагарна дигар чизе намегӯяд.", ru:"Не отбирайте телефон — иначе больше не расскажет." },
+      audio:{ tj:"audio/t3-tj.mp3" } },
+    { id:"t4",
+      do:{ tj:"Аз паёмҳо скриншот гиред ва нигоҳ доред.", ru:"Сделайте скриншоты сообщений и сохраните их." },
+      dont:{ tj:"Паёмҳоро пок накунед — онҳо далел ҳастанд.", ru:"Не удаляйте переписку — это доказательство." },
+      audio:{ tj:"audio/t4-tj.mp3" } },
+    { id:"t5",
+      do:{ tj:"Он одамро блок кунед ва дар сомона шикоят кунед.", ru:"Заблокируйте этого человека и пожалуйтесь на сайте." },
+      dont:{ tj:"Ба ӯ худатон ҷавоб нанависед ва пул надиҳед.", ru:"Не отвечайте ему сами и не платите денег." },
+      audio:{ tj:"audio/t5-tj.mp3" } },
+    { id:"t6",
+      do:{ tj:"Агар таҳдид ё шантаж бошад, ба мутахассис муроҷиат кунед.", ru:"Если есть угрозы или шантаж — обратитесь к специалисту." },
+      dont:{ tj:"Бе розигии фарзанд ба дигарон нақл накунед.", ru:"Не рассказывайте другим без согласия ребёнка." },
+      audio:{ tj:"audio/t6-tj.mp3" } }
+  ],
+
+  glossary: [
+    { id:"g1", icon:"📸", term:{ tj:"Скриншот", ru:"Скриншот" },
+      plain:{ tj:"Сурати экрани телефон. Ду тугмаро якбора пахш кунед: барқ ва овози паст.", ru:"Снимок экрана телефона. Нажмите вместе две кнопки: питание и тише." } },
+    { id:"g2", icon:"🔑", term:{ tj:"Парол", ru:"Пароль" },
+      plain:{ tj:"Калимаи махфӣ, мисли калиди хона. Ба ҳеҷ кас намегӯянд.", ru:"Секретное слово, как ключ от дома. Никому не говорят." } },
+    { id:"g3", icon:"👤", term:{ tj:"Саҳифа (профил)", ru:"Профиль" },
+      plain:{ tj:"Саҳифаи одам дар интернет: ном, сурат ва навиштаҳояш.", ru:"Страница человека в интернете: имя, фото и записи." } },
+    { id:"g4", icon:"🚫", term:{ tj:"Блок кардан", ru:"Заблокировать" },
+      plain:{ tj:"Манъ кардан, ки он одам дигар ба ту нависад.", ru:"Запретить человеку писать тебе." } },
+    { id:"g5", icon:"🚩", term:{ tj:"Шикоят", ru:"Пожаловаться" },
+      plain:{ tj:"Ба сомона хабар додан, ки касе бад рафтор мекунад.", ru:"Сообщить сайту, что кто-то ведёт себя плохо." } },
+    { id:"g6", icon:"😢", term:{ tj:"Таҳқир дар интернет", ru:"Кибербуллинг" },
+      plain:{ tj:"Вақте ки кӯдакро дар интернет масхара ё таҳқир мекунанд.", ru:"Когда ребёнка дразнят или унижают в интернете." } },
+    { id:"g7", icon:"⚠️", term:{ tj:"Шантаж", ru:"Шантаж" },
+      plain:{ tj:"Тарсондан: «Пул ё сурат деҳ, вагарна ба ҳама нишон медиҳам».", ru:"Запугивание: «Дай деньги или фото, иначе всем покажу»." } },
+    { id:"g8", icon:"🎣", term:{ tj:"Пайванди фиребгар", ru:"Фишинг-ссылка" },
+      plain:{ tj:"Пайванде, ки парол ё пулро медуздад. Онро пахш накунед.", ru:"Ссылка, которая крадёт пароль или деньги. Не нажимайте на неё." } }
+  ],
+
+  /* Ф-6: verified contacts only (О-12). Placeholders until organizers confirm. */
+  /* ---------- mini-games: no losing, no timers, nothing saved ---------- */
+  games: {
+    ui: {
+      tj: {
+        title: "Бозиҳо барои ду кас",
+        back: "Бозиҳо",
+        play: "Бозӣ кунед",
+        noLose: "Ин ҷо ҷавоби нодуруст нест. Ҳеҷ чиз нигоҳ дошта намешавад.",
+        bridge: "Ҳар чӣ шавад, метавонӣ ба ман гӯӣ. Мо дар паҳлӯят ҳастем.",
+        again: "Боз як бор",
+        toHelp: "Ба куҷо муроҷиат кунем"
+      },
+      ru: {
+        title: "Игры для двоих",
+        back: "Игры",
+        play: "Играть",
+        noLose: "Здесь нет неправильных ответов. Ничего не сохраняется.",
+        bridge: "Что бы ни случилось, можно рассказать. Мы рядом.",
+        again: "Ещё раз",
+        toHelp: "Куда обратиться"
+      }
+    },
+    qq: {
+      icon: "🃏",
+      name: { tj: "Савол ба савол", ru: "Вопрос за вопрос" },
+      desc: { tj: "Навбат ба навбат: шумо мепурсед, баъд кӯдак.", ru: "По очереди: спрашиваете вы, потом ребёнок." },
+      rule: { tj: "Шумо ҳам ростқавлона ҷавоб диҳед.", ru: "Отвечайте тоже честно — это главное." },
+      tapToOpen: { tj: "Кортро кушоед", ru: "Открыть карту" },
+      next: { tj: "Корти навбатӣ", ru: "Следующая карта" },
+      finish: { tj: "Анҷом", ru: "Закончить" },
+      who: {
+        parent: { tj: "Калонсол мепурсад", ru: "Спрашивает взрослый" },
+        child:  { tj: "Кӯдак мепурсад", ru: "Спрашивает ребёнок" }
+      },
+      /* who alternates parent/child; "young" replaces the text for 6–9 */
+      cards: [
+        { who:"parent", q:{ tj:"Имрӯз кадом бозӣ ё видео туро хандонд?", ru:"Какая игра или видео рассмешили тебя сегодня?" } },
+        { who:"child",  q:{ tj:"Аввалин бозии ту дар хурдӣ кадом буд?", ru:"Какая была твоя первая игра в детстве?" } },
+        { who:"parent", q:{ tj:"Агар блогер мешудӣ, дар бораи чӣ видео мегирифтӣ?", ru:"Если бы ты стал блогером, о чём снимал бы видео?" },
+                        young:{ tj:"Кадом мултфилм ба ту аз ҳама бештар маъқул аст?", ru:"Какой мультик тебе нравится больше всего?" } },
+        { who:"child",  q:{ tj:"Туро ягон бор дар интернет фиреб додаанд?", ru:"А тебя обманывали в интернете?" },
+                        young:{ tj:"Ту ягон бор дар телефон хато пахш кардаӣ?", ru:"А ты когда-нибудь нажимал в телефоне что-то не то?" } },
+        { who:"parent", q:{ tj:"Дар интернет чӣ чиз туро хафа мекунад?", ru:"Что в интернете тебя расстраивает?" } },
+        { who:"child",  q:{ tj:"Ту дар хурдӣ аз чӣ метарсидӣ?", ru:"Чего ты боялся, когда был маленьким?" } },
+        { who:"parent", q:{ tj:"Кадом бозӣ ё барномаро ба ман ёд дода метавонӣ?", ru:"Какой игре или приложению ты мог бы меня научить?" } },
+        { who:"child",  q:{ tj:"Ту дар як рӯз чанд соат бо телефон мегузаронӣ?", ru:"Сколько часов в день ты сам проводишь в телефоне?" } },
+        { who:"parent", q:{ tj:"Агар дӯстатро дар интернет ранҷонанд, ту чӣ мекунӣ?", ru:"Если друга обидят в интернете, что ты сделаешь?" } },
+        { who:"child",  q:{ tj:"Ту ягон бор хато карда, баъд ба касе гуфтаӣ?", ru:"Ты когда-нибудь ошибался и потом кому-то признавался?" } },
+        { who:"parent", q:{ tj:"Ба фикри ту, кадом қоидаи интернет аз ҳама муҳим аст?", ru:"Какое правило в интернете, по-твоему, самое важное?" },
+                        young:{ tj:"Агар ношинос нависад «биё дӯст шавем», чӣ мекунӣ?", ru:"Если незнакомец напишет «давай дружить», что ты сделаешь?" } },
+        { who:"child",  q:{ tj:"Ту дар интернет чиро аз ҳама бештар дӯст медорӣ?", ru:"Что ты больше всего любишь в интернете?" } }
+      ]
+    },
+    weather: {
+      icon: "🌤️",
+      name: { tj: "Обу ҳавои дарун", ru: "Погода внутри" },
+      desc: { tj: "Кӯдак обу ҳавои дилашро интихоб мекунад.", ru: "Ребёнок выбирает, какая погода у него на душе." },
+      ask: { tj: "Имрӯз дар дилат чӣ обу ҳаво аст?", ru: "Какая сегодня погода у тебя внутри?" },
+      adult: { tj: "Барои калонсол", ru: "Для взрослого" },
+      options: [
+        { id:"sun", e:"☀️", label:{ tj:"Офтобӣ", ru:"Солнечно" },
+          say:{ tj:"Чӣ хуб! Бигӯ, имрӯз чӣ туро шод кард?", ru:"Как здорово! Расскажи, что тебя сегодня порадовало?" },
+          tip:{ tj:"Бо ӯ якҷоя шодӣ кунед ва муфассал пурсед.", ru:"Порадуйтесь вместе и расспросите подробнее." } },
+        { id:"cloud", e:"🌤️", label:{ tj:"Каме абрнок", ru:"Облачно" },
+          say:{ tj:"Каме абр ҳам муқаррарӣ аст. Мехоҳӣ гап занем?", ru:"Немного облаков — это нормально. Хочешь поговорить?" },
+          tip:{ tj:"Маҷбур накунед — танҳо дар паҳлӯяш бошед.", ru:"Не настаивайте — просто побудьте рядом." } },
+        { id:"rain", e:"🌧️", label:{ tj:"Боронӣ", ru:"Дождь" },
+          say:{ tj:"Ғамгин шудан мумкин аст. Ту танҳо нестӣ.", ru:"Грустить — можно. Ты не один." },
+          tip:{ tj:"Нагӯед «ин ҳеҷ гап нест». Гӯед: «Ман мефаҳмам».", ru:"Не говорите «ерунда». Скажите: «Я понимаю»." } },
+        { id:"storm", e:"⛈️", label:{ tj:"Раъду барқ", ru:"Гроза" },
+          say:{ tj:"Ин ҳиссиёти сахт аст. Биё якҷоя оҳиста нафас кашем.", ru:"Это сильные чувства. Давай вместе медленно подышим." },
+          tip:{ tj:"Ором бошед, ҷазо надиҳед. Аввал оғӯш, баъд савол.", ru:"Будьте спокойны, не наказывайте. Сначала обнимите, потом спрашивайте." },
+          help:true }
+      ]
+    }
+  },
+
+  contacts: [
+    { id:"h1", name:{ tj:"Хати боварии миллӣ (Кумитаи кор бо занон ва оила)", ru:"Национальный телефон доверия (Комитет по делам женщин и семьи)" },
+      phones:["1313"] },
+    { id:"h2", name:{ tj:"Хати боварии ВКД: шантаж, таҳдид, фиреб, рахнаи саҳифа", ru:"Телефон доверия МВД: шантаж, угрозы, мошенничество, взлом" },
+      phones:["1919", "+992 37 221-21-21"] },
+    { id:"h3", name:{ tj:"Маркази ҷумҳуриявии хизматрасонии иҷтимоӣ ба зарардидагони зӯроварӣ (Душанбе)", ru:"Республиканский центр соцуслуг для пострадавших от насилия (Душанбе)" },
+      phones:["+992 37 233-33-53", "+992 48 888-07-07"] },
+    { id:"h4", name:{ tj:"Милиция — ҳолати фавқулода", ru:"Милиция — экстренно" }, phones:["102"] },
+    { id:"h5", name:{ tj:"Ёрии таъҷилӣ", ru:"Скорая помощь" }, phones:["103"] }
+  ]
+};
+
+/* =====================================================================
+   LOGIC
+   ===================================================================== */
+const AUDIO_READY = false; // flip to true when MP3s exist in ./audio/
+
+const ICON = {
+  logo:'<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M4 7a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6l-5 4v-4a3 3 0 0 1-3-3z" fill="#E2B33C"/><path d="M14 11h7a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3v3l-4-3h-3a3 3 0 0 1-3-3" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>',
+  globe:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
+  play:'<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  stop:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>',
+  share:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18584A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>',
+  left:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18584A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  right:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#18584A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  go:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  bulb:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z" fill="#E2B33C"/><path d="M9.5 18.5h5M10.5 21h3" stroke="#4A5C57" stroke-width="2" stroke-linecap="round"/></svg>',
+  lock:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#18584A" stroke-width="2" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',
+  yes:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1E7A55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  no:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C23B4A" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  yesW:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  noW:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  phone:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>',
+  x:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#13231F" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  nav:{
+    games:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor"/><circle cx="15" cy="15" r="1.3" fill="currentColor"/><circle cx="15" cy="9" r="1.3" fill="currentColor"/><circle cx="9" cy="15" r="1.3" fill="currentColor"/></svg>',
+    cards:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 4v-4H6a2 2 0 0 1-2-2z"/></svg>',
+    told:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    gloss:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>',
+    help:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/></svg>'
+  }
+};
+/* child figure grows with the age group */
+function figure(i){
+  const h = [46,58,70][i], r = [11,11.5,12][i];
+  const top = r*2 + 3;
+  return `<svg width="54" height="${h}" viewBox="0 0 54 ${h}" aria-hidden="true">
+    <circle cx="27" cy="${r}" r="${r}" fill="#E2B33C"/>
+    <path d="M14 ${h} V${top+13} a13 13 0 0 1 26 0 V${h} z" fill="${['#C23B4A','#18584A','#0F3F35'][i]}"/></svg>`;
+}
+
+const $ = s => document.querySelector(s);
+const store = {
+  get(k){ try{ return localStorage.getItem(k) }catch(e){ return null } },
+  set(k,v){ try{ localStorage.setItem(k,v) }catch(e){} }
+};
+const state = {
+  lang: store.get("rd-lang") === "ru" ? "ru" : "tj",
+  age: null,
+  screen: "start",
+  toldMode: "do",
+  game: null,      // null | "qq" | "weather" — in memory only
+  qqIdx: 0, qqFlipped: false, qqDone: false,
+  wxPick: null
+};
+const T = () => content.ui[state.lang];
+/* every content string goes through esc() before reaching innerHTML */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------------- speech (Ф-3) ---------------- */
+let voices = [];
+function loadVoices(){ try{ voices = speechSynthesis.getVoices() || [] }catch(e){ voices = [] } }
+if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+let playingBtn = null, audioEl = null;
+
+function stopAll(){
+  if (audioEl){ audioEl.pause(); audioEl = null; }
+  try{ if ("speechSynthesis" in window) speechSynthesis.cancel(); }catch(e){}
+  if (playingBtn){ setPlaying(playingBtn,false); playingBtn = null; }
+}
+function setPlaying(btn,on){
+  btn.classList.toggle("playing",on);
+  btn.setAttribute("aria-pressed", on ? "true" : "false");
+  btn.querySelector(".ic").innerHTML = on ? ICON.stop : ICON.play;
+  btn.querySelector(".lb").textContent = on ? T().stop : T().listen;
+}
+function play(btn, text, audioPath){
+  if (playingBtn === btn){ stopAll(); return; }
+  stopAll();
+  playingBtn = btn; setPlaying(btn,true);
+  const done = () => { if (playingBtn === btn){ setPlaying(btn,false); playingBtn = null; } };
+
+  // 1) human-recorded MP3 for Tajik (preferred by the ТЗ)
+  if (state.lang === "tj" && AUDIO_READY && audioPath){
+    audioEl = new Audio(audioPath);
+    audioEl.onended = done;
+    audioEl.onerror = () => { audioEl = null; synth(text, done); };
+    audioEl.play().catch(() => { audioEl = null; synth(text, done); });
+    return;
+  }
+  // 2) browser speech synthesis
+  synth(text, done);
+}
+function synth(text, done){
+  if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined"){
+    toast(T().noVoice); done(); return;
+  }
+  if (!voices.length) loadVoices();
+  const starts = p => voices.find(x => (x.lang||"").toLowerCase().replace("_","-").startsWith(p));
+  let v = state.lang === "tj" ? starts("tg") : starts("ru");
+  if (!v && state.lang === "tj"){
+    // browsers rarely ship a Tajik voice: temporary fallback — a Russian voice reads the Cyrillic text
+    v = starts("ru");
+    if (!v){ toast(T().noVoice); done(); return; }
+    toast(T().tmpVoice);
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  if (v){ u.voice = v; u.lang = v.lang; } else { u.lang = "ru-RU"; }
+  u.rate = 0.85;
+  u.onend = done; u.onerror = done;
+  try{ speechSynthesis.speak(u); }catch(e){ toast(T().noVoice); done(); }
+}
+
+/* ---------------- share (Ф-7) ---------------- */
+function shareText(text){
+  const full = text + "\n— " + T().app;
+  if (navigator.share){ navigator.share({ text: full }).catch(()=>{}); return; }
+  if (navigator.clipboard){ navigator.clipboard.writeText(full).then(()=>toast(T().shared)).catch(()=>{}); }
+}
+
+let toastTimer;
+function toast(msg){
+  if (!msg) return;
+  const t = $("#toast"); t.textContent = msg; t.classList.add("on");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 3200);
+}
+
+/* ---------------- deck (swipe: native momentum + scroll-snap) ---------------- */
+function listenBtn(i){ return `<button class="listen" data-i="${i}" aria-pressed="false"><span class="ic">${ICON.play}</span><span class="lb">${esc(T().listen)}</span></button>`; }
+function pager(n){
+  let d = ""; for (let i=0;i<n;i++) d += `<span class="dot${i?"":" on"}"></span>`;
+  return `<div class="pager"><button class="arrow prev" aria-label="${esc(T().prev)}" disabled>${ICON.left}</button>
+    <div class="dots" aria-hidden="true">${d}</div><span class="count">1 / ${n}</span>
+    <button class="arrow next" aria-label="${esc(T().next)}">${ICON.right}</button></div>`;
+}
+function wireDeck(root, items, getText, getAudio, startIdx){
+  const deck = root.querySelector(".deck");
+  const dots = root.querySelectorAll(".dot");
+  const count = root.querySelector(".count");
+  const prev = root.querySelector(".prev"), next = root.querySelector(".next");
+  const n = items.length;
+  const step = () => { const c = deck.children[0]; return c ? c.getBoundingClientRect().width + 12 : 1; };
+  let idx = -1, raf = 0;
+  const update = () => {
+    raf = 0;
+    const i = Math.max(0, Math.min(n-1, Math.round(deck.scrollLeft / step())));
+    if (i !== idx && idx !== -1) stopAll();
+    idx = i; root.dataset.idx = i;
+    dots.forEach((d,k) => d.classList.toggle("on", k === i));
+    count.textContent = (i+1) + " / " + n;
+    prev.disabled = i === 0; next.disabled = i === n-1;
+  };
+  deck.addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive:true });
+  const go = d => {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    deck.scrollTo({ left: (idx + d) * step(), behavior: reduce ? "auto" : "smooth" });
+  };
+  prev.onclick = () => go(-1); next.onclick = () => go(1);
+  deck.addEventListener("click", e => {
+    const b = e.target.closest(".listen");
+    if (b){ const i = +b.dataset.i; play(b, getText(items[i]), getAudio(items[i])); return; }
+    const s = e.target.closest(".share");
+    if (s){ shareText(getText(items[+s.dataset.i])); }
+  });
+  if (startIdx) deck.scrollLeft = startIdx * step();
+  update();
+}
+
+/* ---------------- renderers ---------------- */
+function renderChrome(){
+  const t = T();
+  document.documentElement.lang = state.lang === "tj" ? "tg" : "ru";
+  document.title = t.app;
+  $("#brand").innerHTML = ICON.logo + `<span>${esc(t.app)}</span>`;
+  $("#langBtn").innerHTML = ICON.globe + `<span>${esc(t.switchTo)}</span>`;
+  $("#langBtn").setAttribute("lang", state.lang === "tj" ? "ru" : "tg");
+  const chip = $("#ageChip");
+  chip.hidden = !state.age || state.screen === "start";
+  $(".bar").classList.toggle("compact", !chip.hidden);
+  if (state.age) chip.textContent = state.age.replace("-", "–") + " " + t.ageUnit;
+  $("#nav").hidden = state.screen === "start";
+  $("#navRow").innerHTML = ["cards","told","games","gloss","help"].map(k =>
+    `<button data-go="${k}" class="${state.screen===k?"on":""}" ${state.screen===k?'aria-current="page"':""}>
+      <span class="pill">${ICON.nav[k]}</span>${esc(t.tabs[k])}</button>`).join("");
+}
+
+function renderStart(){
+  const t = T();
+  $("#s-start").innerHTML = `<div class="start">
+    <h1>${esc(t.startQ)}</h1>
+    <div class="ages">${content.ages.map((a,i) => `
+      <button class="age" data-age="${a}">
+        <span class="fig">${figure(i)}</span>
+        <span><b>${a.replace("-","–")}</b><span>${esc(t.ageUnit)} · ${esc(t.ageHint[a])}</span></span>
+        <span class="go">${ICON.go}</span>
+      </button>`).join("")}
+    </div>
+    <p class="privacy">${ICON.lock}<span>${esc(t.privacy)}</span></p>
+  </div>`;
+}
+
+function renderCards(startIdx){
+  const t = T(), L = state.lang;
+  const items = content.cards.filter(c => c.age === state.age && c.kind === "start");
+  const canShare = !!(navigator.share || navigator.clipboard);
+  const el = $("#s-cards");
+  el.innerHTML = `<div class="shead"><h2>${esc(t.cardsTitle)}</h2></div>
+    <div class="deck" aria-roledescription="carousel">${items.map((c,i) => `
+      <article class="card" aria-label="${i+1} / ${items.length}">
+        <div class="ikat" aria-hidden="true"></div>
+        <div class="card-body">
+          <div class="say">${esc(t.say)}</div>
+          <p class="phrase">${esc(c.phrase[L])}</p>
+          <p class="tip">${ICON.bulb}<span>${esc(c.tip[L])}</span></p>
+          <div class="actions">${listenBtn(i)}${canShare ? `<button class="share" data-i="${i}" aria-label="${esc(t.share)}">${ICON.share}</button>` : ""}</div>
+        </div>
+      </article>`).join("")}
+    </div>${pager(items.length)}`;
+  wireDeck(el, items, c => c.phrase[state.lang], c => c.audio && c.audio.tj, startIdx);
+}
+
+function renderTold(startIdx){
+  const t = T(), L = state.lang, m = state.toldMode;
+  const items = content.told;
+  const el = $("#s-told");
+  el.innerHTML = `<div class="shead"><h2>${esc(t.toldTitle)}</h2></div>
+    <div class="seg" role="tablist">
+      <button role="tab" class="do ${m==="do"?"on":""}" aria-selected="${m==="do"}" data-mode="do">${ICON.yesW}<span>${esc(t.doLabel)}</span></button>
+      <button role="tab" class="dont ${m==="dont"?"on":""}" aria-selected="${m==="dont"}" data-mode="dont">${ICON.noW}<span>${esc(t.dontLabel)}</span></button>
+    </div>
+    <div class="deck">${items.map((c,i) => `
+      <article class="card ${m}" aria-label="${i+1} / ${items.length}">
+        <div class="card-body">
+          <div class="mark ${m}">${m==="do" ? ICON.yes : ICON.no}</div>
+          <p class="told-text">${esc(c[m][L])}</p>
+          <div class="actions">${listenBtn(i)}</div>
+        </div>
+      </article>`).join("")}
+    </div>${pager(items.length)}`;
+  wireDeck(el, items, c => c[state.toldMode][state.lang], () => null, startIdx);
+}
+
+function renderGloss(){
+  const t = T(), L = state.lang;
+  $("#s-gloss").innerHTML = `<div class="shead"><h2>${esc(t.glossTitle)}</h2></div>
+    <div class="gloss">${content.glossary.map(g => `
+      <button class="term" data-g="${g.id}"><span class="ico" aria-hidden="true">${g.icon}</span>${esc(g.term[L])}</button>`).join("")}
+    </div>`;
+}
+
+function openTerm(id){
+  const g = content.glossary.find(x => x.id === id); if (!g) return;
+  const t = T(), L = state.lang;
+  const sh = $("#sheet");
+  sh.innerHTML = `<div class="ikat" aria-hidden="true"></div>
+    <button class="close" aria-label="${esc(t.close)}">${ICON.x}</button>
+    <div class="inner">
+      <div class="big" aria-hidden="true">${g.icon}</div>
+      <h3>${esc(g.term[L])}</h3>
+      <p>${esc(g.plain[L])}</p>
+      ${listenBtn(0)}
+    </div>`;
+  sh.dataset.g = id;
+  sh.querySelector(".close").onclick = closeTerm;
+  sh.querySelector(".listen").onclick = e => play(e.currentTarget, g.term[state.lang] + ". " + g.plain[state.lang], null);
+  sh.classList.add("on"); $("#sheetBg").classList.add("on");
+  sh.querySelector(".close").focus({ preventScroll:true });
+}
+function closeTerm(){
+  stopAll();
+  $("#sheet").classList.remove("on"); $("#sheetBg").classList.remove("on");
+  delete $("#sheet").dataset.g;
+}
+
+function renderHelp(){
+  const t = T(), L = state.lang;
+  $("#s-help").innerHTML = `<div class="shead"><h2>${esc(t.helpTitle)}</h2></div>
+    <div class="contacts">${content.contacts.map(c => {
+      return `<div class="contact"><b>${esc(c.name[L])}</b>
+        ${c.phones.map(ph => `<a class="call" href="tel:${esc(ph.replace(/[\s-]/g,""))}" aria-label="${esc(t.call)}: ${esc(ph)}">${ICON.phone}<span dir="ltr" style="font-size:20px;letter-spacing:.02em">${esc(ph)}</span></a>`).join("")}</div>`;
+    }).join("")}</div>
+    <p class="note">${esc(t.helpNote)}</p>`;
+}
+
+function renderGames(){
+  const G = content.games, g = G.ui[state.lang], L = state.lang;
+  const el = $("#s-games");
+  const backBtn = `<button class="back" data-game="">${ICON.left}<span>${esc(g.back)}</span></button>`;
+  const bridge = `<div class="bridge"><div class="heart" aria-hidden="true">🤝</div><p>${esc(g.bridge)}</p>${listenBtn(0).replace('class="listen"','class="listen bridge-listen"')}</div>`;
+
+  if (!state.game){
+    el.innerHTML = `<div class="shead"><h2>${esc(g.title)}</h2></div>
+      <p class="game-rule">${ICON.lock}<span>${esc(g.noLose)}</span></p>
+      <div class="games">${["qq","weather"].map(k => `
+        <button class="game-entry" data-game="${k}">
+          <span class="gi" aria-hidden="true">${G[k].icon}</span>
+          <span><b>${esc(G[k].name[L])}</b><span>${esc(G[k].desc[L])}</span></span>
+          <span class="go" style="margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--choi);display:grid;place-items:center;flex:none">${ICON.go}</span>
+        </button>`).join("")}
+      </div>`;
+    return;
+  }
+
+  if (state.game === "qq"){
+    const Q = G.qq, n = Q.cards.length;
+    if (state.qqDone){
+      el.innerHTML = `${backBtn}<div class="shead"><h2>${esc(Q.name[L])}</h2></div>${bridge}
+        <button class="big-btn ghost" data-qq="again">${esc(g.again)}</button>`;
+      wireBridge(el, g); return;
+    }
+    const c = Q.cards[state.qqIdx];
+    const text = (state.age === "6-9" && c.young) ? c.young : c.q;
+    const last = state.qqIdx === n - 1;
+    el.innerHTML = `${backBtn}<div class="shead"><h2>${esc(Q.name[L])}</h2></div>
+      <p class="game-rule">${ICON.bulb}<span>${esc(Q.rule[L])}</span></p>
+      <div class="qq-meta"><span>${state.qqIdx + 1} / ${n}</span></div>
+      <div class="flip ${state.qqFlipped ? "flipped" : ""}" id="qqFlip" style="animation:rise .3s ease-out both">
+        <div class="flip-inner">
+          <button class="face front" data-qq="flip" aria-label="${esc(Q.tapToOpen[L])}">
+            <span class="q-mark" aria-hidden="true">?</span><span class="open">${esc(Q.tapToOpen[L])}</span>
+          </button>
+          <div class="face back" aria-hidden="${!state.qqFlipped}">
+            <span class="who ${c.who}"><span class="e" aria-hidden="true">${c.who === "parent" ? "🧑" : "🧒"}</span>${esc(Q.who[c.who][L])}</span>
+            <p class="qtext">${esc(text[L])}</p>
+            ${listenBtn(0)}
+          </div>
+        </div>
+      </div>
+      <button class="big-btn" data-qq="next" ${state.qqFlipped ? "" : "hidden"}>${esc(last ? Q.finish[L] : Q.next[L])}${ICON.go}</button>`;
+    const lb = el.querySelector(".face.back .listen");
+    lb.onclick = () => play(lb, text[state.lang], null);
+    return;
+  }
+
+  if (state.game === "weather"){
+    const W = G.weather, pick = W.options.find(o => o.id === state.wxPick);
+    el.innerHTML = `${backBtn}<div class="shead"><h2>${esc(W.ask[L])}</h2></div>
+      <div class="wx ${pick ? "picked" : ""}" role="radiogroup">${W.options.map(o => `
+        <button role="radio" aria-checked="${state.wxPick === o.id}" class="${state.wxPick === o.id ? "on" : ""}" data-wx="${o.id}">
+          <span class="e" aria-hidden="true">${o.e}</span>${esc(o.label[L])}</button>`).join("")}
+      </div>
+      ${pick ? `<div class="wx-answer">
+          <p class="child-say">${esc(pick.say[L])}</p>
+          ${listenBtn(0)}
+          <div class="adult"><b>${esc(W.adult[L])}</b>${esc(pick.tip[L])}</div>
+          ${pick.help ? `<button class="link-help" data-go="help">${ICON.phone}${esc(g.toHelp)}</button>` : ""}
+        </div>${bridge}
+        <button class="big-btn ghost" data-wx="">${esc(g.again)}</button>` : ""}`;
+    if (pick){
+      const lb = el.querySelector(".wx-answer .listen");
+      lb.onclick = () => play(lb, pick.say[state.lang], null);
+      wireBridge(el, g);
+    }
+  }
+}
+function wireBridge(el, g){
+  const b = el.querySelector(".bridge-listen");
+  if (b) b.onclick = () => play(b, content.games.ui[state.lang].bridge, null);
+}
+
+const renderers = { start:renderStart, cards:renderCards, told:renderTold, games:renderGames, gloss:renderGloss, help:renderHelp };
+
+function show(screen){
+  stopAll();
+  state.screen = screen;
+  renderers[screen]();
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === "s-" + screen));
+  renderChrome();
+  window.scrollTo(0,0);
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener("click", e => {
+  const age = e.target.closest("[data-age]");
+  if (age){ state.age = age.dataset.age; show("cards"); return; }
+  const go = e.target.closest("[data-go]");
+  if (go){ if (go.dataset.go === "games") state.game = null; show(go.dataset.go); return; }
+  const gm = e.target.closest("[data-game]");
+  if (gm){
+    stopAll();
+    state.game = gm.dataset.game || null;
+    state.qqIdx = 0; state.qqFlipped = false; state.qqDone = false; state.wxPick = null;
+    renderGames(); window.scrollTo(0,0); return;
+  }
+  const qq = e.target.closest("[data-qq]");
+  if (qq){
+    const a = qq.dataset.qq;
+    if (a === "flip"){
+      state.qqFlipped = true;
+      $("#qqFlip").classList.add("flipped");
+      $("#qqFlip .face.back").setAttribute("aria-hidden","false");
+      $('[data-qq="next"]').hidden = false;
+      return;
+    }
+    stopAll();
+    if (a === "next"){
+      if (state.qqIdx >= content.games.qq.cards.length - 1) state.qqDone = true;
+      else { state.qqIdx++; state.qqFlipped = false; }
+    }
+    if (a === "again"){ state.qqIdx = 0; state.qqFlipped = false; state.qqDone = false; }
+    renderGames(); return;
+  }
+  const wx = e.target.closest("[data-wx]");
+  if (wx){
+    stopAll(); state.wxPick = wx.dataset.wx || null; renderGames();
+    const ans = $("#s-games .wx-answer");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (ans) ans.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    else window.scrollTo(0,0);
+    return;
+  }
+  const mode = e.target.closest("[data-mode]");
+  if (mode){ stopAll(); const i = +($("#s-told").dataset.idx || 0); state.toldMode = mode.dataset.mode; renderTold(i); return; }
+  const term = e.target.closest(".term");
+  if (term){ openTerm(term.dataset.g); }
+});
+$("#langBtn").onclick = () => {
+  stopAll();
+  state.lang = state.lang === "tj" ? "ru" : "tj";
+  store.set("rd-lang", state.lang);
+  $("#toast").classList.remove("on");
+  const openG = $("#sheet").dataset.g;
+  const cur = $("#s-" + state.screen);
+  renderers[state.screen](+(cur.dataset.idx || 0));
+  renderChrome();
+  if (openG) openTerm(openG);
+};
+$("#ageChip").onclick = () => show("start");
+$("#sheetBg").onclick = closeTerm;
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#sheet").classList.contains("on")) closeTerm(); });
+
+show("start");
+</script>
+</body>
+</html>

@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safe by Design · аудит игры</title>
+<meta name="description" content="Самооценка безопасности игры для детей: 18 вопросов, 6 зон риска, отчёт и рекомендации.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='1' height='1' fill='%231F9254'/%3E%3Crect x='1' width='1' height='1' fill='%23E0A100'/%3E%3Crect x='2' width='1' height='1' fill='%23D2322D'/%3E%3Crect y='1' width='3' height='1' fill='%23141B2D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F5; --panel:#FFFFFF; --ink:#141B2D; --muted:#56607A; --line:#CBD2DD;
+  --cobalt:#2F3FD0; --cobalt-soft:#E3E6FB;
+  --safe:#1F9254; --warn:#E0A100; --risk:#D2322D; --empty:#DCE1E9;
+  --display:"Unbounded", "IBM Plex Sans", system-ui, sans-serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --r:10px; --gut:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--body)}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--gut)}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+
+/* header */
+header.top{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff}
+header.top .wrap{display:flex;align-items:center;gap:12px;min-height:56px}
+.brand{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand i{display:grid;grid-template-columns:repeat(3,7px);gap:2px;flex:none}
+.brand i b{width:7px;height:7px;border-radius:2px;background:#fff;opacity:.35}
+.brand i b:nth-child(1),.brand i b:nth-child(5){background:var(--safe);opacity:1}
+.brand i b:nth-child(3){background:var(--warn);opacity:1}
+.brand i b:nth-child(6){background:var(--risk);opacity:1}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand em{font-style:normal}
+@media (max-width:420px){.brand em{display:none}}
+.lang{display:flex;border:1px solid rgba(255,255,255,.35);border-radius:8px;overflow:hidden;flex:none}
+.lang button{background:none;border:0;color:#fff;min-width:48px;min-height:44px;font-family:var(--mono);font-weight:600;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.progress{height:4px;background:rgba(255,255,255,.15)}
+.progress div{height:100%;background:var(--warn);transform-origin:left;transform:scaleX(0);transition:transform .35s ease-out}
+
+/* buttons */
+.btn{min-height:48px;padding:0 20px;border-radius:var(--r);border:2px solid var(--ink);background:var(--ink);color:#fff;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s ease}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.blue{background:var(--cobalt);border-color:var(--cobalt)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* screens */
+.screen{display:none;padding:28px 0 64px}
+.screen.on{display:block;animation:in .3s ease-out both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* intro */
+.hero{display:grid;gap:28px;align-items:center}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.2vw,50px);line-height:1.08;letter-spacing:-.01em;margin:10px 0 14px}
+.hero h1 em{font-style:normal;color:var(--cobalt)}
+.lead{font-size:18px;color:var(--muted);max-width:560px;margin:0 0 22px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0 0 24px;padding:0;list-style:none}
+.facts li{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.facts b{color:var(--ink)}
+.field{display:block;margin:0 0 14px}
+.field span{display:block;font-weight:600;margin-bottom:6px}
+.field small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.field input,.field textarea{width:100%;min-height:48px;padding:12px 14px;border:2px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.field textarea{min-height:84px;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:var(--cobalt);outline:none}
+.preview{background:var(--panel);border:2px solid var(--ink);border-radius:14px;padding:18px;box-shadow:8px 8px 0 var(--ink)}
+.preview .mono{color:var(--muted)}
+
+/* zone map (signature) */
+.map{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.tile{position:relative;overflow:hidden;border-radius:8px;background:var(--empty);min-height:92px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.tile::before{content:"";position:absolute;inset:0;background:var(--c,transparent);opacity:0;transform:scale(.6);border-radius:inherit}
+.tile > *{position:relative}
+.tile .t{font-weight:600;font-size:15px;line-height:1.25}
+.tile .s{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;opacity:.9}
+.tile.green{--c:var(--safe);color:#fff}
+.tile.yellow{--c:var(--warn);color:var(--ink)}
+.tile.red{--c:var(--risk);color:#fff}
+.tile.lit::before{animation:paint .32s ease-out forwards;animation-delay:var(--d,0ms)}
+.tile.lit > *{opacity:0;animation:fade .25s ease-out forwards;animation-delay:calc(var(--d,0ms) + 120ms)}
+@keyframes paint{to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+
+/* quiz */
+.qhead h2{font-family:var(--display);font-weight:800;font-size:clamp(22px,4.6vw,34px);margin:6px 0 4px;line-height:1.1}
+.qhead p{margin:0 0 6px;color:var(--muted);max-width:640px}
+.dots{display:flex;gap:6px;margin:16px 0 22px}
+.dots b{flex:1;height:8px;border-radius:3px;background:var(--empty);position:relative;overflow:hidden}
+.dots b::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .3s ease-out}
+.dots b.done::after,.dots b.cur::after{transform:none}
+.dots b.cur::after{background:var(--cobalt)}
+fieldset{border:0;margin:0 0 22px;padding:0;min-width:0}
+legend{font-weight:600;font-size:18px;margin-bottom:10px;padding:0;display:flex;gap:10px}
+legend .mono{color:var(--muted);padding-top:3px;flex:none}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;min-height:52px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:transform .15s ease}
+.opt:active{transform:scale(.99)}
+.opt input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--cobalt);flex:none}
+.opt:has(input:checked){border-color:var(--cobalt);background:var(--cobalt-soft)}
+.opt.missing{border-color:var(--risk)}
+.qnav{display:flex;justify-content:space-between;gap:10px;position:sticky;bottom:0;padding:12px 0;background:linear-gradient(to top,var(--paper) 70%,rgba(238,241,245,0))}
+.hint{color:var(--risk);font-weight:600;min-height:24px;margin:0}
+
+/* report */
+.rephead{display:grid;gap:22px;align-items:start}
+.label{border:3px solid var(--ink);border-radius:14px;background:var(--panel);display:grid;grid-template-columns:auto 1fr;overflow:hidden;box-shadow:8px 8px 0 var(--ink)}
+.label .num{background:var(--ink);color:#fff;padding:16px 18px;display:flex;flex-direction:column;justify-content:center;min-width:120px}
+.label .num strong{font-family:var(--display);font-weight:800;font-size:52px;line-height:1;font-variant-numeric:tabular-nums}
+.label .num span{font-family:var(--mono);font-size:12px;opacity:.75;margin-top:4px}
+.label .info{padding:14px 16px}
+.label .verdict{font-family:var(--display);font-weight:800;font-size:19px;line-height:1.15;margin:4px 0 6px}
+.label .bar{height:10px;background:var(--empty);border-radius:5px;overflow:hidden;margin:10px 0 6px}
+.label .bar div{height:100%;background:var(--v,var(--cobalt));transform-origin:left;transform:scaleX(0);transition:transform .4s ease-out}
+.label p{margin:0;color:var(--muted);font-size:14px}
+.game{font-family:var(--display);font-weight:600;font-size:clamp(20px,4vw,28px);margin:6px 0 4px;word-break:break-word}
+.delta{display:inline-block;font-family:var(--mono);font-size:13px;background:var(--cobalt-soft);color:var(--cobalt);padding:4px 8px;border-radius:6px;margin-top:8px}
+h3.sec{font-family:var(--display);font-weight:800;font-size:20px;margin:34px 0 12px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+.issues{display:grid;gap:12px}
+.zcard{background:var(--panel);border-radius:var(--r);border-left:6px solid var(--zc);padding:14px 16px;break-inside:avoid}
+.zcard h4{margin:0 0 6px;font-size:17px;display:flex;justify-content:space-between;gap:10px}
+.zcard ul{margin:6px 0 0;padding-left:20px}
+.zcard li{margin-bottom:6px}
+.zcard .ok{margin:0;color:var(--muted)}
+.zc-green{--zc:var(--safe)} .zc-yellow{--zc:var(--warn)} .zc-red{--zc:var(--risk)}
+.pill{font-family:var(--mono);font-size:12px;font-weight:600;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;align-self:flex-start}
+.pill.green{background:var(--safe);color:#fff}.pill.yellow{background:var(--warn);color:var(--ink)}.pill.red{background:var(--risk);color:#fff}
+.actions{margin-top:28px}
+
+/* recs */
+.rec{background:var(--panel);border-radius:var(--r);border-left:6px solid var(--zc);padding:16px;margin-bottom:12px;break-inside:avoid}
+.rec h4{margin:0 0 10px;display:flex;gap:10px;align-items:center;font-size:18px;flex-wrap:wrap}
+.rec ol{margin:0;padding-left:22px}
+.rec li{margin-bottom:10px}
+.rec li b{display:block}
+.rec li span{color:var(--muted)}
+.allgreen{background:var(--panel);border-radius:var(--r);padding:18px;border-left:6px solid var(--safe)}
+.ai{margin-top:28px;border:2px dashed var(--cobalt);border-radius:14px;padding:18px;background:var(--panel)}
+.ai h4{margin:0 0 6px;font-family:var(--display);font-size:17px}
+.ai p{margin:0 0 12px;color:var(--muted)}
+.ai pre{white-space:pre-wrap;word-break:break-word;font:13px/1.45 var(--mono);background:var(--paper);padding:12px;border-radius:8px;max-height:260px;overflow:auto;margin:12px 0 0}
+.printonly{display:none}
+
+/* entry card on start screen */
+.playcard{display:grid;grid-template-columns:1fr auto;gap:2px 14px;align-items:center;width:100%;margin-top:18px;padding:14px 16px;text-align:left;background:var(--panel);border:2px solid var(--ink);border-left:8px solid var(--cobalt);border-radius:var(--r);cursor:pointer;transition:transform .15s ease}
+.playcard:active{transform:scale(.98)}
+.playcard .mono{color:var(--cobalt);grid-column:1}
+.playcard b{font-family:var(--display);font-weight:800;font-size:17px;grid-column:1}
+.playcard span:not(.mono){color:var(--muted);font-size:15px;grid-column:1}
+.playcard i{grid-column:2;grid-row:1/4;font-style:normal;font-family:var(--display);font-size:24px;color:var(--cobalt)}
+
+/* mini-game */
+.gwrap{display:grid;gap:22px;align-items:start}
+.ghead h2{font-family:var(--display);font-weight:800;font-size:clamp(22px,4.6vw,34px);margin:6px 0 6px;line-height:1.1}
+.ghead p{margin:0 0 12px;color:var(--muted);max-width:620px}
+.gcount{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{font-family:var(--mono);font-size:13px;font-weight:600;padding:6px 10px;border-radius:6px;background:var(--panel);border:2px solid var(--ink)}
+.chip.goodchip{border-color:var(--safe);color:var(--safe)}
+.chip.goodchip.off{border-color:var(--line);color:var(--muted)}
+.phone{width:100%;max-width:360px;margin:0 auto;background:var(--ink);border-radius:32px;padding:10px}
+.kscreen{border-radius:24px;padding:12px;display:grid;gap:10px;color:#fff;background:linear-gradient(165deg,#6E56F8 0%,#B04BDF 55%,#FF7A9E 100%)}
+.kbar{display:flex;justify-content:space-between;align-items:center;padding:2px 4px}
+.kbar b{font-family:var(--display);font-weight:800;font-size:16px}
+.kcoins{font-family:var(--mono);font-weight:600;font-size:13px;background:rgba(0,0,0,.25);padding:4px 10px;border-radius:20px}
+.kcoins::before{content:"";display:inline-block;width:10px;height:10px;background:#7FF0FF;transform:rotate(45deg);margin-right:6px}
+.spot{position:relative;display:block;width:100%;text-align:left;border:0;border-radius:14px;padding:10px 12px;cursor:pointer;font-size:14px;line-height:1.35;color:#fff;background:rgba(255,255,255,.18);transition:transform .15s ease}
+.spot:hover{outline:2px dashed rgba(255,255,255,.85);outline-offset:2px}
+.spot:active{transform:scale(.97)}
+.spot.active{outline:3px solid #fff;outline-offset:2px}
+.spot.found::after{content:"!";position:absolute;top:-9px;right:-7px;width:26px;height:26px;border-radius:50%;background:var(--risk);color:#fff;font:700 15px/26px var(--body);text-align:center;border:2px solid #fff;animation:pop .3s ease-out}
+.spot.good.found::after{content:"✓";background:var(--safe)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+.s-age{background:rgba(20,27,45,.55);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.s-age em{font-style:normal;background:#fff;color:var(--ink);font-weight:700;padding:6px 10px;border-radius:10px;white-space:nowrap}
+.s-offer{background:#FFD84D;color:var(--ink)}
+.s-offer strong{display:block;font-family:var(--display);font-size:15px}
+.s-offer .tmr{display:inline-block;margin-top:6px;font:600 20px var(--mono);background:var(--risk);color:#fff;padding:2px 10px;border-radius:8px;font-variant-numeric:tabular-nums}
+.kpet{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center}
+.pet{width:96px;height:84px;border-radius:48px 48px 38px 38px;background:#FFB0D0;position:relative}
+.pet::before,.pet::after{content:"";position:absolute;top:30px;width:12px;height:14px;border-radius:50%;background:var(--ink)}
+.pet::before{left:26px}.pet::after{right:26px}
+.pet i{position:absolute;left:36px;top:56px;width:24px;height:12px;border:3px solid var(--ink);border-bottom:0;border-radius:14px 14px 0 0}
+.s-streak{background:#fff;color:var(--ink);border-radius:14px 14px 14px 2px}
+.s-loot{background:#FF3D7F;display:flex;gap:12px;align-items:center;font-weight:600}
+.egg{flex:none;width:34px;height:42px;border-radius:50% 50% 46% 46%/60% 60% 40% 40%;background:repeating-linear-gradient(135deg,#FFE680 0 6px,#FFC94D 6px 12px)}
+.s-loot small{display:block;font-weight:400;opacity:.9}
+.s-chat{background:#fff;color:var(--ink);border-radius:14px 14px 14px 2px}
+.s-chat b{color:#6E56F8;font-family:var(--mono);font-size:12px;display:block}
+.s-geo{background:rgba(20,27,45,.55);display:flex;gap:10px;align-items:center}
+.s-geo .box{flex:none;width:22px;height:22px;border-radius:5px;background:var(--safe);color:#fff;font-weight:700;text-align:center;line-height:22px}
+.s-break{background:#DFF5E8;color:var(--ink);display:flex;gap:12px;align-items:center}
+.breath{flex:none;width:28px;height:28px;border-radius:50%;background:var(--safe);opacity:.8;animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.7)}50%{transform:scale(1)}}
+.gpanel{background:var(--panel);border:2px solid var(--ink);border-radius:14px;padding:18px;box-shadow:8px 8px 0 var(--ink)}
+.gpanel .gp-in{animation:in .25s ease-out both}
+.gpanel h3{font-family:var(--display);font-weight:800;font-size:19px;margin:8px 0 12px;line-height:1.2}
+.gpanel h5{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+.gpanel blockquote{margin:0;font-size:17px;font-style:italic;border-left:4px solid var(--warn);padding-left:12px}
+.gpanel p{margin:0}
+.gpanel .empty{color:var(--muted)}
+.gpanel .pill.blue{background:var(--cobalt);color:#fff}
+.gclose{display:none}
+.gdone{margin-top:16px;padding:14px;border-radius:var(--r);background:var(--cobalt-soft)}
+.gdone p{margin:0 0 10px;font-weight:600}
+@media (max-width:759px){
+  .gpanel{position:fixed;left:8px;right:8px;bottom:8px;z-index:10;max-height:66vh;overflow:auto;transform:translateY(calc(100% + 24px));opacity:0;transition:transform .3s ease-out,opacity .2s;box-shadow:0 -6px 0 var(--ink)}
+  .gpanel.open{transform:none;opacity:1}
+  .gclose{display:flex;width:100%;margin-top:14px}
+}
+@media (min-width:760px){
+  .gwrap{grid-template-columns:minmax(0,360px) 1fr;gap:40px}
+  .gpanel{position:sticky;top:84px}
+}
+footer.foot{color:var(--muted);font-size:14px;padding:0 var(--gut) 32px}
+
+@media (min-width:760px){
+  .hero{grid-template-columns:1.25fr 1fr;gap:48px}
+  .map{grid-template-columns:repeat(3,1fr)}
+  .rephead{grid-template-columns:1fr 1.1fr}
+  .issues{grid-template-columns:1fr 1fr}
+  .screen{padding-top:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .tile.lit::before{opacity:1;transform:none}
+  .tile.lit > *{opacity:1}
+}
+@media print{
+  @page{margin:12mm}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt;line-height:1.4}
+  header.top,.qnav,.actions,.ai,.noprint,footer.foot{display:none!important}
+  .screen{display:none!important;padding:0}
+  #s-report,#s-recs{display:block!important}
+  #s-recs{break-before:page}
+  .printonly{display:block;margin-bottom:4mm}
+  .tile.lit::before{opacity:1;transform:none}
+  .tile.lit > *{opacity:1}
+  .tile{min-height:52px;padding:8px}
+  .label,.preview{box-shadow:none}
+  .label .bar div{transform:scaleX(var(--p,0))!important}
+  .zcard,.rec{border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 12px}
+  .map,.issues{gap:6px}
+  .map{grid-template-columns:repeat(3,1fr)}
+  .rephead{grid-template-columns:1fr 1.1fr}
+  .issues{grid-template-columns:1fr 1fr}
+  h3.sec{margin:12px 0 6px;font-size:14pt}
+  body{font-size:9.5pt;line-height:1.3}
+  #recs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .rec{margin:0;padding:8px 10px}
+  .rec h4{font-size:11pt;margin-bottom:4px}
+  .rec li,.zcard li{margin-bottom:3px}
+  .zcard h4{font-size:11pt}
+  .label .num strong{font-size:40px}
+  .label .num,.label .info{padding:10px 12px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span>Safe by Design<em data-t="brandSub"></em></span></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"><div id="pbar"></div></div>
+</header>
+
+<main class="wrap">
+  <!-- Screen 0: intro -->
+  <section class="screen on" id="s-intro" aria-labelledby="h-intro">
+    <div class="hero">
+      <div>
+        <div class="mono" data-t="eyebrow"></div>
+        <h1 id="h-intro" data-t="heroTitle"></h1>
+        <p class="lead" data-t="heroLead"></p>
+        <ul class="facts" id="facts"></ul>
+        <label class="field"><span data-t="gameName"></span>
+          <input id="gname" maxlength="60" autocomplete="off">
+        </label>
+        <label class="field"><span data-t="gameDesc"></span>
+          <textarea id="gdesc" maxlength="400"></textarea>
+          <small data-t="gameDescHint"></small>
+        </label>
+        <div class="row">
+          <button class="btn blue" id="start" type="button" data-t="start"></button>
+          <button class="btn ghost" id="demo" type="button" data-t="demo"></button>
+        </div>
+        <button class="playcard" id="playBtn" type="button">
+          <span class="mono" id="pcEyebrow"></span><b id="pcTitle"></b><span id="pcText"></span><i aria-hidden="true">→</i>
+        </button>
+      </div>
+      <aside class="preview" aria-hidden="true">
+        <div class="mono" data-t="mapCaption"></div>
+        <div class="map" id="introMap"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Mini-game: find the dark pattern -->
+  <section class="screen" id="s-game" aria-labelledby="h-game">
+    <div class="ghead">
+      <div class="mono" id="gEyebrow"></div>
+      <h2 id="h-game"></h2>
+      <p id="gIntro"></p>
+    </div>
+    <div class="gcount"><span class="chip" id="gFound"></span><span class="chip goodchip off" id="gGood"></span></div>
+    <div class="gwrap">
+      <div>
+        <div class="phone"><div class="kscreen" id="kscreen"></div></div>
+        <div class="gdone" id="gDone" hidden></div>
+        <div class="row" style="margin-top:18px">
+          <button class="btn ghost" id="gBack" type="button"></button>
+        </div>
+      </div>
+      <aside class="gpanel" id="gPanel" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <!-- Screen 1: questionnaire -->
+  <section class="screen" id="s-quiz" aria-labelledby="h-zone">
+    <div class="qhead">
+      <div class="mono" id="zoneCount"></div>
+      <h2 id="h-zone"></h2>
+      <p id="zoneBlurb"></p>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <form id="qform" novalidate></form>
+    <p class="hint" id="hint" role="alert"></p>
+    <div class="qnav">
+      <button class="btn ghost" id="back" type="button"></button>
+      <button class="btn blue" id="next" type="button"></button>
+    </div>
+  </section>
+
+  <!-- Screen 2: report -->
+  <section class="screen" id="s-report" aria-labelledby="h-report">
+    <div class="printonly mono" data-t="printHead"></div>
+    <div class="rephead">
+      <div>
+        <div class="mono" data-t="reportEyebrow"></div>
+        <h2 class="game" id="h-report"></h2>
+        <div class="mono" id="repDate" style="color:var(--muted)"></div>
+        <div id="delta"></div>
+      </div>
+      <div class="label">
+        <div class="num"><strong id="score">0</strong><span data-t="outOf"></span></div>
+        <div class="info">
+          <div class="mono" data-t="indexName"></div>
+          <div class="verdict" id="verdict"></div>
+          <div class="bar"><div id="sbar"></div></div>
+          <p id="verdictNote"></p>
+        </div>
+      </div>
+    </div>
+    <h3 class="sec" data-t="mapTitle"></h3>
+    <div class="map" id="repMap"></div>
+    <div class="legend" id="legend"></div>
+    <h3 class="sec" data-t="issuesTitle"></h3>
+    <div class="issues" id="issues"></div>
+    <div class="row actions">
+      <button class="btn blue" id="toRecs" type="button" data-t="toRecs"></button>
+      <button class="btn" id="print1" type="button" data-t="download"></button>
+      <button class="btn ghost" id="edit" type="button" data-t="edit"></button>
+    </div>
+  </section>
+
+  <!-- Screen 3: recommendations -->
+  <section class="screen" id="s-recs" aria-labelledby="h-recs">
+    <div class="mono noprint" data-t="recsEyebrow"></div>
+    <h3 class="sec" id="h-recs" data-t="recsTitle" style="margin-top:6px"></h3>
+    <div id="recs"></div>
+    <div class="ai">
+      <h4 data-t="aiTitle"></h4>
+      <p data-t="aiText"></p>
+      <button class="btn ghost" id="aiBtn" type="button" data-t="aiBtn"></button>
+      <pre id="aiOut" hidden></pre>
+    </div>
+    <div class="row actions">
+      <button class="btn" id="print2" type="button" data-t="download"></button>
+      <button class="btn ghost" id="toReport" type="button" data-t="toReport"></button>
+      <button class="btn ghost" id="restart" type="button" data-t="restart"></button>
+    </div>
+  </section>
+</main>
+<footer class="wrap foot" data-t="footer"></footer>
+
+<script>
+/* ============ CONTENT: all texts, rubric, recommendations (ru + en) ============ */
+const content = {
+  ui: {
+    ru: {
+      brand: "Safe by Design · аудит игры",
+      brandSub: " · аудит игры",
+      eyebrow: "Самооценка для разработчиков игр",
+      heroTitle: "Как ваша игра выглядит <em>для ребёнка</em> — и для того, кто хочет ему навредить?",
+      heroLead: "Ответьте на вопросы о механиках игры. Рубрика оценит 6 зон риска, покажет проблемы и даст готовые рекомендации. Отчёт можно сохранить в PDF.",
+      facts: ["<b>18</b> вопросов", "<b>6</b> зон риска", "<b>~5</b> минут", "без регистрации"],
+      gameName: "Название игры (необязательно)",
+      gameDesc: "Коротко об игре (необязательно)",
+      gameDescHint: "Жанр, платформа, возраст аудитории. Остаётся в браузере и никуда не отправляется.",
+      start: "Начать аудит",
+      demo: "Демо: «Galaxy Pets»",
+      mapCaption: "Так выглядит карта зон в отчёте",
+      zoneOf: (i, n) => `Зона ${i} из ${n}`,
+      back: "Назад",
+      next: "Следующая зона",
+      finish: "Получить отчёт",
+      missing: n => `Ответьте ещё на ${n} ${n === 1 ? "вопрос" : "вопроса"} в этой зоне.`,
+      reportEyebrow: "Отчёт о рисках для детей",
+      untitled: "Игра без названия",
+      outOf: "из 100",
+      indexName: "Индекс безопасности",
+      verdicts: { low: "Низкий риск", mid: "Есть заметные риски", high: "Высокий риск для детей" },
+      verdictNotes: {
+        low: "Базовая защита на месте. Проверьте жёлтые зоны перед релизом.",
+        mid: "Часть механик открывает путь к вреду. Начните с красных зон.",
+        high: "Игру опасно выпускать для детей без изменений."
+      },
+      redCount: n => `Красных зон: ${n}. `,
+      mapTitle: "Карта зон",
+      levels: { green: "Зелёная", yellow: "Жёлтая", red: "Красная" },
+      legend: ["Зелёная — 0–1 балл риска", "Жёлтая — 2–3", "Красная — 4–6"],
+      riskPts: (s, m) => `риск ${s}/${m}`,
+      issuesTitle: "Проблемы и почему это важно",
+      noIssues: "Проблем в этой зоне не найдено.",
+      toRecs: "Смотреть рекомендации",
+      download: "Скачать отчёт (PDF)",
+      edit: "Изменить ответы",
+      deltaText: (a, b) => `До ${a} → после ${b}`,
+      recsEyebrow: "Что исправить",
+      recsTitle: "Рекомендации по красным и жёлтым зонам",
+      allGreen: "Все зоны зелёные. Повторяйте аудит при каждом крупном обновлении: новые социальные функции и магазин чаще всего добавляют риски.",
+      aiTitle: "Персональные шаги от ИИ",
+      aiText: "Следующий шаг MVP: серверная функция /api/recommend получает только ответы анкеты и описание игры и предлагает шаги под вашу игру. Оценку всё равно ставит рубрика. В этом прототипе вызов отключён — ниже видно, что будет отправлено.",
+      aiBtn: "Показать запрос к ИИ",
+      aiStub: "Сервер не подключён, запрос не отправлен. Ключ API хранится только на сервере, в коде страницы его нет. Данные запроса:",
+      toReport: "Назад к отчёту",
+      restart: "Новый аудит",
+      printHead: "Safe by Design · отчёт о безопасности игры для детей",
+      footer: "Прототип для хакатона по защите детей в интернете. Ответы не сохраняются и никуда не отправляются. Оценку ставит фиксированная рубрика: одинаковые ответы всегда дают одинаковый результат."
+    },
+    en: {
+      brand: "Safe by Design · game audit",
+      brandSub: " · game audit",
+      eyebrow: "Self-assessment for game developers",
+      heroTitle: "How does your game look <em>to a child</em> — and to someone who wants to harm them?",
+      heroLead: "Answer questions about your game's mechanics. The rubric rates 6 risk zones, shows the problems and gives ready-to-use recommendations. Save the report as a PDF.",
+      facts: ["<b>18</b> questions", "<b>6</b> risk zones", "<b>~5</b> minutes", "no sign-up"],
+      gameName: "Game title (optional)",
+      gameDesc: "About the game (optional)",
+      gameDescHint: "Genre, platform, target age. Stays in your browser and is never sent anywhere.",
+      start: "Start audit",
+      demo: "Demo: “Galaxy Pets”",
+      mapCaption: "This is how the zone map looks in the report",
+      zoneOf: (i, n) => `Zone ${i} of ${n}`,
+      back: "Back",
+      next: "Next zone",
+      finish: "Get report",
+      missing: n => `Answer ${n} more ${n === 1 ? "question" : "questions"} in this zone.`,
+      reportEyebrow: "Child safety risk report",
+      untitled: "Untitled game",
+      outOf: "out of 100",
+      indexName: "Safety index",
+      verdicts: { low: "Low risk", mid: "Notable risks", high: "High risk for children" },
+      verdictNotes: {
+        low: "Core protections are in place. Review yellow zones before release.",
+        mid: "Some mechanics open a path to harm. Start with the red zones.",
+        high: "Not safe to ship to children without changes."
+      },
+      redCount: n => `Red zones: ${n}. `,
+      mapTitle: "Zone map",
+      levels: { green: "Green", yellow: "Yellow", red: "Red" },
+      legend: ["Green — 0–1 risk points", "Yellow — 2–3", "Red — 4–6"],
+      riskPts: (s, m) => `risk ${s}/${m}`,
+      issuesTitle: "Problems and why they matter",
+      noIssues: "No problems found in this zone.",
+      toRecs: "See recommendations",
+      download: "Download report (PDF)",
+      edit: "Change answers",
+      deltaText: (a, b) => `Before ${a} → after ${b}`,
+      recsEyebrow: "What to fix",
+      recsTitle: "Recommendations for red and yellow zones",
+      allGreen: "All zones are green. Re-run the audit with every major update: new social features and store changes add the most risk.",
+      aiTitle: "Personal steps from AI",
+      aiText: "Next MVP step: a server function /api/recommend receives only the questionnaire answers and the game description and suggests steps for your game. The rubric still sets the score. In this prototype the call is switched off — below is exactly what would be sent.",
+      aiBtn: "Show AI request",
+      aiStub: "Server not connected, nothing was sent. The API key lives only on the server, never in this page. Request payload:",
+      toReport: "Back to report",
+      restart: "New audit",
+      printHead: "Safe by Design · child safety report for a game",
+      footer: "Hackathon prototype on child online safety. Answers are not stored or sent anywhere. A fixed rubric sets the score: the same answers always give the same result."
+    }
+  },
+
+  zones: [
+    {
+      id: "contact",
+      title: { ru: "Незнакомцы", en: "Contact with strangers" },
+      blurb: { ru: "Может ли взрослый незнакомец найти ребёнка в игре и начать с ним общаться.", en: "Can an adult stranger find a child in the game and start talking to them." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "c1",
+          text: { ru: "Как игроки общаются между собой?", en: "How do players communicate?" },
+          issue: { ru: "Свободный чат — главный канал груминга: незнакомец пишет ребёнку напрямую.", en: "Open chat is the main grooming channel: a stranger can message a child directly." },
+          options: [
+            { label: { ru: "Нет чата или только готовые фразы и эмодзи", en: "No chat, or preset phrases and emotes only" }, score: 0 },
+            { label: { ru: "Чат только с подтверждёнными друзьями", en: "Chat with confirmed friends only" }, score: 1 },
+            { label: { ru: "Свободный текстовый или голосовой чат с любым игроком", en: "Open text or voice chat with any player" }, score: 2 } ] },
+        { id: "c2",
+          text: { ru: "Кто может отправить ребёнку заявку в друзья или личное сообщение?", en: "Who can send a child a friend request or direct message?" },
+          issue: { ru: "Личные сообщения от незнакомцев уводят разговор туда, где его не видят модераторы.", en: "DMs from strangers move the conversation to where moderators can't see it." },
+          options: [
+            { label: { ru: "Никто из незнакомцев — только по коду от друга", en: "No strangers — only via a friend code" }, score: 0 },
+            { label: { ru: "Любой игрок, но по умолчанию это выключено", en: "Any player, but it's off by default" }, score: 1 },
+            { label: { ru: "Любой игрок, по умолчанию включено", en: "Any player, on by default" }, score: 2 } ] },
+        { id: "c3",
+          text: { ru: "Фильтруются ли в чате ссылки, номера телефонов и ники в соцсетях?", en: "Does chat filter links, phone numbers and social media handles?" },
+          issue: { ru: "Без фильтра контактов злоумышленник за пару сообщений переводит ребёнка в сторонний мессенджер.", en: "Without a contact filter, an offender moves the child to an outside messenger within a few messages." },
+          options: [
+            { label: { ru: "Да, ссылки и контакты блокируются", en: "Yes, links and contacts are blocked" }, score: 0 },
+            { label: { ru: "Фильтруется только мат", en: "Only profanity is filtered" }, score: 1 },
+            { label: { ru: "Ничего не фильтруется", en: "Nothing is filtered" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "Выключите свободный чат для детских аккаунтов", en: "Turn off open chat for child accounts" }, d: { ru: "Оставьте готовые фразы и эмодзи. Свободный чат — только с друзьями, добавленными по коду или с согласия родителя.", en: "Keep preset phrases and emotes. Open chat only with friends added by code or with parent approval." } },
+        { level: "yellow", t: { ru: "Блокируйте контакты и ссылки в чате", en: "Block contacts and links in chat" }, d: { ru: "Шаблоны для телефонов, e-mail, ссылок и ников вида @name, включая обходы («восемь девять…», цифры через пробел).", en: "Patterns for phones, e-mails, URLs and @handles, including evasions (spelled-out digits, spaced numbers)." } },
+        { level: "yellow", t: { ru: "Кнопка помощи с местными контактами", en: "A help button with local contacts" }, d: { ru: "Покажите в игре кнопку помощи с местными контактами — для Таджикистана: 102 (милиция), 1313 (национальный телефон доверия), 1919 (телефон доверия МВД). Источники: IOM Tajikistan, 01.2026; mvd.tj.", en: "Show a help button in the game with local contacts — for Tajikistan: 102 (police), 1313 (national helpline), 1919 (Ministry of Internal Affairs helpline). Sources: IOM Tajikistan, 01.2026; mvd.tj." } },
+        { level: "yellow", t: { ru: "Личные сообщения от незнакомцев выключены по умолчанию", en: "DMs from strangers off by default" }, d: { ru: "Включить их может только родитель. Объясните ребёнку простыми словами, почему так.", en: "Only a parent can switch them on. Explain to the child in plain words why." } }
+      ]
+    },
+    {
+      id: "purchases",
+      title: { ru: "Покупки и лутбоксы", en: "Purchases and loot boxes" },
+      blurb: { ru: "Может ли ребёнок потратить реальные деньги, не понимая этого.", en: "Can a child spend real money without realising it." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "p1",
+          text: { ru: "Есть ли в игре лутбоксы или другие случайные награды?", en: "Does the game have loot boxes or other random rewards?" },
+          issue: { ru: "Платные случайные награды работают как азартная игра; в Бельгии платные лутбоксы запрещены с 2018 года.", en: "Paid random rewards work like gambling; Belgium has banned paid loot boxes since 2018." },
+          options: [
+            { label: { ru: "Нет, игрок всегда знает, что получит", en: "No, players always know what they get" }, score: 0 },
+            { label: { ru: "Есть, только за заработанную валюту, шансы опубликованы", en: "Yes, earned currency only, odds published" }, score: 1 },
+            { label: { ru: "Есть, за реальные деньги, шансы не показаны", en: "Yes, for real money, odds not shown" }, score: 2 } ] },
+        { id: "p2",
+          text: { ru: "Как подтверждается покупка?", en: "How is a purchase confirmed?" },
+          issue: { ru: "Покупка в одно касание с сохранённой картой — частая причина «случайных» трат детей.", en: "One-tap purchases on a saved card are a common cause of accidental spending by children." },
+          options: [
+            { label: { ru: "Нужен пароль или подтверждение родителя", en: "Password or parent approval required" }, score: 0 },
+            { label: { ru: "Отдельный экран подтверждения для самого игрока", en: "A separate confirmation screen for the player" }, score: 1 },
+            { label: { ru: "В одно касание, карта сохранена", en: "One tap, card saved" }, score: 2 } ] },
+        { id: "p3",
+          text: { ru: "Как показаны цены?", en: "How are prices shown?" },
+          issue: { ru: "Несколько валют и наборы «с остатком» скрывают реальную цену и подталкивают докупать.", en: "Multiple currencies and bundles with leftovers hide the real price and push extra purchases." },
+          options: [
+            { label: { ru: "В реальных деньгах, или платного контента нет", en: "In real money, or no paid content" }, score: 0 },
+            { label: { ru: "Одна игровая валюта, рядом видна цена в деньгах", en: "One currency, real price shown next to it" }, score: 1 },
+            { label: { ru: "Несколько валют, наборы оставляют «остатки»", en: "Several currencies, bundles leave leftovers" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "Уберите платные лутбоксы для детской аудитории", en: "Remove paid loot boxes for young players" }, d: { ru: "Замените их витриной с прямыми покупками: игрок видит предмет до оплаты.", en: "Replace them with a direct-purchase store: the player sees the item before paying." } },
+        { level: "red", t: { ru: "Каждая покупка — через подтверждение родителя", en: "Every purchase goes through parent approval" }, d: { ru: "Используйте родительский контроль платформы (Ask to Buy, Family Link) и не храните способ оплаты внутри игры.", en: "Use platform parental controls (Ask to Buy, Family Link) and don't store payment methods in-game." } },
+        { level: "yellow", t: { ru: "Показывайте шансы и реальную цену", en: "Show odds and the real price" }, d: { ru: "Вероятности выпадения — прямо на экране покупки, цена в местной валюте — рядом с игровой.", en: "Drop odds on the purchase screen, local-currency price next to the in-game price." } }
+      ]
+    },
+    {
+      id: "pressure",
+      title: { ru: "Давление и таймеры", en: "Pressure and timers" },
+      blurb: { ru: "Заставляет ли игра возвращаться и платить через страх что-то упустить.", en: "Does the game push players to return and pay through fear of missing out." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "t1",
+          text: { ru: "Есть ли ограниченные по времени предложения или события?", en: "Are there time-limited offers or events?" },
+          issue: { ru: "Обратный отсчёт на покупке давит на ребёнка, который ещё плохо контролирует импульсы.", en: "A countdown on an offer pressures children, whose impulse control is still developing." },
+          options: [
+            { label: { ru: "Нет", en: "No" }, score: 0 },
+            { label: { ru: "События есть, но без платных предложений с таймером", en: "Events exist, but no paid offers with a timer" }, score: 1 },
+            { label: { ru: "Да, платные предложения с обратным отсчётом", en: "Yes, paid offers with a countdown" }, score: 2 } ] },
+        { id: "t2",
+          text: { ru: "Что происходит, если ребёнок пропустит несколько дней?", en: "What happens if a child skips a few days?" },
+          issue: { ru: "Потеря серии или предметов за пропуск превращает игру в обязанность.", en: "Losing a streak or items for missing days turns play into an obligation." },
+          options: [
+            { label: { ru: "Ничего не теряет", en: "Nothing is lost" }, score: 0 },
+            { label: { ru: "Не получает бонус, но ничего не теряет", en: "Misses a bonus, loses nothing" }, score: 1 },
+            { label: { ru: "Теряет серию, ресурсы или прогресс", en: "Loses a streak, resources or progress" }, score: 2 } ] },
+        { id: "t3",
+          text: { ru: "Как устроены уведомления и длинные сессии?", en: "How do notifications and long sessions work?" },
+          issue: { ru: "Частые пуши «вернись, иначе потеряешь» и отсутствие перерывов мешают сну и учёбе.", en: "Frequent “come back or lose it” pushes and no breaks disrupt sleep and school." },
+          options: [
+            { label: { ru: "Есть напоминание о перерыве и тихие часы", en: "Break reminders and quiet hours" }, score: 0 },
+            { label: { ru: "Несколько пушей в день, ночью — нет", en: "A few pushes a day, none at night" }, score: 1 },
+            { label: { ru: "Частые пуши, в том числе ночью", en: "Frequent pushes, including at night" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "Уберите таймеры с платных предложений", en: "Remove timers from paid offers" }, d: { ru: "Для детских аккаунтов предложения доступны без обратного отсчёта.", en: "For child accounts, offers stay available without a countdown." } },
+        { level: "yellow", t: { ru: "Не наказывайте за пропущенные дни", en: "Don't punish missed days" }, d: { ru: "Награда за возвращение лучше потери серии: ребёнок играет, когда хочет, а не когда должен.", en: "A welcome-back reward beats a lost streak: children play when they want, not when they must." } },
+        { level: "yellow", t: { ru: "Тихие часы и напоминание о перерыве", en: "Quiet hours and break reminders" }, d: { ru: "Никаких пушей с 21:00 до 8:00 по местному времени и мягкое напоминание через 45–60 минут игры.", en: "No pushes from 9 pm to 8 am local time, and a gentle reminder after 45–60 minutes of play." } }
+      ]
+    },
+    {
+      id: "data",
+      title: { ru: "Данные ребёнка", en: "Children's data" },
+      blurb: { ru: "Какие данные собирает игра и кто ещё их получает.", en: "What data the game collects and who else receives it." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "d1",
+          text: { ru: "Что игра просит при регистрации?", en: "What does the game ask for at sign-up?" },
+          issue: { ru: "Имя, фото, телефон и геолокация ребёнка помогают найти его вне игры.", en: "A child's name, photo, phone and location help someone find them outside the game." },
+          options: [
+            { label: { ru: "Только ник, без личных данных", en: "Only a nickname, no personal data" }, score: 0 },
+            { label: { ru: "E-mail родителя и год рождения", en: "Parent's e-mail and birth year" }, score: 1 },
+            { label: { ru: "Имя, дату рождения, телефон, фото или геолокацию", en: "Name, birth date, phone, photo or location" }, score: 2 } ] },
+        { id: "d2",
+          text: { ru: "Какие сторонние SDK стоят в игре?", en: "Which third-party SDKs does the game use?" },
+          issue: { ru: "Рекламные SDK передают идентификаторы ребёнка третьим сторонам; в США COPPA требует для этого согласия родителей.", en: "Ad SDKs pass a child's identifiers to third parties; in the US, COPPA requires parental consent for this." },
+          options: [
+            { label: { ru: "Никаких или только анонимная аналитика", en: "None, or anonymous analytics only" }, score: 0 },
+            { label: { ru: "Аналитика с ID устройства, без рекламы", en: "Analytics with device ID, no ads" }, score: 1 },
+            { label: { ru: "Рекламные SDK с персональной рекламой", en: "Ad SDKs with personalised ads" }, score: 2 } ] },
+        { id: "d3",
+          text: { ru: "Как удалить аккаунт и данные?", en: "How can an account and its data be deleted?" },
+          issue: { ru: "Если данные нельзя удалить, они хранятся годами и могут утечь.", en: "If data can't be deleted, it is kept for years and can leak." },
+          options: [
+            { label: { ru: "Кнопкой в настройках; есть понятная политика для детей", en: "A button in settings, plus a child-friendly policy" }, score: 0 },
+            { label: { ru: "Через запрос в поддержку", en: "Via a support request" }, score: 1 },
+            { label: { ru: "Никак, или политики конфиденциальности нет", en: "Not possible, or no privacy policy" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "Отключите персональную рекламу для детей", en: "Turn off personalised ads for children" }, d: { ru: "Включите в SDK режим для детской аудитории (child-directed) и не передавайте рекламный ID.", en: "Enable the child-directed mode in SDKs and don't pass the advertising ID." } },
+        { level: "yellow", t: { ru: "Собирайте минимум", en: "Collect the minimum" }, d: { ru: "Ник вместо имени, год вместо даты рождения, без фото и геолокации. У каждого поля должен быть ответ на вопрос «зачем».", en: "Nickname instead of name, birth year instead of date, no photo or location. Every field needs a reason." } },
+        { level: "yellow", t: { ru: "Удаление в два касания", en: "Two-tap deletion" }, d: { ru: "Кнопка «Удалить аккаунт» в настройках и короткая политика конфиденциальности простым языком.", en: "A “Delete account” button in settings and a short plain-language privacy policy." } }
+      ]
+    },
+    {
+      id: "moderation",
+      title: { ru: "Модерация", en: "Moderation" },
+      blurb: { ru: "Может ли ребёнок пожаловаться и получит ли он помощь.", en: "Can a child report a problem, and will anyone act on it." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "m1",
+          text: { ru: "Как пожаловаться на игрока или сообщение?", en: "How do you report a player or a message?" },
+          issue: { ru: "Если жалоба требует больше одного шага, дети её не отправляют.", en: "If reporting takes more than one step, children don't do it." },
+          options: [
+            { label: { ru: "Кнопка прямо в чате и профиле, плюс «Заблокировать»", en: "A button right in chat and profile, plus “Block”" }, score: 0 },
+            { label: { ru: "Через сайт, форму или e-mail", en: "Via a website, form or e-mail" }, score: 1 },
+            { label: { ru: "Никак", en: "No way to report" }, score: 2 } ] },
+        { id: "m2",
+          text: { ru: "Кто разбирает жалобы?", en: "Who handles reports?" },
+          issue: { ru: "Автофильтр без людей пропускает груминг: он выглядит как вежливый разговор.", en: "Filters without humans miss grooming: it looks like a polite conversation." },
+          options: [
+            { label: { ru: "Живые модераторы, ответ в течение 24 часов", en: "Human moderators, response within 24 hours" }, score: 0 },
+            { label: { ru: "Только автоматический фильтр", en: "Automatic filter only" }, score: 1 },
+            { label: { ru: "Никто", en: "Nobody" }, score: 2 } ] },
+        { id: "m3",
+          text: { ru: "Как проверяется контент игроков (ники, картинки, уровни)?", en: "How is player-made content checked (names, images, levels)?" },
+          issue: { ru: "Непроверенный контент игроков — путь для сексуальных и шокирующих материалов.", en: "Unchecked player content is a route for sexual and shocking material." },
+          options: [
+            { label: { ru: "Его нет, или он проверяется до публикации", en: "There is none, or it's checked before publishing" }, score: 0 },
+            { label: { ru: "Проверяется после жалоб", en: "Checked after reports" }, score: 1 },
+            { label: { ru: "Публикуется без проверки", en: "Published without checks" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "«Пожаловаться и заблокировать» в одно касание", en: "One-tap “Report and block”" }, d: { ru: "В чате, профиле и списке друзей. После жалобы покажите ребёнку, что будет дальше.", en: "In chat, profile and friend list. After reporting, tell the child what happens next." } },
+        { level: "red", t: { ru: "Живая модерация жалоб с детских аккаунтов", en: "Human review of reports from child accounts" }, d: { ru: "Приоритетная очередь и срок ответа; жалобы на сексуальный контакт — сразу на эскалацию.", en: "A priority queue with a response target; reports of sexual contact escalate immediately." } },
+        { level: "yellow", t: { ru: "Кнопка помощи с местными контактами", en: "A help button with local contacts" }, d: { ru: "Покажите в игре кнопку помощи с местными контактами — для Таджикистана: 102 (милиция), 1313 (национальный телефон доверия), 1919 (телефон доверия МВД). Источники: IOM Tajikistan, 01.2026; mvd.tj.", en: "Show a help button in the game with local contacts — for Tajikistan: 102 (police), 1313 (national helpline), 1919 (Ministry of Internal Affairs helpline). Sources: IOM Tajikistan, 01.2026; mvd.tj." } },
+        { level: "yellow", t: { ru: "Проверяйте ники и картинки до публикации", en: "Check names and images before publishing" }, d: { ru: "Автофильтр плюс ручная проверка спорных случаев; уровни игроков — после проверки.", en: "Automatic filter plus manual review of edge cases; player levels go live after review." } }
+      ]
+    },
+    {
+      id: "age",
+      title: { ru: "Возраст и родительский контроль", en: "Age and parental controls" },
+      blurb: { ru: "Знает ли игра, что играет ребёнок, и могут ли родители вмешаться.", en: "Does the game know a child is playing, and can parents step in." },
+      thresholds: { yellow: 2, red: 4 },
+      questions: [
+        { id: "a1",
+          text: { ru: "Узнаёт ли игра возраст игрока?", en: "Does the game ask for the player's age?" },
+          issue: { ru: "Не зная возраста, игра не может включить защиту для детей.", en: "Without knowing age, the game can't switch on protections for children." },
+          options: [
+            { label: { ru: "Да, и младше 13 лет включается детский режим", en: "Yes, and under-13s get a child mode" }, score: 0 },
+            { label: { ru: "Спрашивает, но игра для всех одинакова", en: "Asks, but the game is the same for everyone" }, score: 1 },
+            { label: { ru: "Не спрашивает", en: "Doesn't ask" }, score: 2 } ] },
+        { id: "a2",
+          text: { ru: "Что могут настроить родители?", en: "What can parents control?" },
+          issue: { ru: "Без родительских настроек единственная защита — запретить игру целиком.", en: "Without parental settings, the only protection is banning the game entirely." },
+          options: [
+            { label: { ru: "Чат, покупки и время игры", en: "Chat, purchases and play time" }, score: 0 },
+            { label: { ru: "Только что-то одно из этого", en: "Only one of these" }, score: 1 },
+            { label: { ru: "Ничего", en: "Nothing" }, score: 2 } ] },
+        { id: "a3",
+          text: { ru: "Какие настройки стоят по умолчанию у детского аккаунта?", en: "What are the default settings for a child account?" },
+          issue: { ru: "Дети почти не меняют настройки: что открыто по умолчанию, то и остаётся открытым.", en: "Children rarely change settings: whatever is open by default stays open." },
+          options: [
+            { label: { ru: "Все социальные функции выключены", en: "All social features off" }, score: 0 },
+            { label: { ru: "Часть включена", en: "Some are on" }, score: 1 },
+            { label: { ru: "Всё открыто, профиль публичный", en: "Everything open, public profile" }, score: 2 } ] }
+      ],
+      recommendations: [
+        { level: "red", t: { ru: "Безопасные настройки по умолчанию", en: "Safe defaults" }, d: { ru: "Профиль скрыт, чат и личные сообщения выключены, геолокации нет. Так требует, например, британский Age Appropriate Design Code.", en: "Hidden profile, chat and DMs off, no location. The UK Age Appropriate Design Code, for example, requires this." } },
+        { level: "yellow", t: { ru: "Нейтральный возрастной экран", en: "A neutral age gate" }, d: { ru: "Спрашивайте год рождения, а не «Вам есть 13?». Младше 13 — детский режим автоматически.", en: "Ask for birth year, not “Are you 13+?”. Under 13 — child mode automatically." } },
+        { level: "yellow", t: { ru: "Панель для родителей", en: "A parent dashboard" }, d: { ru: "Чат, покупки и лимит времени в одном месте — по коду или через родительский контроль платформы.", en: "Chat, purchases and time limits in one place — via a code or the platform's parental controls." } }
+      ]
+    }
+  ],
+
+  // Mini-game "Find the dark pattern": a fictional kid game screen with 6 harmful spots + 1 good example.
+  minigame: {
+    ui: {
+      ru: {
+        cardEyebrow: "Мини-игра · 1–2 минуты",
+        cardTitle: "Мини-игра: глазами ребёнка",
+        cardText: "Найдите 6 тёмных паттернов в выдуманной детской игре.",
+        eyebrow: "Мини-игра · глазами ребёнка",
+        title: "Найди тёмный паттерн",
+        intro: "Это экран выдуманной игры для детей 8+. Нажимайте на всё, что может навредить ребёнку. Проиграть нельзя, ничего не сохраняется.",
+        found: (n, m) => `Найдено: ${n}/${m}`,
+        goodOn: "Хороший пример найден",
+        goodOff: "Есть и один хороший пример",
+        empty: "Нажмите на элемент игры. Здесь появится, как его видит 9-летний ребёнок и как сделать безопаснее.",
+        dark: "Тёмный паттерн",
+        good: "Безопасный дизайн",
+        feel: "Как это чувствует ребёнок 9 лет",
+        fix: "Как сделать безопаснее",
+        why: "Почему это работает",
+        zone: "Зона аудита",
+        close: "Понятно",
+        done: (n, m) => `Нашли ${n}/${m}. Теперь проверьте свою игру: 18 вопросов, около 5 минут.`,
+        toAudit: "Пройти аудит",
+        back: "На старт"
+      },
+      en: {
+        cardEyebrow: "Mini-game · 1–2 minutes",
+        cardTitle: "Mini-game: through a child's eyes",
+        cardText: "Find 6 dark patterns in a made-up kids' game.",
+        eyebrow: "Mini-game · through a child's eyes",
+        title: "Find the dark pattern",
+        intro: "This is a screen from a made-up game for ages 8+. Tap anything that could harm a child. You can't lose, and nothing is saved.",
+        found: (n, m) => `Found: ${n}/${m}`,
+        goodOn: "Good example found",
+        goodOff: "There's one good example too",
+        empty: "Tap an element of the game. You'll see how a 9-year-old experiences it and how to make it safer.",
+        dark: "Dark pattern",
+        good: "Safe by design",
+        feel: "How a 9-year-old feels it",
+        fix: "Safer alternative",
+        why: "Why it works",
+        zone: "Audit zone",
+        close: "Got it",
+        done: (n, m) => `Found ${n}/${m}. Now check your own game: 18 questions, about 5 minutes.`,
+        toAudit: "Start the audit",
+        back: "Back to start"
+      }
+    },
+    mock: {
+      ru: { game: "Galaxy Pets", coins: "150", age: "Тебе уже есть 13?", ageBtn: "Да, мне 13+", offerTitle: "Скидка 80% на легендарного дракона!", offerLeft: "осталось", streak: "Ты не заходил 1 день — питомец грустит. Серия: 0", lootTitle: "Открыть яйцо · 50", lootSub: "Купи ещё — вдруг повезёт!", chatName: "SkinMaster_2009", chatText: "привет! добавь меня в друзья, у меня есть редкие скины, подарю 😉", geo: "Поделиться геолокацией — найди друзей рядом", breakText: "Ты играешь 45 минут. Сделай вдох и потянись — питомец подождёт." },
+      en: { game: "Galaxy Pets", coins: "150", age: "Are you 13 already?", ageBtn: "Yes, I'm 13+", offerTitle: "80% off the legendary dragon!", offerLeft: "left", streak: "You didn't log in for 1 day — your pet is sad. Streak: 0", lootTitle: "Open an egg · 50", lootSub: "Buy another — you might get lucky!", chatName: "SkinMaster_2009", chatText: "hi! add me as a friend, I have rare skins, I'll give you some 😉", geo: "Share my location — find friends nearby", breakText: "You've played for 45 minutes. Take a breath and stretch — your pet will wait." }
+    },
+    spots: [
+      { id: "age", zone: "age",
+        title: { ru: "«Тебе уже есть 13?» с готовым ответом", en: "“Are you 13 already?” with the answer built in" },
+        feel: { ru: "«Если нажму „нет“, меня не пустят. Нажму „да“». Теперь игра считает ребёнка взрослым и включает ему всё.", en: "“If I tap ‘no’, they won't let me in. I'll tap ‘yes’.” Now the game treats the child as an adult and switches everything on." },
+        fix: { ru: "Спрашивайте год рождения без подсказки. Младше 13 — детский режим автоматически, без наказания за честный ответ.", en: "Ask for birth year with no hint. Under 13 gets child mode automatically, with no penalty for answering honestly." } },
+      { id: "offer", zone: "pressure",
+        title: { ru: "Таймер на платном предложении", en: "A countdown on a paid offer" },
+        feel: { ru: "«Осталось меньше минуты! Если не куплю сейчас — дракона больше никогда не будет». Сердце колотится, бегу просить у мамы карту.", en: "“Less than a minute left! If I don't buy now, the dragon is gone forever.” Heart pounding, running to ask Mum for her card." },
+        fix: { ru: "Для детских аккаунтов — предложения без обратного отсчёта, цена в реальных деньгах.", en: "For child accounts, offers have no countdown and show the price in real money." } },
+      { id: "streak", zone: "pressure",
+        title: { ru: "Грустный питомец за пропущенный день", en: "A sad pet for a missed day" },
+        feel: { ru: "«Это я виноват, что он грустит». Ребёнку стыдно, и завтра он зайдёт в игру даже перед школой.", en: "“It's my fault he's sad.” The child feels guilty and will log in tomorrow even before school." },
+        fix: { ru: "Питомец радуется возвращению и дарит подарок. Серия не сгорает, ничего не теряется.", en: "The pet is happy you're back and gives a gift. Streaks don't reset, nothing is lost." } },
+      { id: "loot", zone: "purchases",
+        title: { ru: "Лутбокс «купи ещё — вдруг повезёт»", en: "A loot box: “buy another — you might get lucky”" },
+        feel: { ru: "«Уже пятое яйцо, следующее точно будет легендарным!» Ребёнок не понимает шансов и не видит, сколько это в настоящих деньгах.", en: "“That's the fifth egg, the next one is bound to be legendary!” The child doesn't understand odds or how much it costs in real money." },
+        fix: { ru: "Витрина с прямой покупкой: ребёнок видит, что получит. Если случайность остаётся — только за заработанную валюту и с видимыми шансами.", en: "A direct-purchase store: the child sees what they get. If randomness stays, it's earned-currency only with visible odds." } },
+      { id: "chat", zone: "contact",
+        title: { ru: "Незнакомец пишет в личку и обещает подарок", en: "A stranger DMs and promises a gift" },
+        feel: { ru: "«Крутой игрок хочет со мной дружить и подарит скин!» Через пару сообщений он попросит перейти в другой мессенджер — и прислать фото.", en: "“A cool player wants to be my friend and give me a skin!” A few messages later he'll ask to move to another messenger — and send a photo." },
+        fix: { ru: "Личные сообщения от незнакомцев выключены по умолчанию, в чате — готовые фразы. Рядом с каждым сообщением — «Пожаловаться и заблокировать».", en: "DMs from strangers are off by default, chat uses preset phrases. Every message has “Report and block” next to it." } },
+      { id: "geo", zone: "data",
+        title: { ru: "Галочка «поделиться геолокацией» уже стоит", en: "“Share my location” is pre-ticked" },
+        feel: { ru: "«Галочка уже стоит — значит, так надо». Ребёнок не знает, что такое геолокация, а незнакомцы теперь видят, где он живёт.", en: "“It's already ticked, so it must be right.” The child doesn't know what location means — and strangers can now see where they live." },
+        fix: { ru: "Не собирайте геолокацию у детей вообще. Если она нужна — выключена по умолчанию и включается только родителем.", en: "Don't collect children's location at all. If you must, it's off by default and only a parent can turn it on." } },
+      { id: "break", zone: "pressure", good: true,
+        title: { ru: "Напоминание о перерыве", en: "A break reminder" },
+        feel: { ru: "«Ой, уже так долго играю. Пойду попью воды». Ребёнок сам замечает время, и игра не наказывает его за паузу.", en: "“Oh, I've been playing for ages. I'll get some water.” The child notices the time, and the game doesn't punish the pause." },
+        fix: { ru: "Спокойный тон, без таймера и без потерь. Именно так выглядит зелёная зона «Давление» в аудите.", en: "Calm tone, no timer, no losses. This is what a green “Pressure” zone looks like in the audit." } }
+    ]
+  },
+
+  // Fictional demo game with chat and loot boxes: gives exactly 2 red zones.
+  demo: {
+    name: "Galaxy Pets",
+    desc: { ru: "Мобильная игра про питомцев, 8+. Общий чат, лутбоксы с яйцами питомцев, ежедневные награды.", en: "Mobile pet game, ages 8+. Global chat, loot boxes with pet eggs, daily rewards." },
+    answers: { c1: 2, c2: 2, c3: 1, p1: 2, p2: 1, p3: 2, t1: 1, t2: 1, t3: 0, d1: 0, d2: 1, d3: 1, m1: 0, m2: 1, m3: 0, a1: 1, a2: 0, a3: 0 }
+  }
+};
+
+/* ============ RUBRIC: pure and deterministic (same answers -> same score) ============ */
+function zoneLevel(points, th) {
+  if (points >= th.red) return "red";
+  if (points >= th.yellow) return "yellow";
+  return "green";
+}
+function evaluate(answers) {
+  let total = 0, max = 0;
+  const zones = content.zones.map(z => {
+    let pts = 0, zmax = 0;
+    const issues = [];
+    z.questions.forEach(q => {
+      const opt = q.options[answers[q.id]];
+      const s = opt ? opt.score : 0;
+      pts += s;
+      zmax += Math.max(...q.options.map(o => o.score));
+      if (s > 0) issues.push(q);
+    });
+    total += pts; max += zmax;
+    return { zone: z, points: pts, max: zmax, level: zoneLevel(pts, z.thresholds), issues };
+  });
+  const score = Math.round(100 * (1 - total / max));
+  const reds = zones.filter(z => z.level === "red").length;
+  const band = score >= 80 && reds === 0 ? "low" : score >= 50 ? "mid" : "high";
+  return { score, band, reds, zones };
+}
+
+/* ============ AI STUB (Ф-6) ============
+   Production: POST /api/recommend — a Vercel/Netlify serverless function.
+   The function keeps the API key in a server environment variable, accepts ONLY
+   { lang, game, answers, rubric }, stores nothing and returns personal steps.
+   The rubric above still sets the score; AI only adds wording.
+   This prototype makes NO network calls and contains NO key. */
+function buildAiPayload() {
+  return {
+    lang: state.lang,
+    game: { title: state.game.name || null, description: state.game.desc || null },
+    answers: state.answers,
+    rubric: state.result.zones.map(z => ({ zone: z.zone.id, level: z.level, points: z.points }))
+  };
+}
+async function requestAiRecommendations(payload) {
+  // When the server function exists:
+  // const r = await fetch("/api/recommend", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+  // return r.json();
+  return { stub: true, payload };
+}
+
+/* ============ STATE + RENDER ============ */
+const $ = s => document.querySelector(s);
+// Only trusted template strings built from `content` go through here; user input always uses textContent.
+const setHTML = (el, s) => el.replaceChildren(document.createRange().createContextualFragment(s));
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const state = {
+  lang: store.get("sbd-lang") === "en" ? "en" : "ru",
+  screen: "intro", zone: 0, answers: {}, game: { name: "", desc: "" },
+  result: null, prevScore: null, aiShown: false
+};
+const T = () => content.ui[state.lang];
+const L = o => o[state.lang];
+const totalQ = content.zones.reduce((n, z) => n + z.questions.length, 0);
+
+function show(id) {
+  state.screen = id;
+  if (id !== "game") { stopTimer(); $("#gPanel").classList.remove("open"); }
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === "s-" + id));
+  window.scrollTo(0, 0);
+  updateProgress();
+}
+function updateProgress() {
+  const n = Object.keys(state.answers).length;
+  const p = state.screen === "intro" ? 0 : state.screen === "quiz" ? n / totalQ
+    : state.screen === "game" ? darkFound() / darkTotal : 1;
+  $("#pbar").style.transform = `scaleX(${p})`;
+}
+
+function renderStatic() {
+  const t = T();
+  document.documentElement.lang = state.lang;
+  document.title = t.brand;
+  document.querySelectorAll("[data-t]").forEach(el => setHTML(el, t[el.dataset.t]));
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === state.lang));
+  const g = L(content.minigame.ui);
+  $("#pcEyebrow").textContent = g.cardEyebrow; $("#pcTitle").textContent = g.cardTitle; $("#pcText").textContent = g.cardText;
+  setHTML($("#facts"), t.facts.map(f => `<li>${f}</li>`).join(""));
+  const sample = ["red", "red", "yellow", "yellow", "green", "green"];
+  setHTML($("#introMap"), content.zones.map((z, i) =>
+    `<div class="tile ${sample[i]} lit" style="--d:${i * 70}ms"><span class="t">${L(z.title)}</span><span class="s">${t.levels[sample[i]]}</span></div>`).join(""));
+}
+
+function renderQuiz() {
+  const t = T(), z = content.zones[state.zone], n = content.zones.length;
+  $("#zoneCount").textContent = t.zoneOf(state.zone + 1, n);
+  $("#h-zone").textContent = L(z.title);
+  $("#zoneBlurb").textContent = L(z.blurb);
+  setHTML($("#dots"), content.zones.map((_, i) => `<b class="${i < state.zone ? "done" : i === state.zone ? "cur" : ""}"></b>`).join(""));
+  let qn = content.zones.slice(0, state.zone).reduce((a, zz) => a + zz.questions.length, 0);
+  setHTML($("#qform"), z.questions.map(q => {
+    qn++;
+    return `<fieldset data-q="${q.id}"><legend><span class="mono">${String(qn).padStart(2, "0")}/${totalQ}</span><span>${L(q.text)}</span></legend>` +
+      q.options.map((o, i) => `<label class="opt"><input type="radio" name="${q.id}" value="${i}" ${state.answers[q.id] === i ? "checked" : ""}><span>${L(o.label)}</span></label>`).join("") +
+      `</fieldset>`;
+  }).join(""));
+  $("#hint").textContent = "";
+  $("#back").textContent = t.back;
+  $("#next").textContent = state.zone === n - 1 ? t.finish : t.next;
+}
+
+function animateScore(target) {
+  const el = $("#score");
+  if (reduced) { el.textContent = target; return; }
+  const t0 = performance.now(), dur = 400;
+  const step = now => {
+    const k = Math.min(1, (now - t0) / dur);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function renderReport(animate) {
+  const t = T(), r = state.result;
+  $("#h-report").textContent = state.game.name || t.untitled;
+  $("#repDate").textContent = new Date().toLocaleDateString(state.lang === "ru" ? "ru-RU" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const delta = $("#delta");
+  delta.replaceChildren();
+  if (state.prevScore !== null && state.prevScore !== r.score) {
+    const s = document.createElement("span"); s.className = "delta"; s.textContent = t.deltaText(state.prevScore, r.score); delta.append(s);
+  }
+  $("#verdict").textContent = t.verdicts[r.band];
+  $("#verdictNote").textContent = (r.reds ? t.redCount(r.reds) : "") + t.verdictNotes[r.band];
+  const bar = $("#sbar");
+  bar.style.setProperty("--v", { low: "var(--safe)", mid: "var(--warn)", high: "var(--risk)" }[r.band]);
+  bar.style.setProperty("--p", r.score / 100);
+  if (animate) {
+    bar.style.transform = "scaleX(0)";
+    requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transform = `scaleX(${r.score / 100})`; }));
+    animateScore(r.score);
+  } else {
+    bar.style.transform = `scaleX(${r.score / 100})`;
+    $("#score").textContent = r.score;
+  }
+  setHTML($("#repMap"), r.zones.map((z, i) =>
+    `<div class="tile ${z.level} lit" style="--d:${animate ? i * 140 : 0}ms"><span class="t">${L(z.zone.title)}</span><span class="s">${t.levels[z.level]} · ${t.riskPts(z.points, z.max)}</span></div>`).join(""));
+  setHTML($("#legend"), ["safe", "warn", "risk"].map((c, i) => `<span><i style="background:var(--${c})"></i>${t.legend[i]}</span>`).join(""));
+  setHTML($("#issues"), r.zones.map(z =>
+    `<article class="zcard zc-${z.level}"><h4><span>${L(z.zone.title)}</span><span class="pill ${z.level}">${t.levels[z.level]}</span></h4>` +
+    (z.issues.length ? `<ul>${z.issues.map(q => `<li>${L(q.issue)}</li>`).join("")}</ul>` : `<p class="ok">${t.noIssues}</p>`) +
+    `</article>`).join(""));
+}
+
+function renderRecs() {
+  const t = T(), r = state.result;
+  const bad = r.zones.filter(z => z.level !== "green")
+    .sort((a, b) => (b.level === "red") - (a.level === "red") || b.points - a.points);
+  if (!bad.length) { setHTML($("#recs"), `<div class="allgreen">${t.allGreen}</div>`); }
+  else setHTML($("#recs"), bad.map(z => {
+    const items = z.zone.recommendations.filter(x => z.level === "red" || x.level === "yellow");
+    return `<article class="rec zc-${z.level}"><h4><span class="pill ${z.level}">${t.levels[z.level]}</span>${L(z.zone.title)}</h4><ol>` +
+      items.map(x => `<li><b>${L(x.t)}</b><span>${L(x.d)}</span></li>`).join("") + `</ol></article>`;
+  }).join(""));
+  if (state.aiShown) showAi(); else $("#aiOut").hidden = true;
+}
+
+async function showAi() {
+  state.aiShown = true;
+  const res = await requestAiRecommendations(buildAiPayload());
+  const pre = $("#aiOut");
+  pre.textContent = T().aiStub + "\n\nPOST /api/recommend\n" + JSON.stringify(res.payload, null, 2);
+  pre.hidden = false;
+}
+
+/* ============ MINI-GAME: find the dark pattern (in memory only, no losing) ============ */
+const MG = content.minigame;
+const mg = { found: new Set(), active: null, sec: 59, iv: null, open: false };
+const darkTotal = MG.spots.filter(s => !s.good).length;
+const darkFound = () => MG.spots.filter(s => !s.good && mg.found.has(s.id)).length;
+const fmtTimer = s => `0:${String(s).padStart(2, "0")}`;
+
+function renderMock() {
+  const m = L(MG.mock);
+  setHTML($("#kscreen"), `
+    <div class="kbar"><b>${m.game}</b><span class="kcoins">${m.coins}</span></div>
+    <button type="button" class="spot s-age" data-spot="age"><span>${m.age}</span><em>${m.ageBtn}</em></button>
+    <button type="button" class="spot s-offer" data-spot="offer"><strong>${m.offerTitle}</strong>${m.offerLeft} <span class="tmr">${fmtTimer(mg.sec)}</span></button>
+    <div class="kpet"><div class="pet" aria-hidden="true"><i></i></div>
+      <button type="button" class="spot s-streak" data-spot="streak">${m.streak}</button></div>
+    <button type="button" class="spot s-loot" data-spot="loot"><span class="egg" aria-hidden="true"></span><span>${m.lootTitle}<small>${m.lootSub}</small></span></button>
+    <button type="button" class="spot s-chat" data-spot="chat"><b>${m.chatName}</b>${m.chatText}</button>
+    <button type="button" class="spot s-geo" data-spot="geo"><span class="box" aria-hidden="true">✓</span><span>${m.geo}</span></button>
+    <button type="button" class="spot s-break good" data-spot="break"><span class="breath" aria-hidden="true"></span><span>${m.breakText}</span></button>`);
+}
+
+function renderGameState() {
+  const g = L(MG.ui);
+  document.querySelectorAll("#kscreen .spot").forEach(b => {
+    b.classList.toggle("found", mg.found.has(b.dataset.spot));
+    b.classList.toggle("active", mg.active === b.dataset.spot);
+    b.setAttribute("aria-pressed", mg.found.has(b.dataset.spot));
+  });
+  $("#gFound").textContent = g.found(darkFound(), darkTotal);
+  const goodChip = $("#gGood");
+  goodChip.textContent = mg.found.has("break") ? g.goodOn : g.goodOff;
+  goodChip.classList.toggle("off", !mg.found.has("break"));
+
+  const done = darkFound() === darkTotal;
+  const doneHTML = `<p>${g.done(darkFound(), darkTotal)}</p><button class="btn blue" type="button" data-act="audit">${g.toAudit}</button>`;
+  const gd = $("#gDone");
+  gd.hidden = !done;
+  if (done) setHTML(gd, doneHTML);
+
+  const panel = $("#gPanel");
+  const s = MG.spots.find(x => x.id === mg.active);
+  if (!s) setHTML(panel, `<p class="empty">${g.empty}</p>`);
+  else {
+    const zone = content.zones.find(z => z.id === s.zone);
+    setHTML(panel, `<div class="gp-in">
+      <span class="pill ${s.good ? "green" : "red"}">${s.good ? g.good : g.dark}</span>
+      <h3>${L(s.title)}</h3>
+      <h5>${g.feel}</h5><blockquote>${L(s.feel)}</blockquote>
+      <h5>${s.good ? g.why : g.fix}</h5><p>${L(s.fix)}</p>
+      <h5>${g.zone}</h5><span class="pill blue">${L(zone.title)}</span>
+      ${done ? `<div class="gdone">${doneHTML}</div>` : ""}
+      <button class="btn ghost gclose" type="button" data-act="close">${g.close}</button></div>`);
+  }
+  panel.classList.toggle("open", mg.open && !!s);
+  updateProgress();
+}
+
+function renderGame() {
+  const g = L(MG.ui);
+  $("#gEyebrow").textContent = g.eyebrow;
+  $("#h-game").textContent = g.title;
+  $("#gIntro").textContent = g.intro;
+  $("#gBack").textContent = g.back;
+  renderMock();
+  renderGameState();
+}
+
+function startTimer() {
+  stopTimer();
+  mg.iv = setInterval(() => {
+    mg.sec = mg.sec <= 0 ? 59 : mg.sec - 1;  // loops forever: the "deal" never really ends
+    const t = $("#kscreen .tmr");
+    if (t) t.textContent = fmtTimer(mg.sec);
+  }, 1000);
+}
+function stopTimer() { if (mg.iv) { clearInterval(mg.iv); mg.iv = null; } }
+
+function openAudit() {
+  stopTimer();
+  state.game = { name: $("#gname").value.trim(), desc: $("#gdesc").value.trim() };
+  state.zone = 0; renderQuiz(); show("quiz");
+}
+
+function renderAll() {
+  renderStatic();
+  if (state.screen === "game") renderGame();
+  if (state.screen === "quiz") renderQuiz();
+  if (state.result) { renderReport(false); renderRecs(); }
+}
+
+/* ============ EVENTS ============ */
+document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
+  state.lang = b.dataset.lang; store.set("sbd-lang", state.lang); renderAll();
+}));
+$("#start").addEventListener("click", () => {
+  state.game = { name: $("#gname").value.trim(), desc: $("#gdesc").value.trim() };
+  state.zone = 0; renderQuiz(); show("quiz");
+});
+$("#demo").addEventListener("click", () => {
+  const d = content.demo;
+  $("#gname").value = d.name; $("#gdesc").value = L(d.desc);
+  state.game = { name: d.name, desc: L(d.desc) };
+  state.answers = { ...d.answers };
+  state.zone = 0; renderQuiz(); show("quiz");
+});
+$("#qform").addEventListener("change", e => {
+  if (e.target.type !== "radio") return;
+  state.answers[e.target.name] = Number(e.target.value);
+  e.target.closest("fieldset").querySelectorAll(".opt").forEach(o => o.classList.remove("missing"));
+  $("#hint").textContent = "";
+  updateProgress();
+});
+$("#back").addEventListener("click", () => {
+  if (state.zone === 0) { show("intro"); return; }
+  state.zone--; renderQuiz(); window.scrollTo(0, 0);
+});
+$("#next").addEventListener("click", () => {
+  const z = content.zones[state.zone];
+  const missing = z.questions.filter(q => state.answers[q.id] === undefined);
+  if (missing.length) {
+    $("#hint").textContent = T().missing(missing.length);
+    missing.forEach(q => document.querySelectorAll(`[data-q="${q.id}"] .opt`).forEach(o => o.classList.add("missing")));
+    document.querySelector(`[data-q="${missing[0].id}"]`).scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+    return;
+  }
+  if (state.zone < content.zones.length - 1) { state.zone++; renderQuiz(); window.scrollTo(0, 0); return; }
+  state.result = evaluate(state.answers);
+  show("report"); renderReport(true); renderRecs();
+});
+$("#toRecs").addEventListener("click", () => show("recs"));
+$("#toReport").addEventListener("click", () => { show("report"); renderReport(true); });
+$("#edit").addEventListener("click", () => { state.prevScore = state.result.score; state.zone = 0; renderQuiz(); show("quiz"); });
+$("#restart").addEventListener("click", () => {
+  Object.assign(state, { answers: {}, result: null, prevScore: null, aiShown: false, zone: 0, game: { name: "", desc: "" } });
+  $("#gname").value = ""; $("#gdesc").value = ""; $("#aiOut").hidden = true; show("intro");
+});
+$("#aiBtn").addEventListener("click", showAi);
+$("#playBtn").addEventListener("click", () => {
+  mg.found.clear(); mg.active = null; mg.open = false; mg.sec = 59;
+  show("game"); renderGame(); startTimer();
+});
+$("#kscreen").addEventListener("click", e => {
+  const b = e.target.closest(".spot");
+  if (!b) return;
+  mg.found.add(b.dataset.spot); mg.active = b.dataset.spot; mg.open = true;
+  renderGameState();
+});
+$("#s-game").addEventListener("click", e => {
+  const a = e.target.closest("[data-act]");
+  if (!a) return;
+  if (a.dataset.act === "close") { mg.open = false; $("#gPanel").classList.remove("open"); }
+  if (a.dataset.act === "audit") openAudit();
+});
+$("#gBack").addEventListener("click", () => show("intro"));
+$("#print1").addEventListener("click", () => window.print());
+$("#print2").addEventListener("click", () => window.print());
+
+renderStatic();
+updateProgress();
+</script>
+</body>
+</html>

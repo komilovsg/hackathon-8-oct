@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3448C5">
+<title>Ман интихоб мекунам · Я выбираю</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2746%27 fill=%27%23FFB238%27 stroke=%27%231B1A3A%27 stroke-width=%278%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#DCE7FF;        /* pale lapis sky */
+  --paper:#FFFFFF;
+  --ink:#1B1A3A;       /* outline ink */
+  --lapis:#3448C5;     /* primary */
+  --pom:#E8384F;       /* pomegranate: help */
+  --apricot:#FFB238;   /* warm: "let's try again" */
+  --apricot-soft:#FFF1D6;
+  --mint:#12A579;      /* success */
+  --mint-soft:#DDF6EC;
+  --muted:#55547A;
+  --r:20px;
+  --font:"Noto Sans","Roboto","Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:17px;line-height:1.5;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--lapis);outline-offset:3px}
+
+/* ---------- header with adras/ikat band (signature) ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--bg)}
+.ikat{height:12px;background:
+  repeating-linear-gradient(90deg,var(--pom) 0 14px,var(--apricot) 14px 22px,var(--lapis) 22px 38px,var(--mint) 38px 44px,var(--ink) 44px 47px,var(--apricot) 47px 56px);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 0h24v6l-6 6-6-6-6 6-6-6z'/%3E%3C/svg%3E") repeat-x;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 0h24v6l-6 6-6-6-6 6-6-6z'/%3E%3C/svg%3E") repeat-x}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 16px 10px;max-width:560px;margin:0 auto}
+.home{display:flex;align-items:center;gap:8px;min-height:48px;font-weight:900;font-size:15px;letter-spacing:-.01em;text-align:left;line-height:1.1;flex:1;min-width:0}
+.home svg{width:40px;height:40px;flex:none}
+.lang{display:flex;border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--paper);flex:none}
+.lang button{min-width:44px;min-height:42px;font-weight:800;font-size:14px}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.help{flex:none;min-height:48px;padding:0 12px;border:3px solid var(--ink);border-radius:14px;background:var(--pom);color:#fff;font-weight:800;font-size:14px;line-height:1.1;box-shadow:3px 3px 0 var(--ink);max-width:128px;text-align:center}
+.help:active{transform:translate(2px,2px)}
+
+/* ---------- layout ---------- */
+main{max-width:560px;margin:0 auto;padding:8px 16px 40px}
+.screen{animation:enter 320ms cubic-bezier(.2,.7,.3,1) both}
+@keyframes enter{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+h1{font-size:30px;line-height:1.1;font-weight:900;letter-spacing:-.02em}
+h2{font-size:22px;line-height:1.2;font-weight:900;letter-spacing:-.01em}
+.lead{color:var(--muted);margin-top:6px}
+.eyebrow{display:inline-block;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--lapis);margin-bottom:6px}
+.stack>*+*{margin-top:12px}
+.section{margin-top:24px}
+
+/* sticker card / buttons */
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:var(--r);box-shadow:5px 5px 0 var(--ink)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;padding:12px 18px;border:3px solid var(--ink);border-radius:18px;background:var(--paper);font-weight:800;font-size:17px;line-height:1.25;box-shadow:4px 4px 0 var(--ink);text-align:center;transition:transform 150ms ease}
+.btn:active{transform:translate(3px,3px)}
+.btn.primary{background:var(--lapis);color:#fff}
+.btn.ghost{background:transparent;box-shadow:none;border-style:dashed}
+.btn.choice{justify-content:flex-start;text-align:left;font-weight:700}
+.btn.choice .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--ink);border:2px solid var(--ink);display:grid;place-items:center;font-size:14px;font-weight:900}
+
+/* start */
+.title-wrap{text-align:center;padding:12px 0 4px}
+.title-wrap h1{font-size:34px}
+.title-wrap h1 span{display:inline-block;background:var(--apricot);border:3px solid var(--ink);border-radius:12px;padding:0 10px;transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg .btn[aria-pressed="true"]{background:var(--ink);color:#fff}
+.heroes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hero-pick{display:flex;flex-direction:column;align-items:center;padding:10px 4px 12px;border:3px solid var(--ink);border-radius:18px;background:var(--paper);box-shadow:4px 4px 0 var(--ink);transition:transform 150ms ease;min-height:150px}
+.hero-pick:active{transform:translate(3px,3px)}
+.hero-pick svg{width:78px;height:78px}
+.hero-pick b{font-size:15px;margin-top:4px}
+.hero-pick small{font-size:13px;color:var(--muted)}
+.hero-pick[aria-pressed="true"]{background:var(--apricot);transform:translateY(-4px)}
+.hero-pick[aria-pressed="true"] svg{animation:bob 2.4s ease-in-out infinite alternate}
+
+/* story menu */
+.story{display:flex;gap:14px;align-items:center;padding:14px;text-align:left;width:100%;transition:transform 150ms ease}
+.story:active{transform:translate(3px,3px)}
+.story .ic{flex:none;width:60px;height:60px;border-radius:16px;border:3px solid var(--ink);display:grid;place-items:center;font-size:30px}
+.story b{display:block;font-size:19px;line-height:1.2}
+.story small{display:block;color:var(--muted);font-size:14px}
+.story .done{display:inline-block;margin-top:4px;font-size:13px;font-weight:800;color:var(--mint)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* scene */
+.scene-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.back{min-height:48px;min-width:48px;padding:0 12px;border:3px solid var(--ink);border-radius:14px;background:var(--paper);font-weight:800;font-size:14px}
+.scene-head .st{font-weight:800;font-size:15px;color:var(--muted);flex:1}
+.phone{overflow:hidden}
+.phone .ph-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--ink);color:#fff}
+.phone .av{width:38px;height:38px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:20px;border:2px solid #fff;flex:none}
+.phone .ph-top b{font-size:15px;line-height:1.2}
+.phone .ph-top small{display:block;font-size:12px;opacity:.75}
+.phone .ph-body{padding:16px 14px 18px;background:
+  radial-gradient(circle at 12px 12px,rgba(52,72,197,.10) 2px,transparent 2.5px) 0 0/24px 24px, #F4F7FF}
+.bubble{position:relative;max-width:88%;background:var(--paper);border:2px solid var(--ink);border-radius:18px 18px 18px 4px;padding:10px 14px;font-size:17px;font-weight:600;animation:pop 360ms cubic-bezier(.3,1.5,.6,1) 120ms both;transform-origin:0 100%}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.illus{display:grid;place-items:center;height:120px;font-size:64px;background:
+  repeating-linear-gradient(135deg,rgba(255,178,56,.25) 0 10px,transparent 10px 22px),var(--apricot-soft)}
+.narr{margin-top:16px;font-size:18px;line-height:1.55}
+.choices{margin-top:18px}
+.choices .btn{animation:rise 260ms ease-out both;animation-delay:calc(var(--i) * 110ms + 180ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* soft consequence scene */
+.oops .card{background:var(--apricot-soft)}
+.oops-tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:14px;background:var(--apricot);border:2px solid var(--ink);border-radius:999px;padding:4px 12px;margin-bottom:12px}
+
+/* hero buddy */
+.buddy{display:flex;align-items:flex-end;gap:10px;margin-top:22px}
+.buddy svg{width:64px;height:64px;flex:none;animation:bob 2.4s ease-in-out infinite alternate}
+.buddy .say{background:var(--paper);border:2px solid var(--ink);border-radius:16px 16px 16px 4px;padding:8px 12px;font-size:15px;font-weight:600}
+@keyframes bob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-5px) rotate(2deg)}}
+
+/* lesson */
+.opt.wrong{background:var(--apricot-soft)}
+.note{padding:12px 14px;border-radius:16px;border:2px dashed var(--ink);background:var(--paper);font-weight:600}
+.badge-big{display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 16px}
+.medal{width:120px;height:120px;border-radius:50%;border:4px solid var(--ink);display:grid;place-items:center;font-size:56px;box-shadow:5px 5px 0 var(--ink);position:relative}
+.medal::after{content:"";position:absolute;inset:8px;border-radius:50%;border:3px dashed rgba(27,26,58,.35)}
+.badge-big .medal{animation:spring 400ms cubic-bezier(.34,1.7,.5,1) both}
+@keyframes spring{0%{opacity:0;transform:scale(.3) rotate(-20deg)}100%{opacity:1;transform:none}}
+
+/* badges collection */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.slot{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:12px 6px}
+.slot .medal{width:72px;height:72px;font-size:34px;box-shadow:3px 3px 0 var(--ink)}
+.slot .medal::after{inset:5px;border-width:2px}
+.slot.locked .medal{background:#EDEDF5!important;opacity:.55}
+.slot b{font-size:14px;line-height:1.2}
+.slot small{font-size:12px;color:var(--muted)}
+
+/* help modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(27,26,58,.55);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.modal[hidden]{display:none}
+.sheet{width:100%;max-width:520px;max-height:92vh;overflow:auto;padding:20px 18px;animation:sheet 300ms cubic-bezier(.2,.8,.3,1) both}
+@keyframes sheet{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.sheet h2{color:var(--pom)}
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:2px dotted rgba(27,26,58,.2)}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-size:14px;margin-top:1px}
+.phonebox{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:3px solid var(--ink);border-radius:16px;background:var(--mint-soft)}
+.phonebox{color:var(--ink);text-decoration:none;min-height:56px}
+.phonebox>b{font-size:22px;text-align:right;flex:none}
+.phonebox .pl{font-size:16px}
+.phonebox small{font-size:13px;color:var(--muted);line-height:1.3;display:inline-block}
+.parents p+p{margin-top:10px}
+.parents ul{padding-left:20px}
+.parents li{margin-top:6px}
+.foot{margin-top:28px;text-align:center;font-size:13px;color:var(--muted)}
+
+/* ---------- mini-games ---------- */
+.games-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.game-tile{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px;text-align:left;min-height:120px;transition:transform 150ms ease}
+.game-tile:active{transform:translate(3px,3px)}
+.game-tile .gi{font-size:34px;line-height:1}
+.game-tile b{font-size:16px;line-height:1.2}
+.game-tile small{font-size:13px;color:var(--muted);line-height:1.3}
+.rule{padding:12px 14px;border-radius:16px;background:var(--paper);border:2px solid var(--ink);font-size:15px;font-weight:600}
+.counter{font-size:14px;font-weight:800;color:var(--muted)}
+.deck{position:relative;margin-top:14px;touch-action:pan-y}
+.sort-card{position:relative;padding:28px 18px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;user-select:none;-webkit-user-select:none;touch-action:pan-y;cursor:grab;animation:pop 300ms cubic-bezier(.3,1.4,.6,1) both}
+.sort-card.dragging{cursor:grabbing}
+.sort-card.snap{transition:transform 220ms ease}
+.sort-card .q{font-size:20px;font-weight:800;line-height:1.35}
+.sort-card .ce{font-size:40px;line-height:1}
+.sort-card.is-good{background:var(--mint-soft)}
+.sort-card.is-bad{background:#FFE1E5}
+.sort-card.hint{animation:nudge 360ms ease both}
+@keyframes nudge{0%,100%{transform:none}30%{transform:translateX(-8px)}60%{transform:translateX(8px)}}
+.stamp{position:absolute;top:10px;right:10px;font-size:13px;font-weight:900;padding:4px 10px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);transform:rotate(6deg);animation:spring 320ms cubic-bezier(.34,1.7,.5,1) both}
+.swipe-hint{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+.sort-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.sort-btns .btn{min-height:64px;font-size:16px;padding:10px}
+.btn.bad{background:#FFE1E5}
+.btn.good{background:var(--mint-soft)}
+.breath-stage{position:relative;display:flex;flex-direction:column;align-items:center;padding:18px 12px 16px;margin-top:16px;overflow:hidden}
+.balloon-wrap{height:210px;display:flex;align-items:flex-end;justify-content:center}
+.balloon{width:170px;height:200px;transform-origin:50% 100%;transform:scale(.42);transition:transform 4s cubic-bezier(.4,0,.6,1)}
+.balloon.big{transform:scale(1)}
+.balloon svg{width:100%;height:100%}
+.breath-hero svg{width:76px;height:76px;margin-top:-6px;animation:bob 2.4s ease-in-out infinite alternate}
+.breath-msg{min-height:52px;margin-top:12px;font-size:18px;font-weight:800;text-align:center;line-height:1.35}
+.dots{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);transition:transform 200ms ease}
+.dots i.on{background:var(--apricot);transform:scale(1.2)}
+.hold{min-height:72px;font-size:19px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none}
+.hold.pressed{transform:translate(3px,3px);background:#2536A0}
+.hold[disabled]{opacity:.55;cursor:default}
+.bridge{display:flex;gap:10px;align-items:flex-start;padding:14px;border-radius:16px;border:3px solid var(--ink);background:var(--apricot-soft);font-weight:700}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media (max-width:419px){ .home span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)} }
+@media (min-width:420px){ .help{max-width:none} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="ikat" aria-hidden="true"></div>
+  <div class="bar">
+    <button class="home" id="homeBtn" type="button"></button>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="tj">ТҶ</button>
+      <button type="button" data-lang="ru">РУ</button>
+    </div>
+    <button class="help" id="helpBtn" type="button"></button>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+<div class="modal" id="helpModal" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="sheet card" id="helpSheet"></div>
+</div>
+
+<script>
+/* =====================================================================
+   CONTENT — all texts live here, separate from the logic.
+   tj = тоҷикӣ, ru = русский. Тексты проверит ментор и носитель языка.
+   ===================================================================== */
+const content = {
+  ui: {
+    appName:   {tj:"Ман интихоб мекунам", ru:"Я выбираю"},
+    tagline:   {tj:"Ҳикояҳо дар бораи интернет, ки дар онҳо ҳар қарор аз они ту.", ru:"Истории про интернет, в которых каждое решение — твоё."},
+    chooseLang:{tj:"Забонро интихоб кун", ru:"Выбери язык"},
+    chooseHero:{tj:"Ҳамроҳатро интихоб кун", ru:"Выбери себе спутника"},
+    heroHint:  {tj:"Ӯ дар ҳама ҳикояҳо бо ту мешавад.", ru:"Он будет рядом во всех историях."},
+    start:     {tj:"Оғоз кардан", ru:"Начать"},
+    pickHeroFirst:{tj:"Аввал ҳамроҳатро интихоб кун", ru:"Сначала выбери спутника"},
+    stories:   {tj:"Ҳикояҳо", ru:"Истории"},
+    storiesHint:{tj:"Ҳикояро интихоб кун. Хато кардан натарс — ҳамеша метавонӣ дигар хел интихоб кунӣ.", ru:"Выбери историю. Ошибиться не страшно — всегда можно выбрать иначе."},
+    help:      {tj:"Ба ман кӯмак лозим", ru:"Мне нужна помощь"},
+    badges:    {tj:"Нишонҳои ман", ru:"Мои значки"},
+    parents:   {tj:"Барои волидон", ru:"Для родителей"},
+    back:      {tj:"← Ба ҳикояҳо", ru:"← К историям"},
+    tryAgain:  {tj:"Дигар хел интихоб кунам", ru:"Выбрать иначе"},
+    next:      {tj:"Давом", ru:"Дальше"},
+    toLesson:  {tj:"Ба охири ҳикоя", ru:"К концу истории"},
+    done:      {tj:"✓ Гузашта шуд", ru:"✓ Пройдено"},
+    oopsTag:   {tj:"Биё бубинем, чӣ шуд", ru:"Посмотрим, что случилось"},
+    lessonEyebrow:{tj:"Охири ҳикоя", ru:"Конец истории"},
+    lessonQ:   {tj:"Чӣ туро ба шубҳа андохт?", ru:"Что тебя насторожило?"},
+    lessonHint:{tj:"Як ҷавобро интихоб кун.", ru:"Выбери один ответ."},
+    lessonWrong:{tj:"Ин ҳам буд, аммо асосӣ чизи дигар аст. Ба хоҳишҳои ӯ боз як бор нигоҳ кун.", ru:"Это тоже было, но главное — другое. Посмотри ещё раз, о чём тебя просили."},
+    badgeNew:  {tj:"Нишони нав!", ru:"Новый значок!"},
+    badgeAgain:{tj:"Ин нишон аллакай дар коллексияи ту ҳаст.", ru:"Этот значок уже есть в твоей коллекции."},
+    toStories: {tj:"Ба ҳикояҳо", ru:"К историям"},
+    collection:{tj:"Коллексияи нишонҳо", ru:"Коллекция значков"},
+    collectionHint:{tj:"Барои ҳар ҳикояи то охир гузашта — як нишон.", ru:"За каждую пройденную историю — один значок."},
+    collectionEmpty:{tj:"Ҳоло нишон нест. Ҳикояро то охир гузар — нишон пайдо мешавад.", ru:"Пока значков нет. Пройди историю до конца — и значок появится."},
+    locked:    {tj:"Ҳанӯз пӯшида", ru:"Ещё закрыт"},
+    got:       {tj:"Гирифта шуд", ru:"Получен"},
+    allDone:   {tj:"Ҳамаи се нишон ҷамъ шуд! Ту аломатҳои хатарро мешиносӣ.", ru:"Все три значка собраны! Ты умеешь замечать тревожные знаки."},
+    buddyOops: {tj:"Ҳеҷ гап не. Боз кӯшиш мекунем!", ru:"Ничего страшного. Попробуем ещё!"},
+    buddyThink:{tj:"Шитоб накун. Фикр кун, баъд интихоб кун.", ru:"Не спеши. Подумай, потом выбирай."},
+    buddyWin:  {tj:"Офарин! Мо аз уҳдааш баромадем.", ru:"Здорово! У нас получилось."},
+    privacy:   {tj:"Бозӣ ному акс ва рақами туро намепурсад ва ба ҷое намефиристад.", ru:"Игра не спрашивает имя, фото и номер и никуда ничего не отправляет."}
+  },
+  help: {
+    title: {tj:"Ба ту кӯмак мекунем", ru:"Тебе помогут"},
+    body:  {tj:"Агар ту метарсӣ ё дилат ноором аст — ин муқаррарист. Гуноҳи ту нест. Ҳамеша метавонӣ кӯмак пурсӣ.", ru:"Если тебе страшно или неспокойно — это нормально. Твоей вины здесь нет. Попросить помощи можно всегда."},
+    stepsTitle:{tj:"Чӣ кор кардан мумкин:", ru:"Что можно сделать:"},
+    steps: [
+      {tj:"Мукотибаро қатъ кун. Ҷавоб додан ҳатмӣ нест.", ru:"Перестань переписываться. Отвечать не обязательно."},
+      {tj:"Скриншот гир ва паёмҳоро нест накун.", ru:"Сделай скриншот и не удаляй сообщения."},
+      {tj:"Ба калонсоле, ки ба ӯ бовар дорӣ, нишон деҳ: модар, падар, муаллим.", ru:"Покажи взрослому, которому доверяешь: маме, папе, учителю."},
+      {tj:"Он одамро блок кун ва шикоят фирист.", ru:"Заблокируй этого человека и пожалуйся."}
+    ],
+    contactsTitle:{tj:"Ба куҷо занг задан мумкин:", ru:"Куда можно позвонить:"},
+    contacts:[
+      {num:"1313", tel:"1313", label:{tj:"Хати боварии миллӣ", ru:"Национальный телефон доверия"},
+        note:{tj:"Агар метарсӣ ё ғамгин ҳастӣ ва гап задан мехоҳӣ", ru:"Если страшно или грустно и нужно поговорить"}},
+      {num:"1919", tel:"1919", label:{tj:"Хати боварии ВКД", ru:"Телефон доверия МВД"},
+        note:{tj:"Таҳдид, шантаж, фиреб, дуздидани аккаунт. Инчунин +992\u00A037\u00A0221\u201121\u201121", ru:"Угрозы, шантаж, обман, взлом аккаунта. Также +992\u00A037\u00A0221\u201121\u201121"}},
+      {num:"102", tel:"102", label:{tj:"Милиса", ru:"Милиция"},
+        note:{tj:"Агар ҳозир хатар бошад", ru:"Если опасность прямо сейчас"}}
+    ],
+    contactsNote:{tj:"Рақамҳо аз рӯи манбаъҳои кушод санҷида шуданд (октябри 2026). Пеш аз нишон додан боз санҷед.", ru:"Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте."},
+    close: {tj:"Ба бозӣ баргаштан", ru:"Вернуться в игру"}
+  },
+  parents: {
+    title:{tj:"Барои волидон", ru:"Для родителей"},
+    paras:[
+      {tj:"Дар ин бозӣ кӯдак худаш интихоб мекунад, ки ба хоҳишҳои шубҳанок дар интернет чӣ ҷавоб диҳад. Интихоби хатарнок ба натиҷаи нарм меорад — бе ҷазо ва бе шарм — ва имкон медиҳад дигар хел интихоб кунад.", ru:"В этой игре ребёнок сам выбирает, как ответить на подозрительные просьбы в интернете. Небезопасный выбор ведёт к мягкому последствию — без наказания и стыда — и даёт шанс выбрать иначе."},
+      {tj:"Бозӣ ҳеҷ маълумотро ҷамъ намекунад. Танҳо нишонҳо ва забон дар ҳамин телефон нигоҳ дошта мешаванд.", ru:"Игра не собирает никаких данных. На этом телефоне сохраняются только значки и выбранный язык."}
+    ],
+    askTitle:{tj:"Чӣ тавр баъди бозӣ гап задан:", ru:"Как поговорить после игры:"},
+    ask:[
+      {tj:"«Кадом ҳикоя ба ту бештар маъқул шуд? Чаро?»", ru:"«Какая история понравилась больше всего? Почему?»"},
+      {tj:"«Агар касе дар интернет акс ё парол пурсад, ту чӣ мекунӣ?»", ru:"«Что ты сделаешь, если в интернете попросят фото или пароль?»"},
+      {tj:"«Сирри хуб аз сирри бад чӣ фарқ дорад?»", ru:"«Чем хороший секрет отличается от плохого?»"},
+      {tj:"Бигӯед: «Ҳар чӣ шавад, ба ман гӯй — ман сарзаниш намекунам».", ru:"Скажите: «Что бы ни случилось, расскажи мне — я не буду ругать»."}
+    ]
+  },
+  games: {
+    title:{tj:"Бозичаҳо", ru:"Мини-игры"},
+    hint:{tj:"Барои дам гирифтан. Дар ин ҷо бохт нест.", ru:"Чтобы отдохнуть. Здесь нельзя проиграть."},
+    bridge:{tj:"Агар ягон чиз ба ту ором намедиҳад — метавонӣ ба калонсоле, ки ба ӯ бовар дорӣ, гӯӣ.", ru:"Если что-то не даёт покоя — можно рассказать взрослому, которому доверяешь."},
+    again:{tj:"Боз бозӣ кардан", ru:"Сыграть ещё раз"},
+    sort:{
+      icon:"🎁",
+      title:{tj:"Сирри хуб, сирри бад", ru:"Хороший секрет, плохой секрет"},
+      sub:{tj:"Кортҳоро ҷудо кун", ru:"Разложи карточки"},
+      rule:{tj:"Сирри хуб — шодиовар ва кӯтоҳ, мисли сюрприз. Сирри бад дилро вазнин мекунад ва онро аз калонсолон пинҳон доштан мехоҳанд.", ru:"Хороший секрет — радостный и ненадолго, как сюрприз. От плохого на душе тяжело, и его просят скрыть от взрослых."},
+      good:{tj:"Сирри хуб", ru:"Хороший"},
+      bad:{tj:"Сирри бад", ru:"Плохой"},
+      goodStamp:{tj:"🎁 Хуб", ru:"🎁 Хороший"},
+      badStamp:{tj:"🚫 Бад", ru:"🚫 Плохой"},
+      swipe:{tj:"Кортро ҳаракат додан мумкин: ба рост — хуб, ба чап — бад.", ru:"Карточку можно смахнуть: вправо — хороший, влево — плохой."},
+      of:{tj:"Корт {n} аз {t}", ru:"Карточка {n} из {t}"},
+      hint:{tj:"Боз фикр кун: аз ин сир дил шод мешавад ё вазнин? Онро баъд ба ҳама гуфтан мумкин аст?", ru:"Подумай ещё: от этого секрета радостно или тяжело? Его потом можно будет всем рассказать?"},
+      next:{tj:"Корти навбатӣ", ru:"Следующая карточка"},
+      doneTitle:{tj:"Ҳамаи кортҳо ҷудо карда шуданд!", ru:"Все карточки разложены!"},
+      doneText:{tj:"Акнун ту сирри хубро аз сирри бад фарқ карда метавонӣ.", ru:"Теперь ты умеешь отличать хороший секрет от плохого."},
+      cards:[
+        {e:"🎂", good:true,  q:{tj:"«Мо барои зодрӯзи модар сюрприз тайёр мекунем»", ru:"«Мы готовим маме сюрприз на день рождения»"},
+          why:{tj:"Ин сирри хуб аст: ба наздикӣ ҳама мефаҳманд ва шод мешаванд.", ru:"Это хороший секрет: скоро все узнают и обрадуются."}},
+        {e:"💬", good:false, q:{tj:"«Ба ҳеҷ кас нагӯй, ки мо ба ҳам менависем»", ru:"«Никому не говори, что мы переписываемся»"},
+          why:{tj:"Ин сирри бад аст: мехоҳанд, ки муоширатро аз калонсолон пинҳон кунӣ.", ru:"Это плохой секрет: тебя просят скрывать общение от взрослых."}},
+        {e:"🎁", good:true,  q:{tj:"«Ба дӯстамон тӯҳфа мехарем ва то ид намегӯем»", ru:"«Купим другу подарок и не скажем до праздника»"},
+          why:{tj:"Хуб: сирри шодиовар ва кӯтоҳмуддат.", ru:"Хороший: секрет радостный и ненадолго."}},
+        {e:"🗑️", good:false, q:{tj:"«Паёмҳои моро нест кун»", ru:"«Удали наши сообщения»"},
+          why:{tj:"Бад: касе, ки нишонаҳоро пинҳон мекунад, чизеро пинҳон медорад.", ru:"Плохой: кто прячет следы, тот что-то скрывает."}},
+        {e:"🍬", good:true,  q:{tj:"«Бародар қандро пинҳон кард, ки бегоҳ ба ту диҳад»", ru:"«Брат спрятал конфету, чтобы угостить тебя вечером»"},
+          why:{tj:"Хуб: аз ин сир дил гарм мешавад, на тарсу.", ru:"Хороший: от такого секрета тепло, а не страшно."}},
+        {e:"😢", good:false, q:{tj:"«Ин сирри мост, вагарна хафа мешавам»", ru:"«Это наша тайна, а то я обижусь»"},
+          why:{tj:"Бад: бо хафагӣ маҷбур мекунанд, ки хомӯш бошӣ.", ru:"Плохой: обидой заставляют молчать."}},
+        {e:"🎤", good:true,  q:{tj:"«Синф барои муаллим консерти сюрпризӣ тайёр мекунад»", ru:"«Класс готовит для учителя концерт-сюрприз»"},
+          why:{tj:"Хуб: дар охир ҳама мефаҳманд ва шод мешаванд.", ru:"Хороший: в конце все узнают и порадуются."}},
+        {e:"📷", good:false, q:{tj:"«Ба модарат нагӯй, ки ман акси туро пурсидам»", ru:"«Не говори маме, что я просил твоё фото»"},
+          why:{tj:"Бад: хоҳиши акс ва пинҳон аз модар — ду аломати хатар.", ru:"Плохой: просьба о фото и тайна от мамы — сразу два тревожных знака."}},
+        {e:"🍰", good:true,  q:{tj:"«Мо бо бибиҷон барои омадани падар торт мепазем»", ru:"«Мы с бабушкой печём торт к приезду папы»"},
+          why:{tj:"Хуб: ин сюрприз аст ва баъд дар бораи он ҳама мефаҳманд.", ru:"Хороший: это сюрприз, и потом о нём узнают все."}},
+        {e:"😨", good:false, q:{tj:"«Агар ба касе гӯӣ, ба ту бад мешавад»", ru:"«Если кому-то расскажешь, тебе будет плохо»"},
+          why:{tj:"Бад: бо тарс хомӯш мекунанд. Маҳз дар бораи ҳамин ба калонсол гуфтан лозим.", ru:"Плохой: страхом заставляют молчать. Именно о таком и нужно рассказать взрослому."}}
+      ]
+    },
+    breath:{
+      icon:"🎈",
+      title:{tj:"Пуфаки нафас", ru:"Шарик-дыхание"},
+      sub:{tj:"Бо ҳамроҳат ором нафас гир", ru:"Спокойно подыши вместе со спутником"},
+      intro:{tj:"Вақте ки дил ноором аст, нафаси оҳиста кӯмак мекунад. Тугмаро пахш карда нигоҳ дор — пуфак калон мешавад.", ru:"Когда неспокойно, помогает медленное дыхание. Нажми и держи кнопку — шарик будет расти."},
+      hold:{tj:"Пахш карда нигоҳ дор", ru:"Нажми и держи"},
+      ready:{tj:"Тайёр? Тугмаро пахш кун ва нафас гир.", ru:"Готово? Нажми кнопку и вдыхай."},
+      inhale:{tj:"Аз бинӣ оҳиста нафас гир… пуфак калон мешавад", ru:"Медленно вдыхай носом… шарик растёт"},
+      full:{tj:"Акнун сар деҳ ва оҳиста нафас барор", ru:"Теперь отпусти и медленно выдыхай"},
+      exhale:{tj:"Нафас мебарорем… пуфак хурд мешавад", ru:"Выдыхаем… шарик сдувается"},
+      early:{tj:"Ҳеҷ гап не! Каме бештар нигоҳ дор, то пуфак калон шавад.", ru:"Ничего страшного! Подержи чуть дольше, пока шарик растёт."},
+      again:{tj:"Боз як бор: пахш кун ва нафас гир.", ru:"Ещё разок: нажми и вдыхай."},
+      doneTitle:{tj:"Офарин, ту хеле хуб кардӣ!", ru:"Ты молодец!"},
+      doneText:{tj:"Се нафаси ором гузашт. Ҳар вақт ки дил ноором аст, ҳамин тавр нафас кашидан мумкин.", ru:"Три спокойных вдоха позади. Так можно дышать всегда, когда неспокойно."},
+      fromHelp:{tj:"🎈 Бо пуфак нафас кашидан", ru:"🎈 Подышать с шариком"}
+    }
+  },
+  heroes: [
+    {id:"leopard", name:{tj:"Палангча", ru:"Барсик"}, trait:{tj:"далер", ru:"смелый"}},
+    {id:"stork",   name:{tj:"Лайлак",   ru:"Лайлак"}, trait:{tj:"доно",  ru:"мудрая"}},
+    {id:"kabk",    name:{tj:"Кабкча",   ru:"Кеклик"}, trait:{tj:"хушҳол", ru:"весёлый"}}
+  ],
+  stories: [
+    {
+      id:"photo", icon:"📷", tint:"#FFD6DC",
+      title:{tj:"Аксро фирист", ru:"Пришли фото"},
+      sub:{tj:"Ношинос дар бозӣ", ru:"Незнакомец в игре"},
+      start:"s1",
+      scenes:{
+        s1:{image:"🎮", from:"Star_Pro",
+          text:{tj:"Ту бозии «Кӯҳистон Ран»-ро бозӣ мекунӣ. Бозингари Star_Pro ба ту дар марҳилаи душвор кӯмак кард ва ба чат менависад.", ru:"Ты играешь в «Кӯҳистон Ран». Игрок Star_Pro помог тебе пройти трудный уровень и пишет в чат."},
+          msg:{tj:"Ту хеле хуб бозӣ мекунӣ! Биё дӯст шавем? 🙂", ru:"Ты классно играешь! Давай дружить? 🙂"},
+          choices:[
+            {label:{tj:"«Ташаккур! Биё якҷоя бозӣ кунем»", ru:"«Спасибо! Давай играть вместе»"}, next:"s2", safe:true},
+            {label:{tj:"Ҷавоб надода, бозиро давом додан", ru:"Не отвечать и играть дальше"}, next:"s2", safe:true}
+          ]},
+        s2:{image:"🎮", from:"Star_Pro",
+          text:{tj:"Якчанд рӯз Star_Pro ҳар бегоҳ дар бозӣ пайдо мешавад. Ӯ савол медиҳад.", ru:"Несколько дней Star_Pro появляется в игре каждый вечер. Он задаёт вопросы."},
+          msg:{tj:"Чандсолаӣ? Дар кадом мактаб мехонӣ? 🏫", ru:"Сколько тебе лет? В какой школе учишься? 🏫"},
+          choices:[
+            {label:{tj:"Синну сол ва рақами мактабро навиштан", ru:"Написать возраст и номер школы"}, next:"c1", safe:false},
+            {label:{tj:"«Инро дар интернет намегӯям»", ru:"«Про это я в интернете не пишу»"}, next:"s3", safe:true},
+            {label:{tj:"Гапро ба бозӣ гардонидан", ru:"Перевести разговор на игру"}, next:"s3", safe:true}
+          ]},
+        c1:{oops:true, image:"🏫",
+          text:{tj:"Акнун одами ношинос медонад, ки туро аз куҷо ёбад. Ин бо бисёриҳо рух медиҳад ва инро ислоҳ кардан мумкин аст. Биё ба ҳамон лаҳза баргардем.", ru:"Теперь человек, которого ты не знаешь, знает, где тебя искать. Так бывает со многими, и это можно исправить. Давай вернёмся к тому моменту."},
+          choices:[{label:"tryAgain", next:"s2"}]},
+        s3:{image:"🎁", from:"Star_Pro",
+          text:{tj:"Рӯзи дигар паёми нав меояд.", ru:"На следующий день приходит новое сообщение."},
+          msg:{tj:"Акси худро фирист — ба ту скини нодир тӯҳфа мекунам! 🎁 Фақат ба падару модар нагӯй.", ru:"Пришли своё фото — подарю редкий скин! 🎁 Только родителям не говори."},
+          choices:[
+            {label:{tj:"Аксро фиристодан", ru:"Отправить фото"}, next:"c2", safe:false},
+            {label:{tj:"«Не, ман акс намефиристам»", ru:"«Нет, фото я не отправляю»"}, next:"s4", safe:true},
+            {label:{tj:"Паёмҳоро ба калонсолон нишон додан", ru:"Показать переписку старшим"}, next:"s5", safe:true}
+          ]},
+        c2:{oops:true, image:"📤",
+          text:{tj:"Акс дар интернет метавонад ба ҳар ҷо равад ва онро баргардонидан намешавад. Гуноҳи ту нест — нодуруст касест, ки чунин хоҳиш мекунад. Биё дигар хел кӯшиш кунем?", ru:"Фото в интернете может уйти куда угодно, и вернуть его уже нельзя. Твоей вины тут нет — неправильно поступает тот, кто так просит. Попробуем по-другому?"},
+          choices:[{label:"tryAgain", next:"s3"}]},
+        s4:{image:"😠", from:"Star_Pro",
+          text:{tj:"Star_Pro даст намекашад ва боз менависад.", ru:"Star_Pro не отстаёт и пишет снова."},
+          msg:{tj:"Хоҳиш мекунам! Агар нафиристӣ, ба ҳама мегӯям, ки ту хасисӣ 😠", ru:"Ну пожалуйста! Если не пришлёшь, расскажу всем, что ты жадина 😠"},
+          choices:[
+            {label:{tj:"Фиристодан, то ӯ хафа нашавад", ru:"Отправить, чтобы он не злился"}, next:"c3", safe:false},
+            {label:{tj:"Блок кардан ва ба калонсол гуфтан", ru:"Заблокировать и рассказать взрослому"}, next:"s5", safe:true}
+          ]},
+        c3:{oops:true, image:"🌧️",
+          text:{tj:"Таҳдид — роҳест, ки туро ба коре водор кунанд, ки ту намехоҳӣ. Агар гузашт кунӣ, хоҳишҳо одатан боз зиёд мешаванд. Биё дигар хел интихоб кунем.", ru:"Угрозы — это способ заставить сделать то, чего ты не хочешь. Если уступить, просьбы обычно становятся только больше. Давай выберем иначе."},
+          choices:[{label:"tryAgain", next:"s4"}]},
+        s5:{image:"🛡️",
+          text:{tj:"Ту паёмҳоро ба хоҳари калонат нишон медиҳӣ. Ӯ мегӯяд: «Офарин, ки ба ман нишон додӣ». Якҷоя Star_Pro-ро блок мекунед ва дар бозӣ шикоят мефиристед.", ru:"Ты показываешь переписку старшей сестре. Она говорит: «Здорово, что ты мне это показываешь». Вместе вы блокируете Star_Pro и отправляете жалобу в игре."},
+          choices:[{label:"toLesson", next:"end"}]}
+      },
+      lesson:{
+        options:[
+          {tj:"Ӯ хуб бозӣ мекард", ru:"Он хорошо играл"},
+          {tj:"Ӯ акс хост ва гуфт, ки аз падару модар пинҳон кунам", ru:"Он просил фото и велел скрыть это от родителей"},
+          {tj:"Номаш хандаовар буд", ru:"У него смешной ник"}
+        ],
+        correct:1,
+        explain:{tj:"Агар ношинос акс ё маълумоти шахсӣ пурсад ва гӯяд, ки ба калонсолон нагӯй — ин аломати бас кардан аст.", ru:"Если незнакомец просит фото или личные данные и просит не говорить взрослым — это знак остановиться."},
+        badge:{icon:"📷", color:"#FFD6DC", name:{tj:"Посбони акс", ru:"Хранитель фото"}}
+      }
+    },
+    {
+      id:"secret", icon:"🤫", tint:"#DDF6EC",
+      title:{tj:"Сирри мо", ru:"Наш секрет"},
+      sub:{tj:"«Дӯст» аз интернет", ru:"«Друг» из сети"},
+      start:"s1",
+      scenes:{
+        s1:{image:"💬", from:"Шер",
+          text:{tj:"Дар чати мухлисони мультфилми дӯстдоштаат ба ту Шер менависад. Мегӯяд, ки 12-сола аст.", ru:"В чате фанатов твоего любимого мультика тебе пишет Шер. Говорит, что ему 12 лет."},
+          msg:{tj:"Ту хеле ҷолибӣ! Бо ту ҳеҷ дилгир намешавам 😊", ru:"Ты такой интересный человек! С тобой совсем не скучно 😊"},
+          choices:[
+            {label:{tj:"Ҷавоб додан ва гап задан", ru:"Ответить и поболтать"}, next:"s2", safe:true},
+            {label:{tj:"Пурсидан, ки маро аз куҷо мешиносад", ru:"Спросить, откуда он меня знает"}, next:"s1b", safe:true}
+          ]},
+        s1b:{image:"💬", from:"Шер",
+          text:{tj:"Шер зуд ҷавоб медиҳад ва туро бисёр таъриф мекунад.", ru:"Шер отвечает быстро и много тебя хвалит."},
+          msg:{tj:"Ҳамин тавр, туро дар чат дидам. Мо ба ҳам монандем-ку!", ru:"Да просто увидел тебя в чате. Мы же так похожи!"},
+          choices:[{label:"next", next:"s2"}]},
+        s2:{image:"🤫", from:"Шер",
+          text:{tj:"Шумо ҳар бегоҳ ба ҳам менависед. Як рӯз Шер чизи аҷибе менависад.", ru:"Вы переписываетесь каждый вечер. Однажды Шер пишет что-то странное."},
+          msg:{tj:"Биё мукотибаи мо сирри мо бошад 🤫 Паёмҳоро нест кун, хуб?", ru:"Давай наша переписка будет нашим секретом 🤫 Удаляй сообщения, ладно?"},
+          choices:[
+            {label:{tj:"«Хуб, нест мекунам»", ru:"«Ладно, удалю»"}, next:"c1", safe:false},
+            {label:{tj:"«Барои чӣ? Ба ман ин маъқул нест»", ru:"«Зачем? Мне так не нравится»"}, next:"s3", safe:true}
+          ]},
+        c1:{oops:true, image:"🗑️",
+          text:{tj:"Вақте ки хоҳиш мекунанд мукотибаро аз наздикон пинҳон кунӣ, одатан он одам чизе дорад, ки пинҳон кунад. Гуноҳи ту нест. Ту ҳар вақт метавонӣ фикратро иваз кунӣ.", ru:"Когда просят прятать переписку от близких, обычно этому человеку есть что скрывать. Твоей вины здесь нет. Передумать можно в любой момент."},
+          choices:[{label:"tryAgain", next:"s2"}]},
+        s3:{image:"😢", from:"Шер",
+          text:{tj:"Шер дарҳол ҷавоб медиҳад.", ru:"Шер отвечает сразу."},
+          msg:{tj:"Агар ба касе гӯӣ — дигар бо ту дӯстӣ намекунам 😢 Ту дӯсти ягонаи манӣ.", ru:"Если расскажешь кому-то — я больше не буду с тобой дружить 😢 Ты мой единственный друг."},
+          choices:[
+            {label:{tj:"«Хуб, ба ҳеҷ кас намегӯям»", ru:"«Ладно, никому не скажу»"}, next:"c2", safe:false},
+            {label:{tj:"«Дӯстони ҳақиқӣ ин хел намегӯянд»", ru:"«Настоящие друзья так не говорят»"}, next:"s4", safe:true}
+          ]},
+        c2:{oops:true, image:"🎈",
+          text:{tj:"Хафагӣ ва раҳм ҳам роҳест, ки туро хомӯш кунанд. Сирри хуб шод мекунад, мисли сюрприз барои зодрӯз. Аз сирри бад бошад, дил вазнин мешавад.", ru:"Обида и жалость — тоже способ заставить молчать. Хороший секрет радует, как сюрприз на день рождения. А от плохого секрета на душе тяжело."},
+          choices:[{label:"tryAgain", next:"s3"}]},
+        s4:{image:"🤔",
+          text:{tj:"Дилат ноором аст ва танҳо дар ин бора фикр кардан душвор аст. Ба кӣ гуфтан мумкин аст?", ru:"Тебе неспокойно, и думать об этом в одиночку трудно. Кому можно рассказать?"},
+          choices:[
+            {label:{tj:"Ба модар, падар ё муаллим", ru:"Маме, папе или учителю"}, next:"s5", safe:true},
+            {label:{tj:"Ба ҳеҷ кас — худам ҳал мекунам", ru:"Никому — справлюсь без взрослых"}, next:"c3", safe:false}
+          ]},
+        c3:{oops:true, image:"🎒",
+          text:{tj:"Бо чунин сирҳо танҳо мондан душвор аст. Калонсолон барои кӯмак ҳастанд — ҳатто агар дар мукотиба аллакай чизе шуда бошад.", ru:"С такими секретами трудно оставаться одному. Взрослые для того и есть, чтобы помогать — даже если в переписке уже что-то случилось."},
+          choices:[{label:"tryAgain", next:"s4"}]},
+        s5:{image:"🤗",
+          text:{tj:"Модар ором гӯш кард ва туро ба оғӯш гирифт: «Ташаккур, ки гуфтӣ. Гуноҳи ту нест». Якҷоя Шерро блок мекунед ва скриншотҳоро нигоҳ медоред.", ru:"Мама спокойно выслушала и обняла тебя: «Спасибо, что рассказываешь. Твоей вины нет». Вместе вы блокируете Шера и сохраняете скриншоты."},
+          choices:[{label:"toLesson", next:"end"}]}
+      },
+      lesson:{
+        options:[
+          {tj:"Ӯ ҳамон мультфилмҳоро дӯст медорад", ru:"Он любит те же мультики"},
+          {tj:"Ӯ бегоҳиҳо менавишт", ru:"Он писал по вечерам"},
+          {tj:"Ӯ хост, ки мукотибаро аз калонсолон пинҳон дорам", ru:"Он просил держать переписку в секрете от взрослых"}
+        ],
+        correct:2,
+        explain:{tj:"Хоҳиши пинҳон доштани мукотиба аз калонсолон — аломати асосии хатар аст, ҳатто агар он одам дӯст ба назар расад.", ru:"Просьба скрывать переписку от взрослых — главный тревожный знак, даже если человек кажется другом."},
+        badge:{icon:"🗣️", color:"#DDF6EC", name:{tj:"Бе сирри бад", ru:"Без плохих секретов"}}
+      }
+    },
+    {
+      id:"password", icon:"💎", tint:"#FFE7B8",
+      title:{tj:"Алмосҳои ройгон", ru:"Бесплатные алмазы"},
+      sub:{tj:"Алмос ба ивази парол", ru:"Алмазы за пароль"},
+      start:"s1",
+      scenes:{
+        s1:{image:"💎", from:{tj:"🎁 Тӯҳфа", ru:"🎁 Подарок"},
+          text:{tj:"Дар бозӣ равзанаи рангоранг пайдо мешавад. Ҳозир алмоси бисёр ваъда медиҳанд.", ru:"В игре всплывает яркое окно. Обещают кучу алмазов прямо сейчас."},
+          msg:{tj:"РОЙГОН 10 000 алмос! Фақат имрӯз! 💎", ru:"БЕСПЛАТНО 10 000 алмазов! Только сегодня! 💎"},
+          choices:[
+            {label:{tj:"Пахш кардан ва дидан", ru:"Нажать и посмотреть"}, next:"s2", safe:true},
+            {label:{tj:"Равзанаро пӯшидан", ru:"Закрыть окно"}, next:"s1x", safe:true}
+          ]},
+        s1x:{image:"🌙",
+          text:{tj:"Ту равзанаро мепӯшӣ ва бозиро давом медиҳӣ. Бегоҳ бошад, дӯстат Камол менависад.", ru:"Ты закрываешь окно и играешь дальше. А вечером тебе пишет друг Камол."},
+          choices:[{label:"next", next:"s4"}]},
+        s2:{image:"🔑", from:"bonus-almos.site",
+          text:{tj:"Сайте кушода мешавад, ки ба бозӣ монанд аст. Он логин ва паролро мепурсад.", ru:"Открывается сайт, похожий на игру. Он просит логин и пароль."},
+          msg:{tj:"Барои гирифтани алмос логин ва паролро ворид кун 💎", ru:"Введи логин и пароль, чтобы получить алмазы 💎"},
+          choices:[
+            {label:{tj:"Паролро ворид кардан", ru:"Ввести пароль"}, next:"c1", safe:false},
+            {label:{tj:"«Бозии ҳақиқӣ паролро ин хел намепурсад»", ru:"«Настоящая игра так пароль не просит»"}, next:"s3", safe:true}
+          ]},
+        c1:{oops:true, image:"🔒",
+          text:{tj:"Пас аз як дақиқа ба аккаунт даромада наметавонӣ — онро фиребгарон гирифтанд. Онҳо хуб худро дигар кас нишон медиҳанд, ҳатто калонсолон фиреб мехӯранд. Биё баргардем ва дигар хел интихоб кунем.", ru:"Через минуту в аккаунт уже не войти — его забрали обманщики. Они хорошо притворяются, на это попадаются даже взрослые. Вернёмся и выберем иначе."},
+          choices:[{label:"tryAgain", next:"s2"}]},
+        s3:{image:"⏰", from:"GameAdmin",
+          text:{tj:"Касе бо номи «GameAdmin» ба чат менависад.", ru:"В чат пишет кто-то с ником «GameAdmin»."},
+          msg:{tj:"Ман админ ҳастам. Парол барои санҷиш лозим! Тезтар, 2 дақиқа монд ⏰", ru:"Я админ. Пароль нужен для проверки! Быстрее, осталось 2 минуты ⏰"},
+          choices:[
+            {label:{tj:"Шитоб карда фиристодан", ru:"Поспешить и отправить"}, next:"c2", safe:false},
+            {label:{tj:"Шитоб накарда, чатро пӯшидан", ru:"Не спешить и закрыть чат"}, next:"s4", safe:true}
+          ]},
+        c2:{oops:true, image:"🐢",
+          text:{tj:"Админҳои ҳақиқӣ ҳеҷ гоҳ паролро намепурсанд. Шитоб ба фиребгар лозим аст, то вақти фикр кардан набошад. Биё дигар хел интихоб кунем.", ru:"Настоящие админы никогда не спрашивают пароль. Спешка нужна обманщику, чтобы не осталось времени подумать. Давай выберем иначе."},
+          choices:[{label:"tryAgain", next:"s3"}]},
+        s4:{image:"😭", from:"Камол",
+          text:{tj:"Бегоҳ дӯстат Камол менависад. Ӯ ғамгин аст.", ru:"Вечером пишет друг Камол. Ему грустно."},
+          msg:{tj:"Ман барои алмос паролро додам ва аккаунтамро дуздиданд 😭", ru:"Я дал пароль за алмазы, и у меня украли аккаунт 😭"},
+          choices:[
+            {label:{tj:"«Худат гунаҳкорӣ»", ru:"«Сам виноват»"}, next:"c3", safe:false},
+            {label:{tj:"«Гуноҳи ту нест. Биё ба калонсолон гӯем»", ru:"«Это не твоя вина. Давай скажем взрослым»"}, next:"s5", safe:true}
+          ]},
+        c3:{oops:true, image:"💙",
+          text:{tj:"Камол боз ҳам ғамгинтар шуд. Ӯро фиреб доданд — бадӣ аз фиребгарон аст, на аз ӯ. Дӯстро чӣ тавр дастгирӣ кардан мумкин?", ru:"Камолу стало ещё грустнее. Его обманули — плохо поступили обманщики, а не он. Как можно поддержать друга?"},
+          choices:[{label:"tryAgain", next:"s4"}]},
+        s5:{image:"🔐",
+          text:{tj:"Якҷоя бо падар паролҳоро иваз мекунед ва дар танзимот муҳофизатро фаъол мекунед. Парол мисли калиди хона аст: онро ба ҳеҷ кас намедиҳанд, ҳатто ба дӯсти беҳтарин.", ru:"Вместе с папой вы меняете пароли и включаете защиту в настройках. Пароль — как ключ от дома: его не дают никому, даже лучшему другу."},
+          choices:[{label:"toLesson", next:"end"}]}
+      },
+      lesson:{
+        options:[
+          {tj:"Парол пурсиданд ва шитоб мекунонданд", ru:"Просили пароль и торопили"},
+          {tj:"Алмосҳо зебо буданд", ru:"Алмазы были красивые"},
+          {tj:"Равзана рангоранг буд", ru:"Окно было яркое"}
+        ],
+        correct:0,
+        explain:{tj:"Парол ба ҳеҷ кас ғайр аз ту лозим нест. Агар онро пурсанд ва шитоб кунонанд — ин фиреб аст.", ru:"Пароль не нужен никому, кроме тебя. Если его просят и торопят — это обман."},
+        badge:{icon:"🗝️", color:"#FFE7B8", name:{tj:"Посбони калид", ru:"Хранитель ключа"}}
+      }
+    }
+  ]
+};
+
+/* =====================================================================
+   HERO ILLUSTRATIONS (inline SVG, no requests)
+   ===================================================================== */
+const heroSVG = {
+  leopard:`<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1B1A3A" stroke-width="4" stroke-linejoin="round">
+    <circle cx="24" cy="26" r="12" fill="#F6C453"/><circle cx="76" cy="26" r="12" fill="#F6C453"/>
+    <ellipse cx="50" cy="56" rx="38" ry="34" fill="#F6C453"/></g>
+    <circle cx="24" cy="26" r="5" fill="#E8384F"/><circle cx="76" cy="26" r="5" fill="#E8384F"/>
+    <g fill="#1B1A3A"><circle cx="30" cy="40" r="3"/><circle cx="70" cy="38" r="3"/><circle cx="24" cy="60" r="2.5"/><circle cx="78" cy="62" r="2.5"/><circle cx="50" cy="30" r="2.5"/>
+    <circle cx="38" cy="52" r="5"/><circle cx="62" cy="52" r="5"/></g>
+    <circle cx="40" cy="50" r="1.6" fill="#fff"/><circle cx="64" cy="50" r="1.6" fill="#fff"/>
+    <ellipse cx="50" cy="70" rx="14" ry="10" fill="#FFF4DC" stroke="#1B1A3A" stroke-width="3"/>
+    <path d="M45 64l5 4 5-4z" fill="#1B1A3A"/><path d="M44 74q6 5 12 0" fill="none" stroke="#1B1A3A" stroke-width="3" stroke-linecap="round"/></svg>`,
+  stork:`<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1B1A3A" stroke-width="4" stroke-linejoin="round">
+    <path d="M60 52 L98 62 L60 66 Z" fill="#FF8A3D"/>
+    <circle cx="44" cy="54" r="34" fill="#FFFFFF"/>
+    <path d="M20 30 q10 -18 30 -16" fill="none" stroke-linecap="round"/></g>
+    <path d="M14 70 q30 24 60 0 l-6 18 q-24 10 -48 0z" fill="#1B1A3A"/>
+    <circle cx="50" cy="46" r="6" fill="#1B1A3A"/><circle cx="52" cy="44" r="2" fill="#fff"/>
+    <circle cx="34" cy="60" r="5" fill="#FFB8C2"/></svg>`,
+  kabk:`<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#1B1A3A" stroke-width="4" stroke-linejoin="round">
+    <path d="M50 8 q6 6 0 14 q-6-8 0-14z" fill="#3448C5"/>
+    <ellipse cx="50" cy="58" rx="38" ry="36" fill="#B9A9E8"/>
+    <path d="M78 52 L94 58 L78 64 Z" fill="#E8384F"/></g>
+    <path d="M26 46 q18 -10 52 2" fill="none" stroke="#1B1A3A" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="62" cy="52" r="5" fill="#1B1A3A"/><circle cx="64" cy="50" r="1.6" fill="#fff"/>
+    <g fill="none" stroke="#1B1A3A" stroke-width="3" stroke-linecap="round"><path d="M24 70 l10 -6"/><path d="M28 80 l10 -6"/><path d="M36 88 l8 -5"/></g>
+    <circle cx="70" cy="68" r="5" fill="#FFB8C2"/></svg>`
+};
+
+/* =====================================================================
+   STATE + STORAGE (only language, hero, badges — on this device)
+   ===================================================================== */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const state = {
+  lang: store.get("kb_lang", "tj"),
+  hero: store.get("kb_hero", null),
+  badges: store.get("kb_badges", []),
+  screen: "start", story: null, scene: null, picked: null, newBadge: false,
+  sort: {i:0, fb:null, tries:0},   /* mini-game state lives in memory only */
+  breath: {round:0, phase:"idle", tok:null}
+};
+if(!["tj","ru"].includes(state.lang)) state.lang = "tj";
+if(!Array.isArray(state.badges)) state.badges = [];
+
+const app = document.getElementById("app");
+const t = obj => (obj && typeof obj === "object") ? (obj[state.lang] ?? obj.tj) : obj;
+const ui = key => t(content.ui[key]);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* templates below are built only from the static `content` object, every text passed through esc() */
+const setHTML = (el, html) => el.replaceChildren(document.createRange().createContextualFragment(html));
+const story = () => content.stories.find(s => s.id === state.story);
+const heroObj = () => content.heroes.find(h => h.id === state.hero) || content.heroes[0];
+
+function go(screen, extra){ Object.assign(state, {screen}, extra || {}); render(); window.scrollTo(0,0); }
+
+/* ---------- screens ---------- */
+function vStart(){
+  return `<section class="screen stack">
+    <div class="title-wrap">
+      <h1>${esc(ui("appName")).replace(/(\S+)$/, "<span>$1</span>")}</h1>
+      <p class="lead">${esc(ui("tagline"))}</p>
+    </div>
+    <div class="section">
+      <h2>${esc(ui("chooseLang"))}</h2>
+      <div class="seg" style="margin-top:10px">
+        <button class="btn" data-act="lang" data-v="tj" aria-pressed="${state.lang==="tj"}">Тоҷикӣ</button>
+        <button class="btn" data-act="lang" data-v="ru" aria-pressed="${state.lang==="ru"}">Русский</button>
+      </div>
+    </div>
+    <div class="section">
+      <h2>${esc(ui("chooseHero"))}</h2>
+      <p class="lead" style="margin-bottom:12px">${esc(ui("heroHint"))}</p>
+      <div class="heroes">
+        ${content.heroes.map(h => `<button class="hero-pick" data-act="hero" data-v="${h.id}" aria-pressed="${state.hero===h.id}">
+          ${heroSVG[h.id]}<b>${esc(t(h.name))}</b><small>${esc(t(h.trait))}</small></button>`).join("")}
+      </div>
+    </div>
+    <div class="section">
+      <button class="btn primary" data-act="begin" ${state.hero ? "" : "aria-disabled=\"true\" style=\"opacity:.6\""}>${esc(state.hero ? ui("start") + " →" : ui("pickHeroFirst"))}</button>
+    </div>
+    <p class="foot">${esc(ui("privacy"))}</p>
+  </section>`;
+}
+
+function vMenu(){
+  const G = content.games;
+  return `<section class="screen">
+    <h1>${esc(ui("stories"))}</h1>
+    <p class="lead">${esc(ui("storiesHint"))}</p>
+    <div class="stack section">
+      ${content.stories.map((s,i) => `<button class="card story" data-act="story" data-v="${s.id}" style="animation:rise 260ms ease-out both;animation-delay:${i*90+120}ms">
+        <span class="ic" style="background:${s.tint}">${s.icon}</span>
+        <span><b>${esc(t(s.title))}</b><small>${esc(t(s.sub))}</small>
+        ${state.badges.includes(s.id) ? `<span class="done">${esc(ui("done"))}</span>` : ""}</span></button>`).join("")}
+    </div>
+    <div class="section">
+      <h2>${esc(t(G.title))}</h2>
+      <p class="lead" style="margin-bottom:12px">${esc(t(G.hint))}</p>
+      <div class="row2">
+        ${["sort","breath"].map(k => `<button class="card game-tile" data-act="${k}"><span class="gi">${G[k].icon}</span><b>${esc(t(G[k].title))}</b><small>${esc(t(G[k].sub))}</small></button>`).join("")}
+      </div>
+    </div>
+    <div class="row2 section">
+      <button class="btn" data-act="badges">🏅 ${esc(ui("badges"))}</button>
+      <button class="btn ghost" data-act="parents">${esc(ui("parents"))}</button>
+    </div>
+    ${buddy(ui("buddyThink"))}
+  </section>`;
+}
+
+function buddy(text){
+  return `<div class="buddy">${heroSVG[heroObj().id]}<div class="say"><b>${esc(t(heroObj().name))}:</b> ${esc(text)}</div></div>`;
+}
+
+function vScene(){
+  const s = story(), sc = s.scenes[state.scene];
+  const isUi = c => typeof c.label === "string";
+  const visual = sc.msg
+    ? `<div class="card phone">
+        <div class="ph-top"><span class="av">${sc.image}</span><span><b>${esc(t(sc.from))}</b><small>online</small></span></div>
+        <div class="ph-body"><div class="bubble">${esc(t(sc.msg))}</div></div>
+      </div>`
+    : `<div class="card phone"><div class="illus" aria-hidden="true">${sc.image}</div></div>`;
+  return `<section class="screen ${sc.oops ? "oops" : ""}" data-scene="${state.scene}">
+    <div class="scene-head">
+      <button class="back" data-act="menu">${esc(ui("back"))}</button>
+      <span class="st">${s.icon} ${esc(t(s.title))}</span>
+    </div>
+    ${sc.oops ? `<span class="oops-tag">💭 ${esc(ui("oopsTag"))}</span>` : ""}
+    ${visual}
+    <p class="narr">${esc(t(sc.text))}</p>
+    <div class="choices stack">
+      ${sc.choices.map((c,i) => `<button class="btn ${isUi(c) ? "primary" : "choice"}" style="--i:${i}" data-act="choose" data-v="${c.next}">
+        ${isUi(c) ? "" : `<span class="k">${"АБВ"[i]}</span>`}<span>${esc(isUi(c) ? ui(c.label) : t(c.label))}${isUi(c) ? " →" : ""}</span></button>`).join("")}
+    </div>
+    ${sc.oops ? buddy(ui("buddyOops")) : ""}
+  </section>`;
+}
+
+function vLesson(){
+  const s = story(), L = s.lesson, p = state.picked, ok = p === L.correct;
+  if(p !== null && ok){
+    return `<section class="screen">
+      <span class="eyebrow">${esc(ui("lessonEyebrow"))}</span>
+      <div class="card badge-big">
+        <div class="medal" style="background:${L.badge.color}">${L.badge.icon}</div>
+        <h2 style="margin-top:16px">${esc(state.newBadge ? ui("badgeNew") : t(L.badge.name))}</h2>
+        ${state.newBadge ? `<p style="font-weight:800">${esc(t(L.badge.name))}</p>` : `<p class="lead">${esc(ui("badgeAgain"))}</p>`}
+      </div>
+      <p class="note section">✅ ${esc(t(L.explain))}</p>
+      <div class="stack section">
+        <button class="btn primary" data-act="menu">${esc(ui("toStories"))}</button>
+        <button class="btn" data-act="badges">🏅 ${esc(ui("badges"))}</button>
+      </div>
+      ${buddy(ui("buddyWin"))}
+    </section>`;
+  }
+  return `<section class="screen">
+    <span class="eyebrow">${s.icon} ${esc(ui("lessonEyebrow"))}</span>
+    <h1>${esc(ui("lessonQ"))}</h1>
+    <p class="lead">${esc(ui("lessonHint"))}</p>
+    <div class="choices stack">
+      ${L.options.map((o,i) => `<button class="btn choice opt ${p===i ? "wrong" : ""}" style="--i:${i}" data-act="answer" data-v="${i}"><span class="k">${"АБВ"[i]}</span><span>${esc(t(o))}</span></button>`).join("")}
+    </div>
+    ${p !== null ? `<p class="note section">💡 ${esc(ui("lessonWrong"))}</p>` : ""}
+  </section>`;
+}
+
+function vBadges(){
+  const n = state.badges.length, total = content.stories.length;
+  return `<section class="screen">
+    <h1>${esc(ui("collection"))}</h1>
+    <p class="lead">${esc(ui("collectionHint"))}</p>
+    <div class="grid section">
+      ${content.stories.map(s => { const has = state.badges.includes(s.id); const b = s.lesson.badge;
+        return `<div class="card slot ${has ? "" : "locked"}"><div class="medal" style="background:${b.color}">${has ? b.icon : "?"}</div>
+          <b>${esc(t(b.name))}</b><small>${esc(has ? ui("got") : ui("locked"))}</small></div>`; }).join("")}
+    </div>
+    <p class="note section">${esc(n === 0 ? ui("collectionEmpty") : n >= total ? "🎉 " + ui("allDone") : `🏅 ${n} / ${total}`)}</p>
+    <div class="section"><button class="btn primary" data-act="menu">${esc(ui("toStories"))}</button></div>
+  </section>`;
+}
+
+function vParents(){
+  const P = content.parents;
+  return `<section class="screen parents">
+    <h1>${esc(t(P.title))}</h1>
+    <div class="card section" style="padding:16px">
+      ${P.paras.map(p => `<p>${esc(t(p))}</p>`).join("")}
+      <h2 style="margin-top:16px;font-size:18px">${esc(t(P.askTitle))}</h2>
+      <ul>${P.ask.map(a => `<li>${esc(t(a))}</li>`).join("")}</ul>
+    </div>
+    <div class="section"><button class="btn primary" data-act="menu">${esc(ui("toStories"))}</button></div>
+  </section>`;
+}
+
+/* ---------- mini-game 1: good secret / bad secret (no score, no timer) ---------- */
+function vSort(){
+  const S = content.games.sort, cards = S.cards, st = state.sort;
+  const backBtn = `<div class="scene-head"><button class="back" data-act="menu">${esc(ui("back"))}</button><span class="st">${S.icon} ${esc(t(S.title))}</span></div>`;
+  if(st.i >= cards.length){
+    return `<section class="screen">${backBtn}
+      <div class="card badge-big"><div class="medal" style="background:var(--mint-soft)">🎁</div>
+        <h2 style="margin-top:16px">${esc(t(S.doneTitle))}</h2><p class="lead">${esc(t(S.doneText))}</p></div>
+      <p class="bridge section"><span>💛</span><span>${esc(t(content.games.bridge))}</span></p>
+      <div class="stack section">
+        <button class="btn primary" data-act="sort">${esc(t(content.games.again))}</button>
+        <button class="btn" data-act="menu">${esc(ui("toStories"))}</button>
+      </div>
+      ${buddy(ui("buddyWin"))}</section>`;
+  }
+  const c = cards[st.i], answered = st.fb === "ok";
+  const say = answered ? t(c.why) : st.fb === "hint" ? t(S.hint) : t(S.rule);
+  return `<section class="screen">${backBtn}
+    <span class="counter">${esc(t(S.of).replace("{n}", st.i + 1).replace("{t}", cards.length))}</span>
+    <div class="deck">
+      <div class="card sort-card ${answered ? (c.good ? "is-good" : "is-bad") : ""} ${st.fb === "hint" ? "hint" : ""}" id="sortCard" data-k="${st.i}-${st.tries}">
+        ${answered ? `<span class="stamp">${esc(t(c.good ? S.goodStamp : S.badStamp))}</span>` : ""}
+        <span class="ce" aria-hidden="true">${c.e}</span><span class="q">${esc(t(c.q))}</span>
+      </div>
+    </div>
+    ${answered
+      ? `<div class="section"><button class="btn primary" data-act="sortNext">${esc(t(S.next))} →</button></div>`
+      : `<div class="sort-btns">
+          <button class="btn bad" data-act="sortAns" data-v="bad">🚫 ${esc(t(S.bad))}</button>
+          <button class="btn good" data-act="sortAns" data-v="good">🎁 ${esc(t(S.good))}</button>
+        </div><p class="swipe-hint">${esc(t(S.swipe))}</p>`}
+    ${buddy(say)}
+  </section>`;
+}
+function sortAnswer(choice){
+  const c = content.games.sort.cards[state.sort.i];
+  if((choice === "good") === c.good) state.sort.fb = "ok";
+  else { state.sort.fb = "hint"; state.sort.tries++; }
+  render();
+}
+function bindSwipe(){
+  const card = document.getElementById("sortCard");
+  if(!card || state.sort.fb === "ok") return;
+  let x0 = null, dx = 0;
+  card.addEventListener("pointerdown", e => { x0 = e.clientX; dx = 0; card.classList.remove("snap","hint"); card.classList.add("dragging"); card.setPointerCapture(e.pointerId); });
+  card.addEventListener("pointermove", e => { if(x0 === null) return; dx = e.clientX - x0; card.style.transform = `translateX(${dx}px) rotate(${dx/18}deg)`; });
+  const end = () => {
+    if(x0 === null) return; x0 = null; card.classList.remove("dragging");
+    if(Math.abs(dx) > 80){ sortAnswer(dx > 0 ? "good" : "bad"); return; }
+    card.classList.add("snap"); card.style.transform = "";
+  };
+  card.addEventListener("pointerup", end);
+  card.addEventListener("pointercancel", end);
+}
+
+/* ---------- mini-game 2: breathing balloon (no timer shown, 3 calm rounds) ---------- */
+const balloonSVG = `<svg viewBox="0 0 170 200" aria-hidden="true">
+  <path d="M85 150 q-8 20 6 34 q10 10 -2 16" fill="none" stroke="#1B1A3A" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="85" cy="78" rx="68" ry="74" fill="#E8384F" stroke="#1B1A3A" stroke-width="5"/>
+  <path d="M77 150 h16 l-8 10z" fill="#E8384F" stroke="#1B1A3A" stroke-width="4" stroke-linejoin="round"/>
+  <ellipse cx="58" cy="50" rx="12" ry="20" fill="#fff" opacity=".55" transform="rotate(-20 58 50)"/></svg>`;
+function vBreath(){
+  const B = content.games.breath, b = state.breath;
+  const backBtn = `<div class="scene-head"><button class="back" data-act="menu">${esc(ui("back"))}</button><span class="st">${B.icon} ${esc(t(B.title))}</span></div>`;
+  if(b.round >= 3){
+    return `<section class="screen">${backBtn}
+      <div class="card badge-big"><div class="medal" style="background:var(--apricot-soft)">🎈</div>
+        <h2 style="margin-top:16px">${esc(t(B.doneTitle))}</h2><p class="lead">${esc(t(B.doneText))}</p></div>
+      <p class="bridge section"><span>💛</span><span>${esc(t(content.games.bridge))}</span></p>
+      <div class="stack section">
+        <button class="btn primary" data-act="breath">${esc(t(content.games.again))}</button>
+        <button class="btn" data-act="menu">${esc(ui("toStories"))}</button>
+      </div></section>`;
+  }
+  return `<section class="screen">${backBtn}
+    <p class="rule">${esc(t(B.intro))}</p>
+    <div class="card breath-stage">
+      <div class="balloon-wrap"><div class="balloon" id="balloon">${balloonSVG}</div></div>
+      <div class="breath-hero">${heroSVG[heroObj().id]}</div>
+      <div class="dots" aria-hidden="true">${[0,1,2].map(i => `<i class="${i < b.round ? "on" : ""}"></i>`).join("")}</div>
+      <p class="breath-msg" id="breathMsg" aria-live="polite">${esc(t(b.round ? B.again : B.ready))}</p>
+    </div>
+    <div class="section"><button class="btn primary hold" id="holdBtn" type="button">${esc(t(B.hold))}</button></div>
+  </section>`;
+}
+function bindBreath(){
+  const btn = document.getElementById("holdBtn");
+  if(!btn) return;
+  const B = content.games.breath, b = state.breath;
+  const balloon = document.getElementById("balloon"), msg = document.getElementById("breathMsg");
+  const say = k => { msg.textContent = t(B[k]); };
+  b.phase = "idle"; b.tok = null;
+  const start = e => {
+    if(e) e.preventDefault();
+    if(b.phase !== "idle") return;
+    b.phase = "in"; btn.classList.add("pressed"); balloon.classList.add("big"); say("inhale");
+    const tok = b.tok = Symbol();
+    setTimeout(() => { if(b.tok === tok && b.phase === "in"){ b.phase = "full"; say("full"); } }, 4000);
+  };
+  const release = () => {
+    btn.classList.remove("pressed");
+    if(b.phase === "in"){            /* released early: gentle hint, nothing counted */
+      b.phase = "idle"; b.tok = null; balloon.classList.remove("big"); say("early");
+    } else if(b.phase === "full"){
+      b.phase = "out"; balloon.classList.remove("big"); say("exhale"); btn.disabled = true;
+      const tok = b.tok = Symbol();
+      setTimeout(() => {
+        if(b.tok !== tok || state.screen !== "breath") return;
+        b.round++; b.phase = "idle"; render();
+      }, 4000);
+    }
+  };
+  btn.addEventListener("pointerdown", e => { btn.setPointerCapture(e.pointerId); start(e); });
+  btn.addEventListener("pointerup", release);
+  btn.addEventListener("pointercancel", release);
+  btn.addEventListener("contextmenu", e => e.preventDefault());
+  btn.addEventListener("keydown", e => { if((e.key === " " || e.key === "Enter") && !e.repeat){ start(e); } });
+  btn.addEventListener("keyup", e => { if(e.key === " " || e.key === "Enter"){ e.preventDefault(); release(); } });
+}
+
+/* ---------- help sheet ---------- */
+const modal = document.getElementById("helpModal");
+function renderHelp(){
+  const H = content.help;
+  setHTML(document.getElementById("helpSheet"), `
+    <h2 id="helpTitle">${esc(t(H.title))}</h2>
+    <p style="margin-top:8px">${esc(t(H.body))}</p>
+    <p style="margin-top:14px;font-weight:800">${esc(t(H.stepsTitle))}</p>
+    <ol class="steps">${H.steps.map(s => `<li>${esc(t(s))}</li>`).join("")}</ol>
+    <p style="margin-top:16px;font-weight:800">${esc(t(H.contactsTitle))}</p>
+    <div class="stack" style="margin-top:8px">${H.contacts.map(c => `<a class="phonebox" href="tel:${c.tel}"><span>📞 <b class="pl">${esc(t(c.label))}</b><br><small>${esc(t(c.note))}</small></span><b>${esc(c.num)}</b></a>`).join("")}</div>
+    <p class="foot" style="margin-top:10px">${esc(t(H.contactsNote))}</p>
+    <button class="btn section" data-act="breathHelp">${esc(t(content.games.breath.fromHelp))}</button>
+    <button class="btn primary" style="margin-top:12px" data-act="closeHelp">${esc(t(H.close))}</button>`);
+}
+function openHelp(){ renderHelp(); modal.hidden = false; modal.querySelector("[data-act=closeHelp]").focus(); }
+function closeHelp(){ modal.hidden = true; document.getElementById("helpBtn").focus(); }
+
+/* ---------- render ---------- */
+function renderChrome(){
+  document.documentElement.lang = state.lang === "tj" ? "tg" : "ru";
+  const h = heroObj();
+  setHTML(document.getElementById("homeBtn"), (state.hero ? heroSVG[h.id] : "") + `<span>${esc(ui("appName"))}</span>`);
+  document.getElementById("helpBtn").textContent = ui("help");
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === state.lang));
+  if(!modal.hidden) renderHelp();
+}
+function render(){
+  renderChrome();
+  const views = {start:vStart, menu:vMenu, scene:vScene, lesson:vLesson, badges:vBadges, parents:vParents, sort:vSort, breath:vBreath};
+  setHTML(app, (views[state.screen] || vStart)());
+  if(state.screen === "sort") bindSwipe();
+  if(state.screen === "breath") bindBreath();
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act],[data-lang]");
+  if(!el) { if(e.target === modal) closeHelp(); return; }
+  if(el.dataset.lang){ setLang(el.dataset.lang); return; }
+  const v = el.dataset.v;
+  switch(el.dataset.act){
+    case "lang": setLang(v); break;
+    case "hero": state.hero = v; store.set("kb_hero", v); render(); break;
+    case "begin": if(state.hero) go("menu"); break;
+    case "menu": go("menu"); break;
+    case "badges": go("badges"); break;
+    case "parents": go("parents"); break;
+    case "story": { const s = content.stories.find(x => x.id === v); go("scene", {story:v, scene:s.start}); break; }
+    case "choose": if(v === "end") go("lesson", {picked:null, newBadge:false}); else go("scene", {scene:v}); break;
+    case "answer": {
+      const i = +v, L = story().lesson;
+      if(i === L.correct){
+        const isNew = !state.badges.includes(state.story);
+        if(isNew){ state.badges.push(state.story); store.set("kb_badges", state.badges); }
+        go("lesson", {picked:i, newBadge:isNew});
+      } else { state.picked = i; render(); }
+      break;
+    }
+    case "closeHelp": closeHelp(); break;
+    case "sort": go("sort", {sort:{i:0, fb:null, tries:0}}); break;
+    case "sortAns": sortAnswer(v); break;
+    case "sortNext": state.sort = {i:state.sort.i + 1, fb:null, tries:0}; render(); break;
+    case "breath": go("breath", {breath:{round:0, phase:"idle", tok:null}}); break;
+    case "breathHelp": modal.hidden = true; go("breath", {breath:{round:0, phase:"idle", tok:null}}); break;
+  }
+});
+function setLang(l){ state.lang = l; store.set("kb_lang", l); render(); }
+document.getElementById("homeBtn").addEventListener("click", () => go(state.hero ? "menu" : "start"));
+document.getElementById("helpBtn").addEventListener("click", openHelp);
+document.addEventListener("keydown", e => { if(e.key === "Escape" && !modal.hidden) closeHelp(); });
+
+render();
+</script>
+</body>
+</html>
