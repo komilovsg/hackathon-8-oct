@@ -22,6 +22,12 @@ a.card:hover{transform:translateY(-3px);border-color:var(--accent)}
 a.guide{display:flex;gap:16px;align-items:center;margin-top:22px;background:var(--accent);color:#fff;border-radius:16px;padding:20px;text-decoration:none}
 a.guide b{font-size:20px}
 @media (prefers-reduced-motion:reduce){a.card{transition:none}}
+a.quest{display:flex;gap:18px;align-items:center;margin-top:14px;border-radius:16px;padding:22px;text-decoration:none;color:#1d1f24;background:linear-gradient(120deg,#ffd166,#ff9f6b);transition:transform .2s}
+a.quest:hover{transform:translateY(-3px)}
+a.quest b{font-size:22px;display:block}
+a.quest .go{margin-left:auto;background:#1d1f24;color:#fff;border-radius:999px;padding:10px 18px;font-weight:800;white-space:nowrap}
+@media (max-width:560px){a.quest{flex-wrap:wrap}a.quest .go{margin-left:0}}
+@media (prefers-reduced-motion:reduce){a.quest{transition:none}}
 </style>
 </head>
 <body>
@@ -39,6 +45,9 @@ a.guide b{font-size:20px}
     <a class="card" href="case-08/"><span class="n">08</span><h2>Свободная тема</h2><p>Пример: «Аввал санҷ» — проверь пост до публикации</p></a>
   </div>
   <a class="guide" href="guide/"><span style="font-size:32px">🛠</span><span><b>Как собрать такой сайт с ИИ — по шагам</b><br>Чат-ИИ → Stitch → GitHub → Vercel + готовые промпты</span></a>
+
+  <a class="guide" style="background:#006194" href="app/"><span style="font-size:32px">📱</span><span><b>КиберЩит Душанбе — мобильное приложение</b><br>4 экрана: Главная · Угрозы · Проверка · SOS</span></a>
+  <a class="quest" href="game/"><span style="font-size:36px">🎮</span><span><b>Проверь себя: собери сайт с ИИ</b>8 заданий от идеи до публикации — в конце скачаешь свой готовый сайт</span><span class="go">Пройти →</span></a>
 </div>
 </body>
 </html>

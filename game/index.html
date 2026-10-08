@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Собери сайт с ИИ</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M2 28 L12 10 L17 18 L21 12 L30 28Z%27 fill=%27%23FF8A3D%27 stroke=%27%231B2340%27 stroke-width=%272%27/%3E%3C/svg%3E">
+<meta name="description" content="Обучающая игра: 8 станций от идеи до опубликованного сайта. Хакатон «Безопасность детей в интернете».">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Noto+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --sky:#E8F0FB;      /* утреннее небо над Памиром */
+  --snow:#FFFFFF;
+  --ink:#1B2340;      /* тёмный индиго — контуры и текст */
+  --muted:#4F5A78;
+  --line:#C3D2EA;
+  --apricot:#FF8A3D;  /* абрикос — главное действие, XP */
+  --apricot-soft:#FFE3CF;
+  --glacier:#2E6BE6;  /* ледник — выбор */
+  --glacier-soft:#DCE7FD;
+  --juniper:#16865F;  /* арча — верно */
+  --juniper-soft:#D9F3E8;
+  --pom:#C9303F;      /* гранат — ошибка, помощь */
+  --pom-soft:#FBE1E4;
+  --display:"Unbounded","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --shadow:4px 4px 0 var(--ink);
+  --r:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--sky);color:var(--ink);font:17px/1.55 var(--body);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:auto 0 0 0;height:38vh;pointer-events:none;z-index:0;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0 300 L0 210 L120 150 L210 190 L330 80 L420 140 L520 40 L640 160 L740 110 L860 190 L960 70 L1060 150 L1200 100 L1200 300Z' fill='%23CFDDF3'/%3E%3Cpath d='M0 300 L0 250 L160 200 L300 240 L450 170 L600 230 L780 180 L920 240 L1080 190 L1200 220 L1200 300Z' fill='%23BBCDEB'/%3E%3Cpath d='M330 80 L360 100 L345 102 L372 120 L330 98Z M520 40 L552 66 L536 66 L560 86 L520 60Z M960 70 L990 96 L972 94 L995 112 L960 88Z' fill='%23fff'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+a{color:var(--glacier)}
+:focus-visible{outline:3px solid var(--glacier);outline-offset:3px;border-radius:6px}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(232,240,251,.92);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+.top-in{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px}
+.back{font-weight:700;font-size:15px;text-decoration:none;color:var(--ink);padding:10px 4px;white-space:nowrap}
+.back:hover{text-decoration:underline}
+.logo{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo span{color:var(--apricot)}
+.xp{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.xp-bar{width:160px;height:14px;border:2px solid var(--ink);border-radius:99px;background:var(--snow);overflow:hidden}
+.xp-fill{height:100%;width:100%;background:repeating-linear-gradient(-45deg,var(--apricot) 0 8px,#FF9F5E 8px 16px);transform-origin:left;transform:scaleX(0);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.xp-num{font-family:var(--mono);font-size:15px;min-width:64px;text-align:right}
+.reset{border:2px solid var(--ink);background:var(--snow);border-radius:99px;padding:8px 14px;font-size:14px;font-weight:700;cursor:pointer;min-height:44px;white-space:nowrap}
+.reset.armed{background:var(--pom);color:#fff}
+
+/* ---------- layout ---------- */
+.layout{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:24px 20px 80px;display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
+.map{position:sticky;top:84px;background:var(--snow);border:2px solid var(--ink);border-radius:22px;box-shadow:var(--shadow);padding:18px 16px 14px}
+.map h2{font-family:var(--display);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px;color:var(--muted)}
+.trail{position:relative;list-style:none;margin:0;padding:6px 0 0;display:flex;flex-direction:column-reverse;gap:6px}
+.trail svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.summit{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;padding:4px 0 8px;color:var(--ink)}
+.summit .flag{width:40px;height:40px;display:grid;place-items:center;border:2px dashed var(--ink);border-radius:50%;font-size:18px;background:var(--sky)}
+.summit.on .flag{background:var(--apricot);border-style:solid}
+.st{position:relative;z-index:1}
+.st button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:4px 6px;border-radius:12px;cursor:pointer;text-align:left;min-height:48px}
+.st button:disabled{cursor:not-allowed}
+.st button:not(:disabled):hover{background:var(--sky)}
+.st .dot{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;background:var(--snow);font-size:18px;transition:transform .25s}
+.st .lbl{display:flex;flex-direction:column;line-height:1.2}
+.st .lbl b{font-size:15px}
+.st .lbl small{font-size:12px;color:var(--muted)}
+.st.locked .dot{background:#EEF2F8;border-style:dashed;color:#8892AB}
+.st.locked .lbl{opacity:.55}
+.st.done .dot{background:var(--juniper-soft)}
+.st.cur .dot{background:var(--apricot);transform:scale(1.12);box-shadow:3px 3px 0 var(--ink)}
+.st.view button{background:var(--glacier-soft)}
+.badges-mini{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:12px;border-top:2px dashed var(--line);min-height:20px;font-size:13px;color:var(--muted)}
+
+/* ---------- quest panel ---------- */
+.panel{background:var(--snow);border:2px solid var(--ink);border-radius:24px;box-shadow:6px 6px 0 var(--ink);padding:28px 32px 32px;min-width:0;outline:none}
+.q-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:14px}
+.q-num{font-family:var(--mono);font-size:13px;font-weight:600;background:var(--ink);color:#fff;border-radius:99px;padding:3px 10px}
+.q-head h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,3vw,38px);line-height:1.1;margin:0;letter-spacing:-.02em;flex-basis:100%}
+.where{font-size:14px;color:var(--muted)}
+.why{border-left:6px solid var(--apricot);background:var(--apricot-soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:0 0 22px}
+.why > b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.why p{margin:0}
+.task{margin:26px 0 0;padding-top:22px;border-top:2px dashed var(--line)}
+.why + .task{border-top:0;padding-top:0;margin-top:0}
+.task h3{font-size:20px;margin:0 0 4px;line-height:1.3}
+.task .hint-s{color:var(--muted);font-size:15px;margin:0 0 12px}
+.hint-s{color:var(--muted);font-size:15px}
+.step-tag{font-family:var(--mono);font-size:12px;color:var(--glacier);font-weight:600;display:block;margin-bottom:2px}
+
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.choice{position:relative;text-align:left;border:2px solid var(--ink);background:var(--snow);border-radius:var(--r);padding:12px 14px;cursor:pointer;min-height:56px;transition:transform .15s,box-shadow .15s}
+.choice:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink)}
+.choice:disabled{cursor:default}
+.choice[aria-pressed="true"]{background:var(--glacier-soft);box-shadow:3px 3px 0 var(--glacier);border-color:var(--glacier)}
+.choice b{display:block;font-size:16px;line-height:1.3}
+.choice small{display:block;color:var(--muted);font-size:13px;margin-top:2px;line-height:1.35}
+.choice .ic{font-size:22px;display:block;margin-bottom:2px}
+.choice.bad{background:var(--pom-soft);border-color:var(--pom);box-shadow:3px 3px 0 var(--pom)}
+.choice.good{background:var(--juniper-soft);border-color:var(--juniper);box-shadow:3px 3px 0 var(--juniper)}
+.choice .tj{display:block;font-weight:700;font-size:16px}
+.choice .ru{display:block;font-size:14px;color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 22px;border:2px solid var(--ink);border-radius:14px;background:var(--apricot);color:var(--ink);font-weight:800;font-size:17px;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;text-decoration:none;text-align:center}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{background:#E3E8F1;color:#6A7490;cursor:not-allowed;box-shadow:none;transform:none;border-color:#9AA4BD}
+.btn.ghost{background:var(--snow)}
+.btn.blue{background:var(--glacier);color:#fff}
+.btn.small{min-height:44px;padding:6px 14px;font-size:15px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
+
+.fb{margin-top:14px;border-radius:14px;padding:12px 16px;border:2px solid var(--ink);display:none;font-size:16px}
+.fb.show{display:block;animation:pop .3s ease}
+.fb.ok{background:var(--juniper-soft);border-color:var(--juniper)}
+.fb.no{background:var(--pom-soft);border-color:var(--pom)}
+.fb.info{background:var(--glacier-soft);border-color:var(--glacier)}
+.fb > b:first-child{display:block}
+
+/* order widget */
+.slots{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:8px}
+.slot,.empty-s{width:100%;display:flex;align-items:center;gap:12px;min-height:52px;border-radius:14px;padding:8px 12px;text-align:left;font-weight:600}
+.slot{border:2px solid var(--ink);background:var(--glacier-soft);cursor:pointer}
+.slot:disabled{cursor:default;color:var(--ink)}
+.slot.wrong{background:var(--pom-soft);border-color:var(--pom)}
+.slot.right{background:var(--juniper-soft);border-color:var(--juniper)}
+.empty-s{border:2px dashed var(--line);color:#6A7490;font-weight:400;font-size:15px}
+.n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff;font-family:var(--mono);font-size:14px}
+.empty-s .n{background:var(--line);color:var(--ink)}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);background:var(--snow);border-radius:99px;padding:8px 16px;min-height:48px;cursor:pointer;font-weight:600;text-align:left;transition:transform .15s}
+.chip:hover{transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.chip .plus{font-family:var(--mono);margin-right:6px}
+
+/* brief / prompt */
+.brief{border:2px solid var(--ink);border-radius:18px;padding:18px 20px;background:repeating-linear-gradient(0deg,transparent 0 31px,#EEF3FB 31px 32px),var(--snow);margin-top:16px;animation:rise .45s cubic-bezier(.2,.8,.2,1)}
+.brief h4{font-family:var(--display);font-size:16px;margin:0 0 10px}
+.brief dl{margin:0;display:grid;grid-template-columns:150px 1fr;gap:6px 14px}
+.brief dt{font-weight:800;font-size:14px;color:var(--muted)}
+.brief dd{margin:0}
+.code{font-family:var(--mono);font-size:13.5px;line-height:1.6;background:var(--ink);color:#E9EEFB;border-radius:14px;padding:16px 18px;white-space:pre-wrap;word-break:break-word;max-height:360px;overflow:auto;margin:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair .choice{font-family:var(--mono);font-size:14px;line-height:1.5}
+
+/* tone trainer */
+.tone{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.tone li{border:2px solid var(--ink);border-radius:14px;padding:12px 14px;background:var(--snow)}
+.tone li.ok{background:var(--juniper-soft);border-color:var(--juniper)}
+.tone li.no{background:var(--pom-soft);border-color:var(--pom)}
+.tone q{display:block;font-weight:700;font-size:17px;quotes:"«" "»"}
+.tone .tb{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.tone .tb button{min-height:44px;padding:6px 14px;border-radius:12px;border:2px solid var(--ink);background:var(--snow);cursor:pointer;font-weight:700}
+.tone .tb button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tone .why-t{font-size:15px;margin:8px 0 0}
+
+/* design studio */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.ctrl{margin-bottom:16px}
+.ctrl > b{display:block;font-size:15px;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:48px;padding:6px 14px;border:2px solid var(--ink);border-radius:12px;background:var(--snow);cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.sw{display:inline-flex}
+.sw i{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(0,0,0,.35);margin-left:-4px}
+.sw i:first-child{margin-left:0}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.checks li{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:8px 12px;font-size:15px}
+.checks li.ok{background:var(--juniper-soft)}
+.checks li.no{background:var(--pom-soft)}
+.checks li span:first-child{font-weight:800;flex:none;width:18px}
+
+/* phone */
+.phone{width:100%;max-width:340px;margin:0 auto;border:3px solid var(--ink);border-radius:36px;padding:12px 10px 16px;background:var(--ink);box-shadow:6px 6px 0 rgba(27,35,64,.25)}
+.phone::before{content:"";display:block;width:70px;height:6px;border-radius:9px;background:#3A4466;margin:0 auto 10px}
+.phone iframe{display:block;width:100%;height:min(600px,calc(100vh - 150px));min-height:440px;border:0;border-radius:24px;background:#fff}
+.phone.finding{background:var(--apricot)}
+.phone.finding::before{background:var(--ink)}
+.split{display:grid;grid-template-columns:340px minmax(0,1fr);gap:28px;align-items:start}
+
+/* builder */
+.typing .code{height:320px;max-height:none}
+.cursor{display:inline-block;width:8px;height:1.1em;background:var(--apricot);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+.gen-bar{height:12px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin:12px 0 0;background:var(--snow)}
+.gen-bar i{display:block;height:100%;background:var(--juniper);transform-origin:left;transform:scaleX(0)}
+.ai-chat{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+.ai-chat .av{flex:none;width:40px;height:40px;border-radius:12px;background:var(--glacier);color:#fff;display:grid;place-items:center;font-weight:800;border:2px solid var(--ink)}
+.ai-chat p{margin:0;background:var(--glacier-soft);border-radius:4px 14px 14px 14px;padding:10px 14px}
+
+/* bugs */
+.bugcount{display:flex;gap:8px;margin:0 0 12px}
+.bugcount span{flex:1;border:2px dashed var(--ink);border-radius:12px;padding:8px;text-align:center;font-weight:700;font-size:14px;background:var(--snow)}
+.bugcount span.found{border-style:solid;background:var(--apricot-soft)}
+.bugcount span.fixed{border-style:solid;background:var(--juniper-soft)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--ink);color:#fff;border-radius:14px;padding:12px 18px;font-weight:600;width:max-content;max-width:min(92vw,520px);transition:transform .25s,opacity .25s;pointer-events:none;text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* deploy log */
+.log{font-family:var(--mono);font-size:13.5px;background:#0E1428;color:#C8D3F0;border-radius:14px;padding:14px 16px;min-height:200px;margin:0;white-space:pre-wrap;word-break:break-word}
+.log .ok{color:#7BE0B4}
+.log .dim{color:#8D99BD}
+.url-card{margin-top:16px;border:2px solid var(--ink);border-radius:18px;padding:16px 18px;background:var(--juniper-soft);display:flex;flex-direction:column;gap:6px;animation:rise .45s cubic-bezier(.2,.8,.2,1)}
+.url-card .u{font-family:var(--mono);font-size:clamp(15px,2.2vw,20px);font-weight:600;word-break:break-all}
+.sim{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:#fff;border-radius:6px;padding:2px 8px;align-self:flex-start}
+.field{display:flex;flex-direction:column;gap:6px;max-width:440px}
+.field input{font:600 17px var(--mono);border:2px solid var(--ink);border-radius:12px;padding:10px 12px;min-height:52px;background:var(--snow);color:var(--ink);width:100%}
+.field .suffix{font-family:var(--mono);font-size:14px;color:var(--muted);word-break:break-all}
+
+/* badge modal */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(27,35,64,.55);display:grid;place-items:center;padding:16px;animation:fade .2s ease}
+.award{background:var(--snow);border:2px solid var(--ink);border-radius:26px;box-shadow:6px 6px 0 var(--ink);padding:28px 26px;max-width:420px;width:100%;text-align:center;animation:rise .4s cubic-bezier(.2,.8,.2,1)}
+.medal{width:110px;height:110px;margin:0 auto 12px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-size:48px;background:radial-gradient(circle at 35% 30%,#FFD2B0,var(--apricot));box-shadow:0 0 0 8px var(--apricot-soft);animation:spinin .6s cubic-bezier(.2,.8,.2,1)}
+.award h3{font-family:var(--display);font-size:22px;margin:0 0 4px}
+.award .plus{font-family:var(--mono);font-weight:600;font-size:20px;color:var(--juniper);margin:4px 0 8px}
+.award p{margin:0 0 16px;color:var(--muted)}
+
+/* final */
+.cert{border:3px double var(--ink);border-radius:24px;padding:28px;background:
+  radial-gradient(circle at 100% 0,var(--apricot-soft) 0 120px,transparent 121px),
+  radial-gradient(circle at 0 100%,var(--glacier-soft) 0 140px,transparent 141px),var(--snow);position:relative}
+.cert .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cert h2{font-family:var(--display);font-size:clamp(24px,3.4vw,40px);margin:4px 0 8px;line-height:1.15}
+.cert .score{font-family:var(--mono);font-size:18px;font-weight:600;margin:0}
+.medals{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin:20px 0 0}
+.medals div{text-align:center;font-size:12px;font-weight:700;line-height:1.25}
+.medals i{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 6px;border-radius:50%;border:2px solid var(--ink);font-style:normal;font-size:26px;background:radial-gradient(circle at 35% 30%,#FFD2B0,var(--apricot))}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.actions .btn{width:100%;font-size:16px}
+
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes spinin{from{opacity:0;transform:scale(.4) rotate(-90deg)}to{opacity:1;transform:none}}
+@keyframes blink{50%{opacity:0}}
+.enter{animation:rise .4s cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .studio,.split{grid-template-columns:1fr}
+  .medals{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;padding:14px 16px 60px;gap:14px}
+  .map{position:static;padding:10px 12px;border-radius:18px}
+  .map h2,.badges-mini,.trail svg,.summit{display:none}
+  .trail{flex-direction:row;justify-content:space-between;padding:0;gap:0}
+  .trail::before{content:"";position:absolute;left:18px;right:18px;top:50%;border-top:3px dashed var(--ink);opacity:.35}
+  .st button{padding:0;min-height:44px;width:auto}
+  .st .lbl{display:none}
+  .st .dot{width:34px;height:34px;font-size:15px}
+  .st.cur .dot{transform:scale(1.1)}
+  .st.view button{background:none}
+  .st.view .dot{outline:3px solid var(--glacier);outline-offset:2px}
+  .panel{padding:20px 16px 22px;border-radius:20px;box-shadow:4px 4px 0 var(--ink)}
+  .xp-bar{width:90px}
+}
+@media (max-width:620px){
+  body{font-size:16px}
+  .top-in{padding:8px 12px;gap:8px;flex-wrap:wrap}
+  .logo{font-size:15px;order:2;flex-basis:100%}
+  .back{order:0;padding:6px 0}
+  .xp{order:1;margin-left:auto;gap:6px}
+  .xp-bar{width:56px}
+  .xp-num{min-width:0;font-size:13px}
+  .reset{order:1;padding:6px 10px;font-size:13px}
+  .pair{grid-template-columns:1fr}
+  .choices{grid-template-columns:1fr}
+  .brief dl{grid-template-columns:1fr;gap:0}
+  .brief dd{margin-bottom:8px}
+  .phone iframe{height:min(540px,calc(100vh - 150px))}
+  .medals{gap:8px}
+  .medals i{width:46px;height:46px;font-size:21px}
+  .medals div{font-size:11px}
+  .actions{grid-template-columns:1fr}
+  .cert{padding:20px 16px}
+  .award{padding:22px 18px}
+  .bugcount span{font-size:12px;padding:6px 4px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="back" href="../">← Все кейсы</a>
+    <p class="logo">Собери сайт <span>с ИИ</span></p>
+    <div class="xp" aria-live="polite">
+      <div class="xp-bar" aria-hidden="true"><div class="xp-fill" id="xpFill"></div></div>
+      <span class="xp-num" id="xpNum">0 XP</span>
+    </div>
+    <button class="reset" id="resetBtn" type="button">Начать заново</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="map" aria-label="Карта квестов">
+    <h2>Тропа к вершине</h2>
+    <div class="summit" id="summit"><span class="flag" aria-hidden="true">⛳</span><span>Вершина: сайт в сети</span></div>
+    <ol class="trail" id="trail"></ol>
+    <div class="badges-mini" id="badgesMini"></div>
+  </nav>
+  <main class="panel" id="panel" tabindex="-1"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   ДАННЫЕ
+   ===================================================================== */
+const QUESTS = [
+  {id:"idea",   name:"Идея",          icon:"💡", badge:"Ясная цель",          where:"Где в реальности: ChatGPT / Gemini / Claude · 15–20 минут · Промпт 1 из гайда"},
+  {id:"prompt", name:"Промпт",        icon:"✍️", badge:"Мастер промпта",      where:"Где в реальности: чат-ИИ · Промпт 4 из гайда"},
+  {id:"content",name:"Контент",       icon:"💬", badge:"Добрые слова",        where:"Где в реальности: тот же чат-ИИ · 15 минут · контент — это 70% работы"},
+  {id:"design", name:"Дизайн (как в Stitch)", icon:"🎨", badge:"Глаз дизайнера", where:"Где в реальности: stitch.withgoogle.com · 15–20 минут"},
+  {id:"build",  name:"Сборка",        icon:"🛠️", badge:"Первый index.html",   where:"Где в реальности: чат-ИИ · 15 минут · один index.html"},
+  {id:"test",   name:"Тест и правки", icon:"🔍", badge:"Охотник за багами",   where:"Где в реальности: Chrome (F12 → ширина 360) + чат-ИИ · по одной правке"},
+  {id:"github", name:"GitHub",        icon:"📦", badge:"Код в надёжном месте",where:"Где в реальности: github.com/new · 5 минут"},
+  {id:"vercel", name:"Vercel",        icon:"🚀", badge:"Сайт в сети",         where:"Где в реальности: vercel.com/new · 3 минуты"}
+];
+
+const USERS = {
+  kid:    {ru:"Ребёнок 8–12", sub:"Читает медленно, нужны очень простые слова", ic:"🧒", aud:"self",
+           long:"дети 8–12 лет в Таджикистане", tone:"очень простые слова, на «ты», тёплый и спокойный тон, можно читать вместе со взрослым"},
+  teen:   {ru:"Подросток 13–17", sub:"Не любит нотаций, всё делает с телефона", ic:"🧑", aud:"self",
+           long:"подростки 13–17 лет в Таджикистане", tone:"на «ты», коротко, без морали и нравоучений, как старший друг"},
+  parent: {ru:"Родитель", sub:"Хочет понять, что происходит, и не напугать ребёнка", ic:"👩‍👧", aud:"adult",
+           long:"родители детей и подростков в Таджикистане", tone:"на «Вы», спокойно, без упрёков ни ребёнку, ни родителю"},
+  teacher:{ru:"Учитель", sub:"Ведёт классный час, видит класс каждый день", ic:"🧑‍🏫", aud:"adult",
+           long:"учителя и классные руководители в Таджикистане", tone:"на «Вы», практично: что заметить и что сказать ученику"}
+};
+
+const PROBLEMS = {
+  photo:    {ru:"Незнакомец просит фото", ic:"📷", slug:"moe-foto",
+             long:"незнакомцы в сети втираются в доверие и просят у детей фото или видео, а потом могут шантажировать"},
+  bully:    {ru:"Травля в чате", ic:"🗯️", slug:"chat-bez-travli",
+             long:"травля в чатах класса и соцсетях: насмешки, пересылка фото без спроса, исключение из групп"},
+  hack:     {ru:"Взлом аккаунта", ic:"🔐", slug:"shchit-akkaunta",
+             long:"аккаунты детей взламывают и через них обманывают друзей или шантажируют, потому что нет надёжного пароля и двухэтапной проверки"},
+  fake:     {ru:"Фейки и ИИ-подделки", ic:"🎭", slug:"proverj-fakt",
+             long:"дети верят фейкам и ИИ-подделкам (фото, видео, голос), пересылают их или попадаются на мошенников"},
+  overshare:{ru:"Слишком много личного в постах", ic:"📍", slug:"post-bez-lishnego",
+             long:"дети выкладывают слишком много личного: школу, адрес, геометки, номер телефона, моменты, когда они одни"}
+};
+
+/* Контент сайта: [проблема][аудитория] -> {tj, ru} -> s1 (узнать), s2 (действовать), s3 (поддержка) */
+const C = {
+photo:{
+ self:{
+  ru:{s1:{t:"Как выглядит уловка",l:"Иногда незнакомец в сети ведёт себя как друг, а потом просит фото.",i:["Пишет очень много комплиментов и быстро становится «лучшим другом».","Просит держать разговор в секрете от родителей.","Просит фото, видео или перейти в другой мессенджер.","Обещает подарок, деньги или игровые бонусы."]},
+      s2:{t:"Что делать прямо сейчас",l:"Можно не отвечать. Ты никому ничего не должен.",i:["Не отправляй фото и видео — даже если очень просят.","Сделай скриншоты переписки.","Заблокируй аккаунт и пожалуйся на него.","Расскажи взрослому, которому доверяешь."]},
+      s3:{t:"Ты не виноват",l:"Если ты уже отправил фото — это не твоя вина. Виноват тот, кто обманывает и давит.",i:["Не плати и не отправляй больше ничего, даже если угрожают.","Взрослые и милиция помогут остановить шантаж.","Позвонить можно в любой момент — кнопка «Мне нужна помощь» внизу."]}},
+  tj:{s1:{t:"Найрангро чӣ тавр бояд шинохт",l:"Баъзан шахси ношинос дар интернет худро дӯст нишон медиҳад, баъд акс металабад.",i:["Бисёр таъриф мекунад ва зуд «дӯсти беҳтарин» мешавад.","Хоҳиш мекунад, ки сӯҳбатро аз волидон пинҳон дорӣ.","Акс, видео мепурсад ё мегӯяд, ки ба мессенҷери дигар гузарӣ.","Тӯҳфа, пул ё бонусҳои бозӣ ваъда медиҳад."]},
+      s2:{t:"Ҳозир чӣ бояд кард",l:"Ҷавоб надодан мумкин аст. Ту ба касе қарздор нестӣ.",i:["Акс ва видео нафирист — ҳатто агар бисёр хоҳиш кунанд.","Аз мукотиба скриншот гир.","Аккаунтро блок кун ва шикоят навис.","Ба калонсоле, ки ба ӯ бовар дорӣ, нақл кун."]},
+      s3:{t:"Ту гунаҳкор нестӣ",l:"Агар аллакай акс фиристода бошӣ — ин гуноҳи ту нест. Гунаҳкор касест, ки фиреб медиҳад ва фишор меорад.",i:["Пул напардоз ва дигар чизе нафирист, ҳатто агар таҳдид кунанд.","Калонсолон ва милитсия кӯмак мекунанд, ки таҳдидро қатъ кунанд.","Ҳар вақт занг задан мумкин аст — тугмаи «Ба ман кӯмак лозим» дар поён."]}}},
+ adult:{
+  ru:{s1:{t:"Признаки, на которые стоит обратить внимание",l:"Такая уловка начинается с доверия: взрослый притворяется ровесником или другом.",i:["Ребёнок прячет телефон и резко закрывает чаты.","Появился новый «друг» из интернета, о котором он не рассказывает.","Подарки, деньги на счёте или игровые покупки неизвестно откуда.","Тревога и плохой сон после переписки."]},
+      s2:{t:"Как поговорить",l:"Главная цель — чтобы ребёнок снова пришёл к Вам, а не испугался.",i:["Начните спокойно: «Ты можешь рассказать мне всё, я не буду ругать».","Не забирайте телефон в наказание — так ребёнок перестанет делиться.","Вместе сохраните скриншоты, затем заблокируйте аккаунт.","Не удаляйте переписку — она нужна для заявления."]},
+      s3:{t:"Куда обратиться",l:"Ребёнок не виноват. Ответственность — на том, кто его обманул.",i:["При угрозах и шантаже — милиция, 102.","Нужна консультация — телефоны доверия 1313 и 1919.","Пожалуйтесь на аккаунт в самой соцсети."]}},
+  tj:{s1:{t:"Нишонаҳое, ки ба онҳо диққат диҳед",l:"Ин найранг аз бовар сар мешавад: шахси калон худро ҳамсол ё дӯст нишон медиҳад.",i:["Кӯдак телефонро пинҳон мекунад ва чатҳоро зуд мепӯшад.","«Дӯсти» нав аз интернет пайдо шуд, ки дар бораи ӯ нақл намекунад.","Тӯҳфаҳо, пул дар ҳисоб ё харидҳои бозӣ аз ҷои номаълум.","Ташвиш ва хоби бад баъд аз мукотиба."]},
+      s2:{t:"Чӣ тавр сӯҳбат кардан",l:"Мақсади асосӣ — кӯдак боз ба назди Шумо ояд, на ин ки тарсад.",i:["Ором сар кунед: «Ту метавонӣ ҳамаашро ба ман гӯӣ, ман ҷанг намекунам».","Телефонро ҳамчун ҷазо нагиред — он гоҳ кӯдак дигар нақл намекунад.","Якҷоя скриншот гиред, баъд аккаунтро блок кунед.","Мукотибаро нест накунед — он барои ариза лозим аст."]},
+      s3:{t:"Ба куҷо муроҷиат кардан",l:"Кӯдак гунаҳкор нест. Масъулият бар дӯши касест, ки ӯро фиреб дод.",i:["Ҳангоми таҳдид ва шантаж — милитсия, 102.","Маслиҳат лозим бошад — телефонҳои боварӣ 1313 ва 1919.","Дар худи шабакаи иҷтимоӣ аз аккаунт шикоят кунед."]}}}},
+bully:{
+ self:{
+  ru:{s1:{t:"Это травля, если…",l:"Шутка — когда смешно всем. Если больно одному — это уже не шутка.",i:["Над тобой смеются в чате снова и снова.","Публикуют твои фото или скриншоты без спроса.","Тебя специально не добавляют в группу или выкидывают из неё.","Пишут обидное в личку или с фейковых аккаунтов."]},
+      s2:{t:"Что делать прямо сейчас",l:"Не отвечай злостью — так травля только разгорается.",i:["Не отвечай обидчикам.","Сделай скриншоты сообщений.","Заблокируй аккаунт и пожалуйся на него.","Выйди из чата, если там плохо."]},
+      s3:{t:"Ты не один",l:"Травля — это не про тебя, а про тех, кто травит. Ты заслуживаешь уважения.",i:["Расскажи взрослому: родителям, учителю, школьному психологу.","Поддержи того, кого обижают, — даже одно доброе слово помогает.","Если угрожают — нажми «Мне нужна помощь»."]}},
+  tj:{s1:{t:"Ин таҳқир аст, агар…",l:"Шӯхӣ — вақте ки ҳама механданд. Агар ба як кас дард расад — ин дигар шӯхӣ нест.",i:["Дар чат пай дар пай ба ту механданд.","Аксҳо ё скриншотҳои туро бе иҷозат мегузоранд.","Туро қасдан ба гурӯҳ илова намекунанд ё берун мекунанд.","Дар паёми шахсӣ ё аз аккаунтҳои қалбакӣ суханони таҳқиромез менависанд."]},
+      s2:{t:"Ҳозир чӣ бояд кард",l:"Бо хашм ҷавоб нагардон — ин таҳқирро зиёдтар мекунад.",i:["Ба озордиҳандагон ҷавоб надеҳ.","Аз паёмҳо скриншот гир.","Аккаунтро блок кун ва шикоят навис.","Агар дар чат бад бошад, аз он баро."]},
+      s3:{t:"Ту танҳо нестӣ",l:"Таҳқир дар бораи ту нест, балки дар бораи онҳоест, ки озор медиҳанд. Ту сазовори эҳтиром ҳастӣ.",i:["Ба калонсол нақл кун: волидон, муаллим, равоншиноси мактаб.","Касеро, ки озор мебинад, дастгирӣ кун — ҳатто як сухани нек кӯмак мекунад.","Агар таҳдид кунанд — тугмаи «Ба ман кӯмак лозим»-ро пахш кун."]}}},
+ adult:{
+  ru:{s1:{t:"Признаки кибертравли",l:"Дети часто молчат: им стыдно или страшно, что станет хуже.",i:["Ребёнок расстраивается после телефона, не хочет в школу.","Вышел из всех чатов класса или удалил аккаунт.","Жалуется на плохое самочувствие по утрам.","Одноклассники пересылают о нём шутки или фото."]},
+      s2:{t:"Как помочь",l:"Сначала — выслушать. Решения — потом и вместе.",i:["Скажите: «Хорошо, что ты рассказал. Ты не виноват».","Сохраните скриншоты с датами.","Не пишите обидчикам и их родителям в гневе.","Сообщите классному руководителю и договоритесь о плане."]},
+      s3:{t:"Куда обратиться",l:"Травля — ответственность взрослых вокруг, а не только ребёнка.",i:["Школа: классный руководитель, психолог, администрация.","Консультация: телефоны доверия 1313 и 1919.","Угроза жизни и здоровью — милиция, 102."]}},
+  tj:{s1:{t:"Нишонаҳои таҳқир дар интернет",l:"Кӯдакон аксар хомӯшанд: шарм медоранд ё метарсанд, ки бадтар мешавад.",i:["Кӯдак баъд аз телефон ғамгин мешавад, ба мактаб рафтан намехоҳад.","Аз ҳамаи чатҳои синф баромад ё аккаунтро нест кард.","Субҳҳо аз беҳолӣ шикоят мекунад.","Ҳамсинфон дар бораи ӯ шӯхӣ ё акс мефиристанд."]},
+      s2:{t:"Чӣ тавр кӯмак кардан",l:"Аввал — гӯш кардан. Қарорҳо — баъд ва якҷоя.",i:["Гӯед: «Хуб шуд, ки нақл кардӣ. Ту гунаҳкор нестӣ».","Скриншотҳоро бо сана нигоҳ доред.","Ба озордиҳандагон ва волидонашон бо хашм нанависед.","Ба роҳбари синф хабар диҳед ва якҷоя нақша созед."]},
+      s3:{t:"Ба куҷо муроҷиат кардан",l:"Таҳқир масъулияти калонсолони атроф аст, на танҳо кӯдак.",i:["Мактаб: роҳбари синф, равоншинос, маъмурият.","Маслиҳат: телефонҳои боварӣ 1313 ва 1919.","Таҳдид ба ҳаёт ва саломатӣ — милитсия, 102."]}}}},
+hack:{
+ self:{
+  ru:{s1:{t:"Признаки взлома",l:"Взломать могут любого. Важно быстро заметить.",i:["Пришёл код входа, который ты не запрашивал.","Друзья получают от тебя странные сообщения или просьбы о деньгах.","Пароль вдруг перестал подходить.","В «Активных сеансах» есть чужое устройство."]},
+      s2:{t:"Защити аккаунт",l:"5 минут — и аккаунт намного надёжнее.",i:["Придумай длинный пароль, свой для каждого приложения.","Включи двухэтапную проверку.","Никому не говори код из SMS — даже «поддержке».","Выйди с чужих устройств в «Активных сеансах»."]},
+      s3:{t:"Если уже взломали",l:"Это случается со многими. Ты не виноват — действуй по шагам.",i:["Восстанови доступ через «Забыли пароль».","Предупреди друзей: «Это пишу не я».","Не плати и не отвечай шантажисту, сохрани скриншоты.","Расскажи взрослому."]}},
+  tj:{s1:{t:"Нишонаҳои шикастани аккаунт",l:"Аккаунти ҳар касро шикастан мумкин. Муҳим — зуд пай бурдан.",i:["Рамзи воридшавӣ омад, ки ту нахоста будӣ.","Дӯстон аз ту паёмҳои аҷиб ё дархости пул мегиранд.","Парол ногаҳон дуруст намеояд.","Дар «Сеансҳои фаъол» дастгоҳи бегона ҳаст."]},
+      s2:{t:"Аккаунтро муҳофизат кун",l:"5 дақиқа — ва аккаунт хеле боэътимодтар мешавад.",i:["Пароли дароз гузор, барои ҳар барнома алоҳида.","Тасдиқи дуқадамаро фаъол кун.","Рамзи SMS-ро ба касе нагӯ — ҳатто ба «хадамоти дастгирӣ».","Дар «Сеансҳои фаъол» аз дастгоҳҳои бегона баро."]},
+      s3:{t:"Агар аллакай шикастанд",l:"Ин бо бисёриҳо рух медиҳад. Ту гунаҳкор нестӣ — қадам ба қадам амал кун.",i:["Дастрасиро бо «Паролро фаромӯш кардед» барқарор кун.","Дӯстонро огоҳ кун: «Ин ман нестам, ки менависам».","Пул напардоз ва ба шантажгар ҷавоб надеҳ, скриншот гир.","Ба калонсол нақл кун."]}}},
+ adult:{
+  ru:{s1:{t:"Почему детские аккаунты взламывают",l:"Через аккаунт ребёнка обманывают его друзей и шантажируют его самого.",i:["Простой пароль: дата рождения, 123456.","Нет двухэтапной проверки.","Пароль вводили на сайтах «бесплатных призов».","Один пароль для всех приложений."]},
+      s2:{t:"Настройте вместе",l:"Сделайте это рядом с ребёнком, а не вместо него — так он научится.",i:["Длинный пароль-фраза, свой для каждого приложения.","Двухэтапная проверка в настройках безопасности.","Приватность: кто может писать и видеть номер.","Проверьте «Активные сеансы» и выйдите с чужих устройств."]},
+      s3:{t:"Если аккаунт уже взломан",l:"Не ругайте ребёнка — взламывают и взрослых.",i:["Восстановите доступ через «Забыли пароль» и смените пароли.","Предупредите друзей ребёнка о поддельных сообщениях.","При шантаже или вымогательстве — телефон доверия МВД 1919 или 102."]}},
+  tj:{s1:{t:"Чаро аккаунти кӯдаконро мешикананд",l:"Тавассути аккаунти кӯдак дӯстонашро фиреб медиҳанд ва худашро шантаж мекунанд.",i:["Пароли содда: санаи таваллуд, 123456.","Тасдиқи дуқадама нест.","Паролро дар сайтҳои «ҷоизаи ройгон» ворид кардаанд.","Як парол барои ҳамаи барномаҳо."]},
+      s2:{t:"Якҷоя танзим кунед",l:"Инро дар паҳлӯи кӯдак кунед, на ба ҷои ӯ — ҳамин тавр ӯ меомӯзад.",i:["Пароли дароз-ибора, барои ҳар барнома алоҳида.","Тасдиқи дуқадама дар танзимоти бехатарӣ.","Махфият: кӣ метавонад нависад ва рақамро бинад.","«Сеансҳои фаъол»-ро санҷед ва аз дастгоҳҳои бегона бароед."]},
+      s3:{t:"Агар аккаунт аллакай шикаста бошад",l:"Кӯдакро сарзаниш накунед — аккаунти калонсолонро ҳам мешикананд.",i:["Дастрасиро бо «Паролро фаромӯш кардед» барқарор кунед ва паролҳоро иваз кунед.","Дӯстони кӯдакро аз паёмҳои қалбакӣ огоҳ кунед.","Ҳангоми шантаж ё тамаъҷӯӣ — телефони боварии ВКД 1919 ё 102."]}}}},
+fake:{
+ self:{
+  ru:{s1:{t:"Как узнать подделку",l:"ИИ умеет делать фото, видео и голос, которые выглядят настоящими.",i:["Слишком шокирующе или слишком хорошо, чтобы быть правдой.","Странные руки, глаза, тени или текст на картинке.","Голос знакомого срочно просит деньги или код.","Нет источника: «все пишут», «скинули в чат»."]},
+      s2:{t:"Проверь за 1 минуту",l:"Не спеши пересылать. Пауза — твоя суперсила.",i:["Остановись: не пересылай сразу.","Найди источник: кто это опубликовал первым?","Проверь картинку через поиск по изображению.","Если просят деньги голосом друга — перезвони ему сам."]},
+      s3:{t:"Если подделка про тебя",l:"Если кто-то сделал подделку с тобой — ты не виноват. Это можно остановить.",i:["Сохрани ссылки и скриншоты.","Пожалуйся в соцсети: «поддельный контент».","Расскажи взрослому, которому доверяешь."]}},
+  tj:{s1:{t:"Қалбакиро чӣ тавр бояд шинохт",l:"Зеҳни сунъӣ метавонад акс, видео ва овозе созад, ки ҳақиқӣ менамояд.",i:["Аз ҳад зиёд ҳайратовар ё аз ҳад зиёд хуб, ки рост бошад.","Дастҳо, чашмҳо, сояҳо ё матни аҷиб дар расм.","Овози шиносе фавран пул ё рамз металабад.","Манбаъ нест: «ҳама менависанд», «ба чат партофтанд»."]},
+      s2:{t:"Дар 1 дақиқа санҷ",l:"Барои фиристодан шитоб накун. Таваққуф — қудрати махсуси ту.",i:["Ист: фавран нафирист.","Манбаъро ёб: кӣ аввал инро гузошт?","Расмро тавассути ҷустуҷӯ аз рӯи тасвир санҷ.","Агар бо овози дӯст пул пурсанд — худат ба ӯ занг зан."]},
+      s3:{t:"Агар қалбакӣ дар бораи ту бошад",l:"Агар касе бо ту қалбакӣ сохта бошад — ту гунаҳкор нестӣ. Инро қатъ кардан мумкин аст.",i:["Пайвандҳо ва скриншотҳоро нигоҳ дор.","Дар шабакаи иҷтимоӣ шикоят кун: «мӯҳтавои қалбакӣ».","Ба калонсоле, ки ба ӯ бовар дорӣ, нақл кун."]}}},
+ adult:{
+  ru:{s1:{t:"Какие подделки встречаются",l:"Дети верят видео больше, чем тексту. Этим пользуются мошенники.",i:["Фейковые «новости» и вирусные видео.","ИИ-фото одноклассников для насмешек.","Подделанный голос родственника с просьбой о деньгах.","«Конкурсы» с призами за пароль или код."]},
+      s2:{t:"Научите проверять",l:"Не запрещайте — тренируйтесь вместе. Разберите один пример.",i:["Правило паузы: не пересылать сразу.","Вопрос: «Кто это опубликовал и откуда он знает?»","Поиск по картинке — покажите, как это делается.","Договоритесь о семейном кодовом слове для звонков с просьбой о деньгах."]},
+      s3:{t:"Если подделка о ребёнке",l:"Ребёнок — пострадавший. Поддержите его и действуйте быстро.",i:["Сохраните ссылки и скриншоты с датами.","Пожалуйтесь на контент в соцсети.","При угрозах и шантаже — 1919 или 102."]}},
+  tj:{s1:{t:"Кадом қалбакиҳо вомехӯранд",l:"Кӯдакон ба видео бештар аз матн бовар мекунанд. Қаллобон аз ин истифода мебаранд.",i:["«Хабарҳо» ва видеоҳои вирусии қалбакӣ.","Аксҳои сохтаи ҳамсинфон барои масхара.","Овози қалбакии хешованд бо дархости пул.","«Озмунҳо» бо ҷоиза барои парол ё рамз."]},
+      s2:{t:"Санҷиданро омӯзонед",l:"Манъ накунед — якҷоя машқ кунед. Як мисолро таҳлил кунед.",i:["Қоидаи таваққуф: фавран нафиристед.","Савол: «Инро кӣ гузошт ва аз куҷо медонад?»","Ҷустуҷӯ аз рӯи тасвир — нишон диҳед, ки чӣ тавр.","Барои зангҳо бо дархости пул калимаи рамзии оилавӣ гузоред."]},
+      s3:{t:"Агар қалбакӣ дар бораи кӯдак бошад",l:"Кӯдак ҷабрдида аст. Ӯро дастгирӣ кунед ва зуд амал кунед.",i:["Пайвандҳо ва скриншотҳоро бо сана нигоҳ доред.","Дар шабакаи иҷтимоӣ аз мӯҳтаво шикоят кунед.","Ҳангоми таҳдид ва шантаж — 1919 ё 102."]}}}},
+overshare:{
+ self:{
+  ru:{s1:{t:"Что о тебе узнают из постов",l:"Один пост — мелочь. Десять постов — карта твоей жизни.",i:["Школа — по форме или фото у входа.","Где ты живёшь — по геометке и виду из окна.","Когда ты один дома — по сторис «все уехали».","Номер телефона в профиле."]},
+      s2:{t:"Наведи порядок",l:"Не нужно удалять всё. Просто убери лишнее.",i:["Сделай профиль закрытым.","Выключи геолокацию в камере и постах.","Скрой номер телефона.","Перед постом спроси себя: «Можно ли это показать незнакомцу?»"]},
+      s3:{t:"Если уже выложил лишнее",l:"Это можно исправить. Главное — без паники.",i:["Удали пост или убери его в архив.","Если кто-то использует твои данные — сделай скриншоты.","Расскажи взрослому. Если угрожают — нажми «Мне нужна помощь»."]}},
+  tj:{s1:{t:"Аз постҳо дар бораи ту чӣ мефаҳманд",l:"Як пост — чизи хурд. Даҳ пост — харитаи ҳаёти ту.",i:["Мактаб — аз либоси мактабӣ ё акс назди дарвоза.","Дар куҷо зиндагӣ мекунӣ — аз геотег ва манзараи тиреза.","Кай танҳо дар хона ҳастӣ — аз сторис «ҳама рафтанд».","Рақами телефон дар профил."]},
+      s2:{t:"Тартиб андоз",l:"Ҳамаашро нест кардан лозим нест. Танҳо зиёдатиро тоза кун.",i:["Профилро пӯшида кун.","Геолокатсияро дар камера ва постҳо хомӯш кун.","Рақами телефонро пинҳон кун.","Пеш аз пост аз худ пурс: «Инро ба шахси ношинос нишон додан мумкин аст?»"]},
+      s3:{t:"Агар аллакай зиёдатӣ гузошта бошӣ",l:"Инро ислоҳ кардан мумкин. Муҳим — ваҳм накардан.",i:["Постро нест кун ё ба архив гузор.","Агар касе маълумоти туро истифода барад — скриншот гир.","Ба калонсол нақл кун. Агар таҳдид кунанд — «Ба ман кӯмак лозим»-ро пахш кун."]}}},
+ adult:{
+  ru:{s1:{t:"Что дети рассказывают о себе",l:"Из открытых постов легко собрать адрес, школу и распорядок дня.",i:["Фото в школьной форме с названием школы.","Геометки дома, кружков, дороги.","Открытый профиль с номером телефона.","Сторис в реальном времени: «я один в парке»."]},
+      s2:{t:"Настройте вместе",l:"Покажите на своём профиле — пример взрослого работает лучше запретов.",i:["Закрытый профиль и список «близкие друзья».","Отключите геолокацию для камеры.","Скройте номер и дату рождения.","Правило: сторис — после того, как ушёл с места."]},
+      s3:{t:"Если данные уже утекли",l:"Без упрёков: ребёнок учится, а Вы рядом.",i:["Удалите посты, попросите друзей удалить репосты.","Сохраните доказательства, если кто-то пишет с угрозами.","Угрозы и преследование — 102, консультация — 1313."]}},
+  tj:{s1:{t:"Кӯдакон дар бораи худ чӣ нақл мекунанд",l:"Аз постҳои кушода суроға, мактаб ва тартиби рӯзро ҷамъ кардан осон аст.",i:["Акс бо либоси мактабӣ ва номи мактаб.","Геотегҳои хона, маҳфилҳо, роҳ.","Профили кушода бо рақами телефон.","Сторис дар вақти воқеӣ: «ман дар боғ танҳоям»."]},
+      s2:{t:"Якҷоя танзим кунед",l:"Дар профили худ нишон диҳед — намунаи калонсол аз манъ беҳтар кор мекунад.",i:["Профили пӯшида ва рӯйхати «дӯстони наздик».","Геолокатсияро барои камера хомӯш кунед.","Рақам ва санаи таваллудро пинҳон кунед.","Қоида: сторис — баъд аз он ки аз ҷой рафтӣ."]},
+      s3:{t:"Агар маълумот аллакай паҳн шуда бошад",l:"Бе маломат: кӯдак меомӯзад, Шумо дар паҳлӯ ҳастед.",i:["Постҳоро нест кунед, аз дӯстон хоҳиш кунед, ки репостҳоро нест кунанд.","Агар касе бо таҳдид нависад, далелҳоро нигоҳ доред.","Таҳдид ва таъқиб — 102, маслиҳат — 1313."]}}}}
+};
+
+/* Подзаголовок и совет — зависят от пользователя */
+const USER_TXT = {
+  kid:    {intro:{ru:"Короткие подсказки. Можно читать вместе со взрослым.",tj:"Маслиҳатҳои кӯтоҳ. Метавонӣ бо калонсол якҷоя хонӣ."},
+           tip:{ru:"Можно попросить взрослого пройти это вместе с тобой.",tj:"Метавонӣ аз калонсол хоҳиш кунӣ, ки инро якҷоя гузаред."}},
+  teen:   {intro:{ru:"3 шага, 2 минуты. Без морали — только то, что работает.",tj:"3 қадам, 2 дақиқа. Бе панд — танҳо он чи кор мекунад."},
+           tip:{ru:"Поделись этим с другом, которому сейчас трудно.",tj:"Инро бо дӯсте, ки ҳоло душвор аст, мубодила кун."}},
+  parent: {intro:{ru:"Как заметить и как поддержать ребёнка — спокойно и без упрёков.",tj:"Чӣ тавр пай бурдан ва фарзандро дастгирӣ кардан — ором ва бе маломат."},
+           tip:{ru:"Сохраните номера помощи в телефоне ребёнка и в своём.",tj:"Рақамҳои кӯмакро дар телефони кӯдак ва худатон сабт кунед."}},
+  teacher:{intro:{ru:"Подсказки для классного часа и разговора с учеником.",tj:"Маслиҳатҳо барои соати синфӣ ва сӯҳбат бо хонанда."},
+           tip:{ru:"Разберите этот сценарий на классном часе — без имён и реальных историй учеников.",tj:"Ин сенарияро дар соати синфӣ баррасӣ кунед — бе номҳо ва ҳодисаҳои воқеии хонандагон."}}
+};
+
+/* Заголовки: 2 хороших + 1 плохой */
+const HEADS = {
+  photo:[{tj:"Акси ман — танҳо аз они ман",ru:"Моё фото — только моё"},{tj:"Акс мепурсанд? Нақша ҳаст",ru:"Просят фото? Есть план"},{tj:"Акс фиристодӣ? Худат гунаҳкорӣ!",ru:"Отправил фото? Сам виноват!",bad:"Это обвинение пострадавшего. Ребёнок, который уже отправил фото, закроет сайт и никому не расскажет. Виноват тот, кто обманул."}],
+  bully:[{tj:"Чат бе таҳқир",ru:"Чат без травли"},{tj:"Дар чат озор медиҳанд? Ту танҳо нестӣ",ru:"Обижают в чате? Ты не один"},{tj:"Заиф набош — ҷавоб деҳ!",ru:"Не будь слабаком — дай сдачи!",bad:"Здесь стыд («слабак») и совет, который делает травлю сильнее. Хороший заголовок поддерживает, а не подталкивает к ссоре."}],
+  hack: [{tj:"Сипари аккаунт",ru:"Щит аккаунта"},{tj:"Аккаунтро дар 5 дақиқа ҳимоя кун",ru:"Защити аккаунт за 5 минут"},{tj:"ШИКАСТАН! Маълумоти туро аллакай дуздиданд!!!",ru:"ВЗЛОМ! Твои данные уже украли!!!",bad:"Капслок и «уже украли» пугают. Испуганный человек не действует, а закрывает страницу. Лучше спокойно пообещать понятный результат."}],
+  fake: [{tj:"Аввал санҷ, баъд бовар кун",ru:"Проверь, прежде чем верить"},{tj:"Видео метавонад дурӯғ гӯяд. Дар як дақиқа санҷ",ru:"Видео может врать. Проверь за минуту"},{tj:"Ба қалбакӣ бовар кардӣ? Чӣ қадар соддаӣ",ru:"Поверил фейку? Ну ты и наивный",bad:"Это насмешка. Фейки обманывают и взрослых — стыдить за это бесполезно и обидно."}],
+  overshare:[{tj:"Пост бе зиёдатӣ",ru:"Пост без лишнего"},{tj:"Лаҳзаҳоро мубодила кун, на суроғаро",ru:"Делись моментами, а не адресом"},{tj:"Суроғаро гузоштӣ? Мунтазири бало бош!",ru:"Выложил адрес? Жди беды!",bad:"Запугивание («жди беды») вызывает панику, а не действие. Лучше показать, как сделать безопаснее."}]
+};
+const BTNS = [
+  {tj:"Оғоз кардан",ru:"Начать"},
+  {tj:"Чӣ бояд кард? →",ru:"Что делать? →"},
+  {tj:"ФАВРАН! ХАТАР!",ru:"СРОЧНО! ОПАСНОСТЬ!",bad:"Кнопка кричит и пугает. Ребёнок в стрессе и так напуган — кнопка должна звать спокойно и честно говорить, что будет дальше."}
+];
+
+const PALETTES = {
+  teal:  {name:"Бирюза и абрикос", bg:"#F3F8F7", card:"#FFFFFF", ink:"#12302F", p:"#0E6B6B", onp:"#FFFFFF", acc:"#F4B942", desc:"глубокий бирюзовый + тёплый жёлтый на светлом фоне"},
+  garden:{name:"Сад",              bg:"#F5F9F1", card:"#FFFFFF", ink:"#1B2E1F", p:"#2E7D4F", onp:"#FFFFFF", acc:"#F29E4C", desc:"спокойный зелёный + оранжевый акцент на светлом фоне"},
+  night: {name:"Ночное небо",      bg:"#121A2F", card:"#1C2744", ink:"#EEF2FA", p:"#7CC4FF", onp:"#0B1426", acc:"#FFC857", desc:"тёмная тема: тёмно-синий фон, голубые кнопки, жёлтый акцент"},
+  pastel:{name:"Нежная пастель",   bg:"#FFFFFF", card:"#F5FAFD", ink:"#A3B1BB", p:"#A8D8EA", onp:"#FFFFFF", acc:"#FBE3E8", desc:"светлая пастель"}
+};
+const BSTYLE = {fill:"заливка", outline:"контур", soft:"заливка с тенью"};
+
+const UI = {
+  tj:{brand:"Бехатарӣ дар интернет",next:"Идома",back:"Бозгашт",done:"Иҷро шуд",undo:"Иҷро шуд ✓",restart:"Аз аввал",help:"Ба ман кӯмак лозим",close:"Пӯшидан",
+      step:"Қадами {n} аз 3",prog:"{n} аз {m} иҷро шуд",helpT:"Ба куҷо занг задан",
+      c102:"Милитсия — хатари фаврӣ",c1313:"Телефони боварии миллӣ",c1919:"Телефони боварии ВКД — шантаж, таҳдид, қаллобӣ",
+      note:"Рақамҳо аз манбаъҳои кушода санҷида шудаанд (октябри 2026). Пеш аз намоиш боз санҷед.",
+      priv:"Бе бақайдгирӣ. Сайт маълумоти шахсӣ ҷамъ намекунад.",nameQ:"Номи ту чист?",save:"Нигоҳ доштан",
+      helpSub:"Занг задан метавонӣ ҳар вақт. Ту танҳо нестӣ.",helpSubA:"Агар хатари фаврӣ бошад — 102."},
+  ru:{brand:"Безопасность в интернете",next:"Дальше",back:"Назад",done:"Сделано",undo:"Сделано ✓",restart:"Сначала",help:"Мне нужна помощь",close:"Закрыть",
+      step:"Шаг {n} из 3",prog:"Сделано {n} из {m}",helpT:"Куда позвонить",
+      c102:"Милиция — срочная опасность",c1313:"Национальный телефон доверия",c1919:"Телефон доверия МВД — шантаж, угрозы, мошенничество",
+      note:"Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте.",
+      priv:"Без регистрации. Сайт не собирает личные данные.",nameQ:"Как тебя зовут?",save:"Сохранить",
+      helpSub:"Звонить можно в любой момент. Ты не один.",helpSubA:"Если опасность срочная — 102."}
+};
+
+/* =====================================================================
+   СОСТОЯНИЕ
+   ===================================================================== */
+const KEY = "ai-site-quest-v1";
+const fresh = () => ({done:[false,false,false,false,false,false,false,false], xp:0, view:0, final:false,
+  user:null, problem:null, order:null, blocks:[], pairs:0, tone:{}, head:null, btn:null,
+  design:{pal:"teal",rad:14,fs:14,bh:36,bs:"fill"}, bugs:{}, repo:"", miss:{}});
+let S = fresh();
+try{ const raw = localStorage.getItem(KEY); if(raw){ S = Object.assign(fresh(), JSON.parse(raw)); } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* =====================================================================
+   УТИЛИТЫ
+   ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function shuffledNot(a){ if(a.length<2) return a.slice(); let r; do{ r=shuffle(a); }while(r.every((x,i)=>x===a[i])); return r; }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600); }
+function fb(el, type, html){ el.className="fb show "+type; el.innerHTML=html; }
+function miss(q){ S.miss[q]=(S.miss[q]||0)+1; save(); }
+function lum(hex){ const n=parseInt(hex.slice(1),16); return [n>>16,(n>>8)&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);}).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0); }
+function contrast(a,b){ const x=lum(a), y=lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); }
+const aud = () => USERS[S.user] ? USERS[S.user].aud : "self";
+const content = () => C[S.problem][aud()];
+const repoName = () => S.repo || (PROBLEMS[S.problem] ? PROBLEMS[S.problem].slug : "my-site");
+const headPair = () => HEADS[S.problem][S.head==null?0:S.head];
+const btnPair = () => BTNS[S.btn==null?0:S.btn];
+
+/* =====================================================================
+   ГЕНЕРАТОР САЙТА — то, что игрок скачает
+   ===================================================================== */
+function buildSiteContent(){
+  const out = {};
+  ["tj","ru"].forEach(l=>{
+    const c = content()[l];
+    out[l] = Object.assign({}, UI[l], {head:headPair()[l], start:btnPair()[l], intro:USER_TXT[S.user].intro[l], tip:USER_TXT[S.user].tip[l],
+      s1:c.s1, s2:c.s2, s3:c.s3, adult: aud()==="adult"});
+  });
+  return out;
+}
+function genSite(opts){
+  opts = opts || {};
+  const d = S.design, P = PALETTES[d.pal];
+  const bug = opts.bugs || {};
+  const data = JSON.stringify(buildSiteContent()).replace(/</g,"\\u003c");
+  const bugJs = JSON.stringify({untr:!!bug.untr,tiny:!!bug.tiny,name:!!bug.name});
+  const title = esc(headPair().ru);
+  const btnCss = d.bs==="outline"
+    ? ".btn.main{background:transparent;color:var(--p);border:2px solid var(--p)}"
+    : d.bs==="soft" ? ".btn.main{background:var(--p);color:var(--onp);box-shadow:0 4px 0 rgba(0,0,0,.22)}"
+    : ".btn.main{background:var(--p);color:var(--onp)}";
+  return `<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%23C62828%27/%3E%3C/svg%3E">
+<!-- Сделано в игре «Собери сайт с ИИ» · хакатон «Безопасность детей в интернете», 8 октября 2026.
+     Таджикский текст обязательно должен вычитать носитель языка. Номера помощи перепроверьте перед показом. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:${P.bg};--card:${P.card};--ink:${P.ink};--p:${P.p};--onp:${P.onp};--acc:${P.acc};--r:${d.rad}px;--fs:${d.fs}px;--bh:${d.bh}px;--help:#C62828;--line:rgba(127,127,127,.28)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs)/1.55 "Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:.85em;letter-spacing:.02em;opacity:.85}
+.lang{display:flex;border:2px solid var(--p);border-radius:999px;overflow:hidden;flex:none}
+.lang button{min-width:52px;min-height:44px;border:0;background:transparent;color:var(--ink);font-weight:800}
+.lang button[aria-pressed="true"]{background:var(--p);color:var(--onp)}
+main{max-width:560px;margin:0 auto;padding:16px 16px 130px}
+.dots{display:flex;align-items:center;gap:8px;margin:4px 0 14px;font-size:.85em;font-weight:600;opacity:.85}
+.dots i{width:28px;height:6px;border-radius:9px;background:var(--line)}
+.dots i.on{background:var(--p)}
+h1{font-size:calc(var(--fs)*1.9);line-height:1.15;margin:4px 0 8px;font-weight:800;letter-spacing:-.01em}
+h2{font-size:calc(var(--fs)*1.35);line-height:1.2;margin:20px 0 6px;font-weight:800}
+.lead{margin:0 0 14px;opacity:.9}
+.hero{background:var(--card);border-radius:var(--r);padding:20px 18px;margin-bottom:6px;border-top:6px solid var(--acc)}
+.hero p{margin:0}
+.cards{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.cards li{background:var(--card);border-radius:var(--r);padding:14px 16px;display:flex;gap:12px;align-items:center;border:1px solid var(--line)}
+.cards .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--acc);color:#1d1d1d;display:grid;place-items:center;font-weight:800;font-size:.9em}
+.cards .txt{flex:1}
+.cards li.is-done{border:2px solid var(--p)}
+.cards li.t{flex-wrap:wrap}
+.cards li.t .txt{flex:1 1 calc(100% - 42px)}
+.cards li.t .tick{margin-left:42px}
+.tick{flex:none;min-height:var(--bh);min-width:var(--bh);padding:0 12px;border-radius:calc(var(--r)*.7);border:2px solid var(--p);background:transparent;color:var(--ink);font-weight:700;font-size:.85em}
+.tick[aria-pressed="true"]{background:var(--p);color:var(--onp);animation:bounce .35s}
+.progress{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin:4px 0 6px}
+.progress i{display:block;height:100%;background:var(--p);transform-origin:left;transition:transform .35s}
+.btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{min-height:var(--bh);padding:0 22px;border-radius:var(--r);border:2px solid transparent;font-weight:800;font-size:1em;flex:1 1 auto}
+.btn.alt{background:transparent;color:var(--ink);border-color:var(--line);flex:0 1 auto}
+${btnCss}
+.tip{margin-top:14px;padding:12px 16px;border-radius:var(--r);border:2px dashed var(--acc)}
+.priv{font-size:.8em;opacity:.75;margin-top:22px}
+.namebug{background:var(--card);border-radius:var(--r);padding:14px 16px;margin-top:14px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line)}
+.namebug input{font:inherit;padding:10px;border-radius:8px;border:1px solid #999;width:100%}
+.helpbtn{position:fixed;left:16px;right:16px;bottom:16px;max-width:528px;margin:0 auto;min-height:56px;border:0;border-radius:var(--r);background:var(--help);color:#fff;font-weight:800;font-size:1.05em;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:6}
+.helpbtn.tiny{left:auto;right:12px;min-height:0;height:26px;padding:0 8px;font-size:11px;font-weight:600;max-width:none;box-shadow:none}
+.modal{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.modal.open{display:flex}
+.sheet{background:var(--card);color:var(--ink);border-radius:calc(var(--r) + 6px);padding:20px 18px;width:100%;max-width:520px;animation:up .3s ease;max-height:94vh;overflow:auto}
+.sheet h2{margin-top:0}
+.tel{display:flex;align-items:center;gap:14px;min-height:60px;padding:10px 14px;border-radius:var(--r);background:var(--bg);color:var(--ink);text-decoration:none;margin-bottom:8px;border:2px solid var(--line)}
+.tel b{font-size:1.5em;min-width:70px;color:var(--help)}
+.tel span{flex:1;font-weight:600;line-height:1.3}
+.sheet .btn{width:100%}
+.note{font-size:.78em;opacity:.8;margin:10px 0 14px}
+.screen.anim{animation:in .35s ease}
+.anim .cards li{animation:in .35s ease both}
+.anim .cards li:nth-child(2){animation-delay:.06s}.anim .cards li:nth-child(3){animation-delay:.12s}.anim .cards li:nth-child(4){animation-delay:.18s}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes bounce{40%{transform:scale(1.08)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bar"><span class="brand" id="brand"></span>
+  <div class="lang" role="group" aria-label="Забон / Язык"><button type="button" data-lang="tj">TJ</button><button type="button" data-lang="ru">RU</button></div></div>
+<main id="app"></main>
+<button type="button" class="helpbtn" id="help" data-help="1"></button>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="sheet" id="sheet"></div>
+</div>
+<script>
+var C = ${data};
+var BUG = ${bugJs};
+var lang = "tj";
+try { var saved = localStorage.getItem("site-lang"); if (saved === "tj" || saved === "ru") lang = saved; } catch (e) {}
+${opts.lang ? 'lang = "'+opts.lang+'";' : ''}
+var cur = 0, done = {}, first = true;
+function e(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function fmt(s, o){ return s.replace(/\\{(\\w+)\\}/g, function(m, k){ return o[k]; }); }
+function list(items, ticks){
+  var T = C[lang], h = '<ul class="cards">';
+  for (var i = 0; i < items.length; i++) {
+    var on = ticks && done[i];
+    h += '<li class="' + (ticks ? 't' : '') + (on ? ' is-done' : '') + '"><span class="k">' + (i + 1) + '</span><span class="txt">' + e(items[i]) + '</span>' +
+      (ticks ? '<button type="button" class="tick" data-done="' + i + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + (on ? T.undo : T.done) + '</button>' : '') + '</li>';
+  }
+  return h + '</ul>';
+}
+function dots(){
+  var T = C[lang], s = fmt(T.step, {n: cur + 1}), h = '<div class="dots">';
+  for (var i = 0; i < 3; i++) h += '<i' + (i <= cur ? ' class="on"' : '') + '></i>';
+  return h + '<span>' + e(s) + '</span></div>';
+}
+function render(focus){
+  var T = C[lang], h = '';
+  document.documentElement.lang = lang === "tj" ? "tg" : "ru";
+  document.title = T.head;
+  document.getElementById("brand").textContent = T.brand;
+  var lb = document.querySelectorAll("[data-lang]");
+  for (var i = 0; i < lb.length; i++) lb[i].setAttribute("aria-pressed", lb[i].getAttribute("data-lang") === lang ? "true" : "false");
+  h += '<section class="screen' + (focus || first ? ' anim' : '') + '">' + dots();
+  if (cur === 0) {
+    var startTxt = (BUG.untr && lang === "tj") ? C.ru.start : T.start;
+    h += '<div class="hero"><h1>' + e(T.head) + '</h1><p>' + e(T.intro) + '</p></div>' +
+      '<h2>' + e(T.s1.t) + '</h2><p class="lead">' + e(T.s1.l) + '</p>' + list(T.s1.i) +
+      (BUG.name ? '<form class="namebug" data-bug="name" onsubmit="return false"><label>' + e(T.nameQ) + '<br><input type="text" autocomplete="off"></label><button type="button" class="btn alt">' + e(T.save) + '</button></form>' : '') +
+      '<div class="btns"><button type="button" class="btn main" data-go="1"' + (BUG.untr ? ' data-bug="untr"' : '') + '>' + e(startTxt) + '</button></div>';
+  } else if (cur === 1) {
+    var n = 0, m = T.s2.i.length;
+    for (var k in done) if (done[k]) n++;
+    h += '<h1>' + e(T.s2.t) + '</h1><p class="lead">' + e(T.s2.l) + '</p>' +
+      '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="' + m + '" aria-valuenow="' + n + '"><i style="transform:scaleX(' + (n / m) + ')"></i></div>' +
+      '<p class="lead" aria-live="polite">' + e(fmt(T.prog, {n: n, m: m})) + '</p>' + list(T.s2.i, true) +
+      '<div class="btns"><button type="button" class="btn alt" data-go="0">' + e(T.back) + '</button><button type="button" class="btn main" data-go="2">' + e(T.next) + '</button></div>';
+  } else {
+    h += '<h1>' + e(T.s3.t) + '</h1><p class="lead">' + e(T.s3.l) + '</p>' + list(T.s3.i) +
+      '<p class="tip">' + e(T.tip) + '</p>' +
+      '<div class="btns"><button type="button" class="btn alt" data-go="1">' + e(T.back) + '</button><button type="button" class="btn main" data-go="0" data-reset="1">' + e(T.restart) + '</button></div>';
+  }
+  h += '<p class="priv">' + e(T.priv) + '</p></section>';
+  var app = document.getElementById("app");
+  app.innerHTML = h;
+  var hb = document.getElementById("help");
+  hb.textContent = T.help;
+  hb.className = "helpbtn" + (BUG.tiny ? " tiny" : "");
+  if (BUG.tiny) hb.setAttribute("data-bug", "tiny"); else hb.removeAttribute("data-bug");
+  first = false;
+  if (focus) { var h1 = app.querySelector("h1"); if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus(); } }
+}
+function openHelp(){
+  var T = C[lang];
+  var tel = function(n, t){ return '<a class="tel" href="tel:' + n + '"><b>' + n + '</b><span>' + e(t) + '</span></a>'; };
+  document.getElementById("sheet").innerHTML = '<h2 id="mt">' + e(T.helpT) + '</h2><p class="lead">' + e(T.adult ? T.helpSubA : T.helpSub) + '</p>' +
+    tel("102", T.c102) + tel("1313", T.c1313) + tel("1919", T.c1919) +
+    '<p class="note">' + e(T.note) + '</p><button type="button" class="btn main" data-close="1">' + e(T.close) + '</button>';
+  var m = document.getElementById("modal");
+  m.classList.add("open");
+  m.querySelector("[data-close]").focus();
+}
+function closeHelp(){ document.getElementById("modal").classList.remove("open"); document.getElementById("help").focus(); }
+document.addEventListener("click", function(ev){
+  if (ev.target.id === "modal") { closeHelp(); return; }
+  var t = ev.target.closest("button");
+  if (!t) return;
+  if (t.hasAttribute("data-lang")) { lang = t.getAttribute("data-lang"); try { localStorage.setItem("site-lang", lang); } catch (e2) {} render(); return; }
+  if (t.hasAttribute("data-go")) { if (t.hasAttribute("data-reset")) done = {}; cur = +t.getAttribute("data-go"); render(true); window.scrollTo(0, 0); return; }
+  if (t.hasAttribute("data-done")) { var i = t.getAttribute("data-done"); done[i] = !done[i]; render(); var b = document.querySelector('[data-done="' + i + '"]'); if (b) b.focus(); return; }
+  if (t.hasAttribute("data-help")) { openHelp(); return; }
+  if (t.hasAttribute("data-close")) { closeHelp(); }
+});
+document.addEventListener("keydown", function(ev){ if (ev.key === "Escape" && document.getElementById("modal").classList.contains("open")) closeHelp(); });
+render();
+<\/script>
+</body>
+</html>`;
+}
+
+/* =====================================================================
+   ПРОМПТ
+   ===================================================================== */
+const BLOCKS = [
+  {id:"who",     label:"Кто пользователь", req:true,  why:"Без пользователя ИИ напишет «для всех» — то есть ни для кого. Возраст меняет слова, тон и размер кнопок."},
+  {id:"problem", label:"Какая проблема",   req:true,  why:"Одна чёткая проблема = один понятный сайт. ИИ не угадает, что именно вы решаете."},
+  {id:"screens", label:"3 экрана сценария",req:true,  why:"Сценарий из 3 экранов — скелет сайта. Без него ИИ придумает свои экраны."},
+  {id:"lang",    label:"Языки TJ + RU",    req:true,  why:"Пользователи говорят по-таджикски и по-русски. Если не попросить — сайт будет на одном языке."},
+  {id:"tech",    label:"Один HTML-файл, без фреймворков", req:true, why:"Иначе ИИ может выдать проект на React с npm — его не открыть двойным щелчком и не залить через «Upload files»."},
+  {id:"privacy", label:"Без сбора данных", req:true,  why:"Детский сайт не должен спрашивать имя, фото и номер. Если не запретить — ИИ часто сам добавляет «форму регистрации»."},
+  {id:"help",    label:"Кнопка помощи",    req:true,  why:"Кнопка «Мне нужна помощь» с номерами 102, 1313, 1919 — на каждом экране. В теме безопасности это главное."},
+  {id:"a11y",    label:"Крупные кнопки и шрифт", req:true, why:"Дешёвый Android, маленький экран: кнопки от 48px, шрифт от 16px, ширина от 360px."},
+  {id:"style",   label:"Стиль",            req:false, why:"Не обязателен, но помогает: без него ИИ выберет случайные цвета."},
+  {id:"anim",    label:"Анимации",         req:false, why:"Не обязательны. Если просите — только мягкие и с отключением при prefers-reduced-motion."},
+  {id:"bad_react",label:"Используй React и npm", bad:true, why:"Сайт на React нужно собирать в терминале. Для хакатона без программирования нужен один index.html."},
+  {id:"bad_reg", label:"Добавь регистрацию: имя, фото, телефон", bad:true, why:"Сбор личных данных детей — риск и нарушение приватности. Сайт должен работать без входа."},
+  {id:"bad_vibe",label:"Сделай как-нибудь красиво, на твой вкус", bad:true, why:"Расплывчатая просьба = случайный результат. Лучше описать стиль конкретно: цвета, кнопки, шрифт."}
+];
+function promptLines(sel, full){
+  const u = USERS[S.user], p = PROBLEMS[S.problem], c = content().ru, d = S.design, P = PALETTES[d.pal];
+  const has = id => sel.includes(id);
+  const L = [];
+  const J = a => a.map(s=>s.replace(/[.!]$/,"")).join("; ") + ".";
+  if(has("tech")) L.push("Создай одностраничное веб-приложение в ОДНОМ HTML-файле на чистом HTML, CSS и JavaScript (без React, без фреймворков и npm — ничего не нужно устанавливать).");
+  else L.push("Создай сайт.");
+  if(full) L.push(`Название: «${headPair().tj} / ${headPair().ru}».`);
+  if(has("who")) L.push(`Пользователь: ${u.long}, дешёвый Android, слабый интернет.`);
+  if(has("problem")) L.push(`Проблема: ${p.long}.`);
+  if(has("screens")) L.push(`Главный сценарий из 3 экранов:\n1) «${c.s1.t}» — ${c.s1.l} Карточки: ${J(c.s1.i)}\n2) «${c.s2.t}» — ${c.s2.i.length} шага, у каждого кнопка «Сделано», сверху полоса прогресса «Сделано N из ${c.s2.i.length}»: ${J(c.s2.i)}\n3) «${c.s3.t}» — ${c.s3.l} ${J(c.s3.i)} Кнопки «Назад» и «Сначала».`);
+  if(has("help")) L.push("Кнопка «Мне нужна помощь / Ба ман кӯмак лозим» внизу на каждом экране, открывает окно с контактами (кнопки tel:): 102 — милиция; 1313 — национальный телефон доверия; 1919 — телефон доверия МВД. Под номерами строка: «Номера проверены по открытым источникам (октябрь 2026). Перед показом перепроверьте.»");
+  if(has("lang")) L.push("Языки: таджикский (по умолчанию) и русский, переключатель «TJ | RU» вверху, выбор запоминается в localStorage. Весь текст храни в одном JavaScript-объекте content = { tj: {...}, ru: {...} }.");
+  if(full) L.push(`Заголовок первого экрана: «${headPair().tj}» / «${headPair().ru}». Главная кнопка: «${btnPair().tj}» / «${btnPair().ru}». Тон: ${u.tone}. Без морали, без стыда, без пугающих слов, никогда не обвинять пострадавшего.`);
+  if(has("a11y")) L.push(`Требования: мобильный экран от 360px, кнопки не меньше 48px${full?` (сделай ${d.bh}px)`:""}, шрифт не меньше 16px${full?` (сделай ${d.fs}px)`:""}, шрифт Noto Sans с поддержкой букв ӣ ӯ ҳ қ ҷ ғ (Google Fonts + системный запасной).`);
+  if(has("privacy")) L.push("Без входа и регистрации, без сбора имени, фото и номера телефона, без внешних запросов кроме шрифта.");
+  if(has("style")) L.push(full ? `Стиль: ${P.desc}; скругление углов ${d.rad}px; кнопки — ${BSTYLE[d.bs]}; карточки с большими отступами. [Если есть — прикрепляю HTML/скриншоты из Stitch: повтори этот дизайн.]`
+                              : "Стиль: [цвета, скругление и кнопки выберешь на станции «Дизайн»]. [Если есть — прикрепляю HTML/скриншоты из Stitch: повтори этот дизайн.]");
+  if(has("anim")) L.push("Анимации: плавная смена экранов, появление карточек по очереди, «Сделано» с лёгким отскоком. Только CSS (transition и @keyframes), 150–400 мс, только transform и opacity, без мигания; при prefers-reduced-motion анимации отключаются.");
+  if(has("bad_react")) L.push("Используй React и npm.");
+  if(has("bad_reg")) L.push("Добавь регистрацию: имя, фото, номер телефона.");
+  if(has("bad_vibe")) L.push("Сделай как-нибудь красиво, на твой вкус.");
+  L.push("Выдай весь файл целиком одним блоком кода.");
+  return L.join("\n");
+}
+const finalPrompt = () => promptLines(S.blocks.filter(b=>!b.startsWith("bad")), true);
+
+/* =====================================================================
+   КАРТА, XP, ЗАВЕРШЕНИЕ
+   ===================================================================== */
+const XP_MAX = 1000;
+const firstOpen = () => { const i = S.done.indexOf(false); return i<0 ? 8 : i; };
+function drawHeader(){
+  $("#xpFill").style.transform = `scaleX(${Math.min(1,S.xp/XP_MAX)})`;
+  $("#xpNum").textContent = S.xp + " XP";
+}
+const ZIG = [6, 70, 24, 86, 14, 76, 32, 90];
+function drawMap(){
+  const tr = $("#trail"), open = firstOpen();
+  tr.innerHTML = QUESTS.map((q,i)=>{
+    const locked = i>open, cls = [S.done[i]?"done":"", i===open?"cur":"", locked?"locked":"", (!S.final && i===S.view)?"view":""].join(" ");
+    return `<li class="st ${cls}" data-x="${ZIG[i]}"><button type="button" data-q="${i}" ${locked?"disabled":""} aria-label="Станция ${i+1}: ${q.name}${S.done[i]?" — пройдено":locked?" — закрыто":""}"${(!S.final && i===S.view)?' aria-current="step"':""}><span class="dot" aria-hidden="true">${S.done[i]?q.icon:locked?"🔒":i+1}</span><span class="lbl"><b>${q.name}</b><small>${S.done[i]?"★ "+q.badge:locked?"закрыто":"сейчас здесь"}</small></span></button></li>`;
+  }).join("") + `<svg aria-hidden="true"><polyline id="path" fill="none" stroke="#1B2340" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" opacity=".45"/></svg>`;
+  $("#summit").classList.toggle("on", S.done.every(Boolean));
+  $("#badgesMini").innerHTML = S.done.some(Boolean) ? QUESTS.filter((q,i)=>S.done[i]).map(q=>`<span title="${q.badge}">${q.icon}</span>`).join("") : "Бейджи появятся здесь";
+  layoutTrail();
+}
+function layoutTrail(){
+  const tr = $("#trail"), pl = $("#path");
+  const wide = innerWidth > 900;
+  tr.querySelectorAll(".st").forEach(li=>{ const b=li.querySelector("button"), x=li.dataset.x;
+    b.style.transform = wide ? `translateX(${x}px)` : ""; b.style.width = wide ? `calc(100% - ${x}px)` : ""; });
+  if(!pl || !wide) return;
+  const box = tr.getBoundingClientRect();
+  const pts = [...tr.querySelectorAll(".dot")].map(d=>{ const r=d.getBoundingClientRect(); return `${(r.left-box.left+r.width/2).toFixed(1)},${(r.top-box.top+r.height/2).toFixed(1)}`; });
+  pl.setAttribute("points", pts.join(" "));
+}
+addEventListener("resize", layoutTrail);
+
+$("#trail").addEventListener("click", ev=>{
+  const b = ev.target.closest("[data-q]"); if(!b) return;
+  S.final = false; S.view = +b.dataset.q; save(); render();
+});
+
+function complete(i){
+  const first = !S.done[i];
+  let gain = 0;
+  if(first){ gain = 100 + (S.miss[i] ? 0 : 25); S.done[i] = true; S.xp += gain; }
+  save(); drawHeader(); drawMap();
+  const q = QUESTS[i], last = i===7;
+  const ov = document.createElement("div");
+  ov.className = "overlay";
+  ov.innerHTML = `<div class="award" role="dialog" aria-modal="true" aria-labelledby="awT">
+    <div class="medal" aria-hidden="true">${q.icon}</div>
+    <h3 id="awT">Бейдж «${q.badge}»</h3>
+    <div class="plus">${first?`+${gain} XP`:"уже получен"}</div>
+    <p>${first && !S.miss[i] ? "С первой попытки — бонус +25 XP." : first ? "Ошибки по пути — это нормально: так и учатся." : "Повторение закрепляет."}</p>
+    <button class="btn" type="button" id="awGo">${last?"Мой результат →":"Следующая станция →"}</button></div>`;
+  document.body.appendChild(ov);
+  const go = ()=>{ ov.remove(); if(last){ S.final=true; } else { S.view = i+1; } save(); render(); };
+  $("#awGo").addEventListener("click", go);
+  ov.addEventListener("keydown", e=>{ if(e.key==="Escape") go(); });
+  $("#awGo").focus();
+}
+
+$("#resetBtn").addEventListener("click", function(){
+  if(!this.classList.contains("armed")){ this.classList.add("armed"); this.textContent="Точно? Нажми ещё раз"; clearTimeout(this._t);
+    this._t=setTimeout(()=>{ this.classList.remove("armed"); this.textContent="Начать заново"; },3000); return; }
+  clearTimeout(this._t); this.classList.remove("armed"); this.textContent="Начать заново";
+  S = fresh(); save(); drawHeader(); render();
+});
+
+/* =====================================================================
+   РЕНДЕР КВЕСТА
+   ===================================================================== */
+function render(){
+  drawMap();
+  const panel = $("#panel");
+  panel.innerHTML = "";
+  if(S.final){ renderFinal(panel); }
+  else{
+    const i = Math.min(S.view, firstOpen());
+    S.view = i;
+    const q = QUESTS[i];
+    panel.insertAdjacentHTML("beforeend", `<div class="q-head enter"><span class="q-num">Станция ${i+1} из 8</span><h2>${q.icon} ${q.name}</h2><span class="where">${q.where}</span></div>`);
+    RENDER[i](panel, i);
+  }
+  drawMap();
+  panel.focus({preventScroll:true});
+  scrollTo({top:0, behavior: reduce?"auto":"smooth"});
+}
+function why(panel, html){ panel.insertAdjacentHTML("beforeend", `<div class="why"><b>Зачем этот шаг</b><p>${html}</p></div>`); }
+function task(panel, tag, title, hint){
+  const s = document.createElement("section"); s.className = "task enter";
+  s.innerHTML = `<span class="step-tag">${tag}</span><h3>${title}</h3>${hint?`<p class="hint-s">${hint}</p>`:""}`;
+  panel.appendChild(s); return s;
+}
+function doneBtn(host, i, label){
+  const r = document.createElement("div"); r.className = "row";
+  r.innerHTML = `<button class="btn" type="button" data-award>${label||"Получить бейдж"}</button>`;
+  host.appendChild(r); r.querySelector("button").addEventListener("click", ()=>complete(i));
+  return r;
+}
+function choiceCards(host, opts, selected, onPick, cls){
+  const g = document.createElement("div"); g.className = "choices "+(cls||"");
+  g.innerHTML = opts.map(o=>`<button type="button" class="choice" data-id="${o.id}" aria-pressed="${o.id===selected}">${o.html}</button>`).join("");
+  g.addEventListener("click", ev=>{ const b=ev.target.closest(".choice"); if(!b || b.disabled) return;
+    g.querySelectorAll(".choice").forEach(x=>{ x.setAttribute("aria-pressed", x===b); x.classList.remove("bad","good"); });
+    onPick(b.dataset.id, b); });
+  host.appendChild(g); return g;
+}
+
+/* ---- tap-to-order ---- */
+function orderWidget(host, items, opts){
+  const correct = items.map(x=>x.id);
+  const lab = id => items.find(x=>x.id===id).label;
+  let pool = shuffledNot(correct), picked = [], solved = false;
+  const w = document.createElement("div");
+  host.appendChild(w);
+  function draw(wrongAt, msg){
+    w.innerHTML = `<p class="hint-s">Нажимай на шаги по порядку — они встанут в список. Нажми на шаг в списке, чтобы вернуть его обратно.</p>
+      <ol class="slots">${picked.map((id,i)=>`<li><button type="button" class="slot ${solved?"right":i===wrongAt?"wrong":""}" data-un="${i}" ${solved?"disabled":""}><span class="n">${i+1}</span><span>${esc(lab(id))}</span></button></li>`).join("")}${correct.slice(picked.length).map((_,k)=>`<li><div class="empty-s"><span class="n">${picked.length+k+1}</span>${k===0?"нажми на шаг ниже":""}</div></li>`).join("")}</ol>
+      ${solved?"":`<div class="pool">${pool.filter(id=>!picked.includes(id)).map(id=>`<button type="button" class="chip" data-pick="${id}"><span class="plus">+</span>${esc(lab(id))}</button>`).join("")}</div>
+      <div class="row"><button type="button" class="btn blue" data-check ${picked.length<correct.length?"disabled":""}>Проверить порядок</button>${picked.length?`<button type="button" class="btn ghost small" data-clear>Сбросить</button>`:""}</div>`}
+      <div class="fb"></div>`;
+    if(msg) fb(w.querySelector(".fb"), msg[0], msg[1]);
+  }
+  w.addEventListener("click", ev=>{
+    const t = ev.target.closest("button"); if(!t || solved) return;
+    if(t.dataset.pick){ picked.push(t.dataset.pick); draw(); const nx=w.querySelector("[data-pick]")||w.querySelector("[data-check]"); nx&&nx.focus(); }
+    else if(t.dataset.un!=null){ picked.splice(+t.dataset.un,1); draw(); }
+    else if(t.hasAttribute("data-clear")){ picked=[]; draw(); }
+    else if(t.hasAttribute("data-check")){
+      const k = picked.findIndex((id,i)=>id!==correct[i]);
+      if(k<0){ solved=true; draw(null, ["ok", opts.ok]); opts.onOk&&opts.onOk(); }
+      else { miss(opts.q); draw(k, ["no", `<b>Почти! Шаг ${k+1} пока не на своём месте.</b>${opts.hint(correct[k])}<br><small>Нажми на красный шаг, чтобы вернуть его, и попробуй ещё раз.</small>`]); }
+    }
+  });
+  if(opts.solved){ picked = correct.slice(); solved = true; draw(null, ["ok", opts.ok]); }
+  else draw();
+  return w;
+}
+
+/* =====================================================================
+   КВЕСТЫ
+   ===================================================================== */
+const RENDER = [
+/* 1. ИДЕЯ */
+(panel, i)=>{
+  why(panel, "Если сразу написать ИИ «сделай сайт», он придумает что-то среднее и ненужное. Сначала решите три вещи: <b>для кого</b>, <b>какую одну проблему</b> решаем и <b>какие 3 экрана</b> пройдёт человек. Это и есть бриф — в гайде его помогает собрать Промпт 1.");
+  const t1 = task(panel, "Задание 1 из 3", "Для кого сайт?", "Выбери одного главного пользователя. Сайт «для всех» не работает ни для кого.");
+  choiceCards(t1, Object.entries(USERS).map(([id,u])=>({id, html:`<span class="ic" aria-hidden="true">${u.ic}</span><b>${u.ru}</b><small>${u.sub}</small>`})), S.user, id=>{
+    const changed = S.user!==id; S.user=id; if(changed) S.order=null; save(); step2(changed); });
+  let t2, t3;
+  function step2(changed){
+    if(!t2){
+      t2 = task(panel, "Задание 2 из 3", "Какую одну проблему решаем?", "Одна проблема — один сайт. Остальные идеи запишите на потом.");
+      choiceCards(t2, Object.entries(PROBLEMS).map(([id,p])=>({id, html:`<span class="ic" aria-hidden="true">${p.ic}</span><b>${p.ru}</b>`})), S.problem, id=>{
+        const ch = S.problem!==id; S.problem=id; if(ch){ S.order=null; S.head=null; S.repo=""; S.bugs={}; } save(); step3(true); });
+    }
+    if(S.problem && (changed || !t3)) step3(false);
+  }
+  function step3(scroll){
+    if(t3) t3.remove();
+    t3 = task(panel, "Задание 3 из 3", "Расставь 3 экрана главного сценария по порядку", "Человек открывает сайт в стрессе. В каком порядке ему это нужно?");
+    const c = content().ru;
+    const items = [{id:"s1",label:`«${c.s1.t}» — понять, что происходит`},{id:"s2",label:`«${c.s2.t}» — конкретные действия`},{id:"s3",label:`«${c.s3.t}» — поддержка и куда обратиться`}];
+    orderWidget(t3, items, {q:i, solved:!!S.order,
+      ok:"<b>Верно!</b> Сначала человек понимает ситуацию, потом действует, потом получает поддержку. А кнопка помощи будет на каждом экране — не только на последнем.",
+      hint:(want)=>({s1:" Сначала человеку нужно понять, что с ним происходит — иначе советы непонятны.",
+                     s2:" После того как понял — нужен короткий план действий.",
+                     s3:" Поддержка и контакты закрывают сценарий: «ты не один, вот куда идти»."}[want]),
+      onOk:()=>{ S.order=["s1","s2","s3"]; save(); showBrief(); }});
+    if(S.order) showBrief();
+    if(scroll) t3.scrollIntoView({behavior:reduce?"auto":"smooth", block:"start"});
+  }
+  function showBrief(){
+    const u = USERS[S.user], p = PROBLEMS[S.problem], c = content().ru;
+    t3.insertAdjacentHTML("beforeend", `<div class="brief"><h4>📋 Бриф проекта</h4><dl>
+      <dt>Пользователь</dt><dd>${u.ru}</dd>
+      <dt>Проблема</dt><dd>${p.ru}: ${p.long}.</dd>
+      <dt>Сценарий</dt><dd>1) ${c.s1.t} → 2) ${c.s2.t} → 3) ${c.s3.t}</dd>
+      <dt>Тон</dt><dd>${u.tone}</dd>
+      <dt>Не делаем</dt><dd>вход и регистрацию; не собираем имя, фото, номер</dd>
+      <dt>Кнопка помощи</dt><dd>на каждом экране: 102 · 1313 · 1919</dd></dl></div>`);
+    doneBtn(t3, i);
+  }
+  if(S.user) step2(false);
+},
+
+/* 2. ПРОМПТ */
+(panel, i)=>{
+  why(panel, "Промпт — это техзадание для ИИ. ИИ не читает мысли: всё, чего нет в промпте, он додумает сам — и часто не так. Хороший промпт конкретный: кто, что, сколько экранов, на каких языках и с какими ограничениями.");
+  const PAIRS = [
+    {a:"сделай сайт про безопасность", b:`Сделай одностраничный сайт в одном HTML-файле. Пользователь: ${USERS[S.user].ru.toLowerCase()}. Тема: ${PROBLEMS[S.problem].ru.toLowerCase()}. 3 экрана: узнать → действовать → кому рассказать.`, good:"b",
+     ok:"Во втором есть пользователь, тема, формат и экраны. На первый ИИ ответит чем угодно.", no:"Первый слишком общий: ИИ не знает, для кого сайт, сколько экранов и в каком формате. Посмотри, сколько конкретики во втором."},
+    {a:"Стиль: спокойный, кнопки от 48px, шрифт от 16px, бирюзовый и тёплый жёлтый на светлом фоне", b:"Сделай красиво и современно, как у Apple, с крутыми эффектами", good:"a",
+     ok:"Числа и цвета ИИ выполнит точно. «Красиво как у Apple» каждый понимает по-своему.", no:"«Красиво» и «круто» — не инструкция, а пожелание. ИИ угадает случайно. В первом варианте есть числа и цвета — их можно проверить."},
+    {a:"Сделай вход по номеру телефона, чтобы дети сохраняли прогресс", b:"Без входа и регистрации, без сбора имени, фото и номера; прогресс только в памяти страницы", good:"b",
+     ok:"Детский сайт о безопасности не должен сам собирать личные данные.", no:"Номер телефона ребёнка — личные данные. Сайт о безопасности не должен их собирать. Попробуй другой вариант."}
+  ];
+  const t1 = task(panel, "Задание 1 из 2", "Какой промпт лучше?", "Выбери в каждой паре тот, по которому ИИ точно поймёт, что делать.");
+  let t2;
+  function pair(k){
+    const P = PAIRS[k], box = document.createElement("div"); box.style.marginTop = "14px";
+    box.innerHTML = `<b style="font-size:14px;display:block;margin-bottom:6px">Пара ${k+1} из ${PAIRS.length}</b>`;
+    t1.appendChild(box);
+    const f = document.createElement("div"); f.className="fb";
+    let solved = k < S.pairs;
+    const g = choiceCards(box, [{id:"a",html:esc(P.a)},{id:"b",html:esc(P.b)}], solved?P.good:null, (id,b)=>{
+      if(solved) return;
+      if(id===P.good){ solved=true; b.classList.add("good"); fb(f,"ok","<b>Верно!</b> "+P.ok); g.querySelectorAll(".choice").forEach(x=>x.disabled=true);
+        if(S.pairs<=k){ S.pairs=k+1; save(); } if(k+1<PAIRS.length) pair(k+1); else assemble(); }
+      else { miss(i); b.classList.add("bad"); fb(f,"no","<b>Не этот.</b> "+P.no); }
+    }, "pair");
+    box.appendChild(f);
+    if(solved){ g.querySelector(`[data-id="${P.good}"]`).classList.add("good"); g.querySelectorAll(".choice").forEach(x=>x.disabled=true); fb(f,"ok","<b>Верно!</b> "+P.ok); }
+  }
+  for(let k=0;k<=Math.min(S.pairs,PAIRS.length-1);k++) pair(k);
+  if(S.pairs>=PAIRS.length) assemble();
+  function assemble(){
+    if(t2) return;
+    t2 = task(panel, "Задание 2 из 2", "Собери промпт из блоков", "Нажимай на блоки, чтобы добавить их в промпт. Ниже видно, что получает ИИ. Осторожно: три блока — ловушки.");
+    let sel = S.blocks.slice();
+    const pool = document.createElement("div"); pool.className="pool"; t2.appendChild(pool);
+    const pre = document.createElement("pre"); pre.className="code"; pre.style.marginTop="14px"; pre.setAttribute("aria-label","Промпт"); t2.appendChild(pre);
+    const r = document.createElement("div"); r.className="row"; r.innerHTML=`<button type="button" class="btn blue" data-checkprompt>Проверить промпт</button>`; t2.appendChild(r);
+    const f = document.createElement("div"); f.className="fb"; t2.appendChild(f);
+    const order = shuffle(BLOCKS.map(b=>b.id));
+    function draw(){
+      pool.innerHTML = order.map(id=>{ const b=BLOCKS.find(x=>x.id===id); return `<button type="button" class="chip" data-b="${id}" aria-pressed="${sel.includes(id)}"><span class="plus">${sel.includes(id)?"✓":"+"}</span>${esc(b.label)}</button>`; }).join("");
+      pre.textContent = promptLines(sel, false);
+    }
+    pool.addEventListener("click", ev=>{ const b=ev.target.closest("[data-b]"); if(!b) return; const id=b.dataset.b;
+      sel = sel.includes(id) ? sel.filter(x=>x!==id) : sel.concat(id); draw(); pool.querySelector(`[data-b="${id}"]`).focus(); });
+    let finished = false;
+    r.querySelector("button").addEventListener("click", ()=>{
+      const bad = sel.filter(id=>BLOCKS.find(b=>b.id===id).bad);
+      const missing = BLOCKS.filter(b=>b.req && !sel.includes(b.id));
+      if(bad.length){ miss(i); fb(f,"no",`<b>В промпт попала ловушка.</b>`+bad.map(id=>{const b=BLOCKS.find(x=>x.id===id);return `«${esc(b.label)}» — ${b.why}`;}).join("<br>")+"<br><small>Убери этот блок — нажми на него ещё раз.</small>"); return; }
+      if(missing.length){ miss(i); const m=missing[0]; fb(f,"no",`<b>Не хватает ${missing.length===1?"одного блока":missing.length+" блоков"}. Подсказка: «${esc(m.label)}».</b>${m.why}`); return; }
+      S.blocks = sel.slice(); save();
+      const extra = ["style","anim"].filter(x=>!sel.includes(x));
+      fb(f,"ok",`<b>Промпт готов!</b> В нём всё главное: один HTML-файл без фреймворков, TJ + RU, без сбора данных, кнопка помощи и крупные кнопки.${extra.length?" Блоки «Стиль» и «Анимации» необязательны — но с ними результат предсказуемее.":""} Финальную версию с твоими текстами и дизайном получишь в конце игры.`);
+      if(!finished){ finished=true; doneBtn(t2, i); }
+    });
+    draw();
+    if(S.done[i] && S.blocks.length) r.querySelector("button").click();
+  }
+},
+
+/* 3. КОНТЕНТ */
+(panel, i)=>{
+  why(panel, "Контент — это 70% работы. Ребёнок, которому стыдно или страшно, закроет сайт и никому не расскажет. Правила из гайда: без морали, без стыда, без пугающих слов, никогда не обвинять пострадавшего. Таджикский текст обязательно читает носитель языка — ИИ ошибается в словах и окончаниях.");
+  const PH = [
+    {t:"Ты не виноват. Хорошо, что ты рассказал.", ok:true, w:"Снимает стыд и поощряет просить помощь."},
+    {t:"Сам виноват — нечего было выкладывать фото.", ok:false, w:"Обвинение пострадавшего. После такой фразы ребёнок больше ничего не расскажет."},
+    {t:"Можно не отвечать. Ты никому ничего не должен.", ok:true, w:"Даёт простое разрешение и чувство контроля."},
+    {t:"Если не послушаешься, случится что-то страшное!", ok:false, w:"Запугивание. Страх парализует, а не помогает действовать."},
+    {t:"Сделай скриншот и расскажи взрослому, которому доверяешь.", ok:true, w:"Конкретное действие, которое реально выполнить."},
+    {t:"Только глупые дети попадаются на такое.", ok:false, w:"Стыд и насмешка. Обманывают и взрослых — дело не в уме."},
+    {t:"Больше никогда не заходи в интернет!", ok:false, w:"Запрет-мораль. Он не работает: ребёнок просто начнёт скрывать проблемы."}
+  ];
+  const t1 = task(panel, "Задание 1 из 3", "Тренажёр тона: можно так сказать ребёнку?", "Отметь каждую фразу. Ошибся — просто выбери другой ответ.");
+  const ul = document.createElement("ul"); ul.className="tone"; t1.appendChild(ul);
+  ul.innerHTML = PH.map((p,k)=>`<li data-k="${k}"><q>${esc(p.t)}</q><div class="tb"><button type="button" data-v="1">Можно ✓</button><button type="button" data-v="0">Нельзя ✕</button></div><p class="why-t" hidden></p></li>`).join("");
+  let t2, t3;
+  function mark(li, v, silent){
+    const p = PH[li.dataset.k], right = (v==="1")===p.ok;
+    li.querySelectorAll("[data-v]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.v===v));
+    li.className = right ? "ok" : "no";
+    const w = li.querySelector(".why-t"); w.hidden=false;
+    w.innerHTML = right ? `<b>Верно.</b> ${p.w}` : `<b>Посмотри ещё раз.</b> ${p.ok?"Эта фраза как раз хорошая: ":"Здесь есть проблема: "}${p.w}`;
+    if(!right && !silent) miss(i);
+    S.tone[li.dataset.k] = v; save();
+    if(PH.every((p,k)=>S.tone[k]!=null && (S.tone[k]==="1")===p.ok)) step2();
+  }
+  ul.addEventListener("click", ev=>{ const b=ev.target.closest("[data-v]"); if(!b) return; mark(b.closest("li"), b.dataset.v); });
+  ul.querySelectorAll("li").forEach(li=>{ const v=S.tone[li.dataset.k]; if(v!=null) mark(li, v, true); });
+  function pick(host, list, key, onDone){
+    const f = document.createElement("div"); f.className="fb";
+    const g = choiceCards(host, list.map((o,k)=>({id:String(k), html:`<span class="tj">TJ · ${esc(o.tj)}</span><span class="ru">RU · ${esc(o.ru)}</span>`})), S[key]==null?null:String(S[key]), (id,b)=>{
+      const o = list[+id];
+      if(o.bad){ miss(i); b.classList.add("bad"); fb(f,"no","<b>Этот вариант навредит.</b> "+o.bad); S[key]=null; save(); return; }
+      b.classList.add("good"); S[key]=+id; save(); fb(f,"ok",`<b>Отлично.</b> TJ: «${esc(o.tj)}» · RU: «${esc(o.ru)}». На станции «Тест» проверим, что перевод не потерялся.`); onDone();
+    });
+    host.appendChild(f);
+    if(S[key]!=null){ g.querySelector(`[data-id="${S[key]}"]`).classList.add("good"); onDone(); }
+  }
+  function step2(){
+    if(t2) return;
+    t2 = task(panel, "Задание 2 из 3", "Выбери заголовок первого экрана", "Он на двух языках — так и будет на твоём сайте.");
+    pick(t2, HEADS[S.problem], "head", step3);
+  }
+  function step3(){
+    if(t3) return;
+    t3 = task(panel, "Задание 3 из 3", "Выбери текст главной кнопки", "Кнопка честно говорит, что будет после нажатия.");
+    pick(t3, BTNS, "btn", ()=>{ if(!t3.querySelector("[data-award]")) doneBtn(t3, i); });
+  }
+},
+
+/* 4. ДИЗАЙН */
+(panel, i)=>{
+  why(panel, "В Google Stitch дизайн рисуют словами: «сделай кнопки крупнее», «цвета спокойнее». Но чтобы просить правильно, нужно знать правила: текст контрастный (не меньше 4.5:1), кнопки — не меньше <b>48px</b>, чтобы попасть пальцем, шрифт — не меньше <b>16px</b>. Здесь — то же самое, только кнопками.");
+  const t = task(panel, "Задание", "Настрой стиль — экран телефона обновляется сразу", "Пока в проверке горят красные пункты — дизайн не готов. Исправь их.");
+  const st = document.createElement("div"); st.className="studio"; t.appendChild(st);
+  const left = document.createElement("div"); st.appendChild(left);
+  const right = document.createElement("div"); right.innerHTML = `<div class="phone"><iframe title="Предпросмотр дизайна"></iframe></div>`; st.appendChild(right);
+  const fr = right.querySelector("iframe");
+  const groups = [
+    {k:"pal", t:"Палитра", o:Object.entries(PALETTES).map(([id,p])=>({v:id, h:`<span class="sw" aria-hidden="true"><i style="background:${p.bg}"></i><i style="background:${p.p}"></i><i style="background:${p.acc}"></i></span>${p.name}`}))},
+    {k:"rad", t:"Скругление углов", o:[4,14,24].map(v=>({v, h:`${v}px`}))},
+    {k:"fs",  t:"Размер шрифта", o:[14,16,18].map(v=>({v, h:`${v}px`}))},
+    {k:"bh",  t:"Высота кнопок", o:[36,48,56].map(v=>({v, h:`${v}px`}))},
+    {k:"bs",  t:"Стиль кнопок", o:Object.entries(BSTYLE).map(([v,n])=>({v, h:n}))}
+  ];
+  left.innerHTML = groups.map(g=>`<div class="ctrl" role="group" aria-label="${g.t}"><b>${g.t}</b><div class="seg">${g.o.map(o=>`<button type="button" data-k="${g.k}" data-v="${o.v}">${o.h}</button>`).join("")}</div></div>`).join("") +
+    `<b style="display:block;margin:6px 0">Проверка дизайна</b><ul class="checks" aria-live="polite"></ul>`;
+  const f = document.createElement("div"); f.className="fb"; t.appendChild(f);
+  const row = document.createElement("div"); row.className="row"; row.innerHTML=`<button class="btn" type="button" data-award>Получить бейдж</button>`; t.appendChild(row);
+  const goBtn = row.querySelector("button");
+  function checks(){
+    const d=S.design, P=PALETTES[d.pal];
+    const txt = contrast(P.ink,P.bg), bt = d.bs==="outline" ? contrast(P.p,P.bg) : contrast(P.onp,P.p);
+    return [
+      {ok:txt>=4.5, m: txt>=4.5 ? `Контраст текста ${txt.toFixed(1)}:1 — читается.` : `Контраст текста ${txt.toFixed(1)}:1 — бледно. Нужно не меньше 4.5:1, иначе на солнце и дешёвом экране не прочитать.`},
+      {ok:bt>=4.5,  m: bt>=4.5 ? `Текст на кнопке ${bt.toFixed(1)}:1 — хорошо.` : `Текст на кнопке ${bt.toFixed(1)}:1 — сливается с кнопкой. Выбери палитру или стиль кнопок контрастнее.`},
+      {ok:d.fs>=16, m: d.fs>=16 ? `Шрифт ${d.fs}px — удобно читать с телефона.` : `Шрифт ${d.fs}px — мелко. Правило: не меньше 16px.`},
+      {ok:d.bh>=48, m: d.bh>=48 ? `Кнопки ${d.bh}px — легко попасть пальцем.` : `Кнопки ${d.bh}px — палец промахнётся. Правило: не меньше 48px.`}
+    ];
+  }
+  function draw(){
+    left.querySelectorAll("[data-k]").forEach(b=>b.setAttribute("aria-pressed", String(S.design[b.dataset.k])===b.dataset.v));
+    const cs = checks();
+    left.querySelector(".checks").innerHTML = cs.map(c=>`<li class="${c.ok?"ok":"no"}"><span>${c.ok?"✓":"!"}</span><span>${c.m}</span></li>`).join("");
+    const all = cs.every(c=>c.ok);
+    goBtn.disabled = !all;
+    if(all) fb(f,"ok",`<b>Дизайн проходит проверку.</b> Эти же правила напиши в Stitch и в промпте: «кнопки не меньше 48px, шрифт не меньше 16px, контрастный текст».`);
+    else f.className="fb";
+    fr.srcdoc = genSite({});
+  }
+  left.addEventListener("click", ev=>{ const b=ev.target.closest("[data-k]"); if(!b) return;
+    const k=b.dataset.k, v = (k==="pal"||k==="bs") ? b.dataset.v : +b.dataset.v;
+    S.design[k]=v; save();
+    const bad = (k==="fs"&&v<16)||(k==="bh"&&v<48)||(k==="pal"&&v==="pastel");
+    if(bad){ miss(i); toast("Посмотри проверку: этот вариант нарушает правило."); }
+    draw(); b.focus(); });
+  goBtn.addEventListener("click", ()=>complete(i));
+  draw();
+},
+
+/* 5. СБОРКА */
+(panel, i)=>{
+  why(panel, "ИИ получает бриф, контент и дизайн — и пишет код одного файла index.html. Не нужно понимать каждую строку. Важно: сохранить ответ как <b>index.html</b> в кодировке UTF-8 и открыть двойным щелчком в Chrome. Если ответ обрезался — напишите ИИ «продолжи с того места, где остановился».");
+  const t = task(panel, "Задание", "Отправь промпт и посмотри, как ИИ собирает твой сайт", "");
+  t.insertAdjacentHTML("beforeend", `<div class="ai-chat"><div class="av" aria-hidden="true">ИИ</div><p>Получил бриф, тексты TJ/RU и дизайн. Пишу один файл index.html — без фреймворков, ничего устанавливать не нужно.</p></div>
+    <div class="typing"><pre class="code" aria-label="Код сайта"></pre></div><div class="gen-bar" aria-hidden="true"><i></i></div>
+    <div class="row"><button type="button" class="btn blue" data-run>▶ Отправить промпт</button><button type="button" class="btn ghost small" data-skip hidden>Пропустить анимацию</button></div>`);
+  const pre = t.querySelector("pre"), bar = t.querySelector(".gen-bar i"), run = t.querySelector("[data-run]"), skip = t.querySelector("[data-skip]");
+  const code = genSite({});
+  const total = Math.min(code.length, 2600);
+  let timer = null;
+  function finish(){
+    clearInterval(timer); pre.textContent = code.slice(0, total) + "\n  …\n</html>"; bar.style.transform = "scaleX(1)"; skip.hidden = true; run.hidden = true;
+    if(t.querySelector(".split")) return;
+    t.insertAdjacentHTML("beforeend", `<div class="fb show ok" style="margin-bottom:16px"><b>Готово! Это твой сайт — из твоих выборов.</b> Попробуй: переключи TJ | RU, пройди 3 экрана, нажми красную кнопку помощи.</div>
+      <div class="split"><div class="phone"><iframe title="Твой сайт"></iframe></div>
+      <div><h3 style="margin-top:0">Что проверить глазами</h3><ul style="padding-left:20px;margin:0 0 8px">
+      <li>Переключатель языка меняет <b>все</b> тексты?</li><li>На каждом экране есть кнопка «Мне нужна помощь»?</li><li>Кнопки легко нажать пальцем?</li><li>Нигде не спрашивают имя, фото или номер?</li></ul>
+      <p class="hint-s">На следующей станции ИИ «ошибётся» — как это бывает в жизни. Найдём и исправим.</p></div></div>`);
+    t.querySelector(".split iframe").srcdoc = code;
+    doneBtn(t, i);
+  }
+  run.addEventListener("click", ()=>{
+    run.disabled = true; skip.hidden = false;
+    if(reduce){ finish(); return; }
+    let n = 0;
+    timer = setInterval(()=>{ n += 38; pre.textContent = code.slice(0,n); const c=document.createElement("span"); c.className="cursor"; pre.appendChild(c); pre.scrollTop = pre.scrollHeight;
+      bar.style.transform = `scaleX(${Math.min(1,n/total)})`; if(n>=total) finish(); }, 30);
+  });
+  skip.addEventListener("click", finish);
+  if(S.done[i]) finish();
+},
+
+/* 6. ТЕСТ И ПРАВКИ */
+(panel, i)=>{
+  why(panel, "ИИ почти всегда ошибается в мелочах. Правило из гайда: <b>одна правка → сохранить → проверить</b>. Если попросить 10 изменений сразу, ИИ сломает то, что работало, и вы не поймёте, что именно.");
+  const BUGS = {
+    untr:{n:"Нет перевода", found:"Главная кнопка на таджикском экране написана по-русски. Так бывает часто: ИИ забывает один ключ в content.tj.",
+      fixes:[{t:`Вот текущий index.html: [код]. Исправь только одно: на первом экране главная кнопка в таджикской версии показывает русский текст. Возьми текст из content.tj. Ничего другого не меняй. Выдай файл целиком.`, ok:true},
+             {t:"Переведи сайт нормально и заодно поменяй цвета и добавь анимации.", w:"Три правки сразу: ИИ поменяет то, что уже работало, и будет непонятно, что сломалось."},
+             {t:"Сайт сломался, исправь.", w:"Слишком общо: ИИ не знает, что именно не так, и начнёт переписывать всё подряд."}]},
+    tiny:{n:"Мелкая кнопка", found:"Кнопка помощи крошечная — 26px. Ребёнок в стрессе по ней не попадёт, а это самая важная кнопка.",
+      fixes:[{t:"Сделай кнопку помощи лучше и вообще улучши дизайн.", w:"«Лучше» — непонятно как. А «вообще улучши дизайн» — это уже вторая правка."},
+             {t:`Вот текущий index.html: [код]. Исправь только одно: кнопка «Мне нужна помощь» слишком маленькая (26px). Сделай её на всю ширину внизу экрана, высотой не меньше 56px. Ничего другого не меняй. Выдай файл целиком.`, ok:true},
+             {t:"Удали кнопку помощи, она мешает.", w:"Кнопка помощи обязательна на каждом экране. Её нужно сделать крупнее, а не убрать."}]},
+    name:{n:"Сбор данных", found:"Сайт спрашивает имя ребёнка. Мы договорились: никаких имён, фото и номеров — а ИИ добавил поле сам.",
+      fixes:[{t:"Добавь ещё поле для номера телефона, чтобы мы могли перезвонить.", w:"Станет только хуже: номер ребёнка — тоже личные данные."},
+             {t:"Проверь весь сайт и исправь все ошибки, какие найдёшь.", w:"Для общей проверки есть Промпт 6 из гайда. Но здесь проблема уже известна — проси одну конкретную правку."},
+             {t:`Вот текущий index.html: [код]. Исправь только одно: удали с первого экрана поле «Как тебя зовут?» и кнопку «Сохранить». Сайт не должен собирать личные данные. Ничего другого не меняй. Выдай файл целиком.`, ok:true}]}
+  };
+  const ids = ["untr","tiny","name"];
+  const t = task(panel, "Задание", "Найди 3 ошибки в сайте, который собрал ИИ", "Нажимай прямо на экран телефона там, где что-то не так. Подсказка: проверь язык, размер кнопок и что сайт спрашивает у ребёнка.");
+  t.insertAdjacentHTML("beforeend", `<div class="split"><div class="phone finding"><iframe title="Сайт с ошибками"></iframe></div><div><div class="bugcount" aria-live="polite"></div><div class="fixbox"></div></div></div>`);
+  const fr = t.querySelector("iframe"), phone = t.querySelector(".phone"), cnt = t.querySelector(".bugcount"), box = t.querySelector(".fixbox");
+  const st = id => S.bugs[id] || "";   // "", "found", "fixed"
+  let pending = ids.find(id=>st(id)==="found") || null;
+  const hunting = () => ids.some(id=>st(id)!=="fixed");
+  function drawCount(){ cnt.innerHTML = ids.map(id=>`<span class="${st(id)}">${st(id)==="fixed"?"✓ "+BUGS[id].n:st(id)==="found"?"! "+BUGS[id].n:"? ошибка"}</span>`).join(""); }
+  function load(){
+    const bugs = {}; ids.forEach(id=>{ if(st(id)!=="fixed") bugs[id]=true; });
+    fr.srcdoc = genSite({bugs, lang: hunting() ? "tj" : null});
+    phone.classList.toggle("finding", hunting());
+  }
+  fr.addEventListener("load", ()=>{
+    const doc = fr.contentDocument; if(!doc) return;
+    doc.addEventListener("click", ev=>{
+      if(!hunting()) return;
+      ev.preventDefault(); ev.stopPropagation();
+      const b = ev.target.closest("[data-bug]");
+      if(pending){ toast("Сначала исправь найденную ошибку — одна правка за раз!"); return; }
+      if(!b){ toast("Тут всё в порядке — ищи дальше."); return; }
+      const id = b.dataset.bug;
+      if(st(id)) return;
+      S.bugs[id]="found"; save(); pending=id; drawCount(); showFix(id);
+    }, true);
+  });
+  function showFix(id){
+    const B = BUGS[id];
+    box.innerHTML = `<div class="fb show info"><b>Нашёл: ${B.n}.</b> ${B.found}</div><h3 style="margin:16px 0 8px">Какую правку отправить ИИ?</h3>`;
+    const f = document.createElement("div"); f.className="fb";
+    const g = choiceCards(box, B.fixes.map((x,k)=>({id:String(k), html:esc(x.t)})), null, (k,b)=>{
+      const x = B.fixes[+k];
+      if(!x.ok){ miss(i); b.classList.add("bad"); fb(f,"no","<b>Не этот.</b> "+x.w); return; }
+      b.classList.add("good"); S.bugs[id]="fixed"; pending=null; save(); drawCount();
+      fb(f,"ok","<b>Правка применена!</b> Хорошая правка — одна и конкретная: что не так, где и как должно быть, плюс «ничего другого не меняй». Сайт обновился.");
+      g.querySelectorAll(".choice").forEach(z=>z.disabled=true);
+      load(); after();
+    }, "pair");
+    g.style.gridTemplateColumns="1fr"; box.appendChild(f);
+  }
+  function after(){
+    if(hunting()) return;
+    if(!box.querySelector("[data-award]")){
+      box.insertAdjacentHTML("beforeend", `<div class="fb show ok"><b>Все 3 ошибки исправлены.</b> Теперь сайт снова можно нажимать — проверь сам. В жизни помогает и Промпт 6 из гайда: «Проверь этот index.html как строгий тестировщик…».</div>`);
+      doneBtn(box, i);
+    }
+  }
+  drawCount(); load();
+  if(pending) showFix(pending); else after();
+},
+
+/* 7. GITHUB */
+(panel, i)=>{
+  why(panel, "GitHub — это облачная папка для кода. Оттуда файл возьмёт Vercel и опубликует. Командная строка не нужна: всё делается кнопками на github.com. Но репозиторий публичный — его видят все.");
+  const t1 = task(panel, "Задание 1 из 3", "Придумай имя репозитория", "Только латиница, цифры и дефис. Имя станет частью ссылки на сайт.");
+  t1.insertAdjacentHTML("beforeend", `<label class="field"><span class="sr">Имя репозитория</span><input id="repo" maxlength="40" autocomplete="off" spellcheck="false" autocapitalize="off"><span class="suffix">github.com/твой-ник/<b id="repoEcho"></b></span></label><div class="fb" id="repoFb"></div>`);
+  const inp = t1.querySelector("#repo"), rf = t1.querySelector("#repoFb"), echo = t1.querySelector("#repoEcho");
+  inp.value = repoName(); echo.textContent = repoName();
+  const valid = v => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(v);
+  inp.addEventListener("input", ()=>{
+    const v = inp.value.trim();
+    echo.textContent = v || "…";
+    if(valid(v)){ S.repo=v; save(); rf.className="fb"; }
+    else fb(rf,"no", /[А-Яа-яЁёӢӣӮӯҲҳҚқҶҷҒғ]/.test(v) ? "Кириллица в имени не подойдёт — напиши латиницей, например <code>"+esc(PROBLEMS[S.problem].slug)+"</code>." : "Только маленькие латинские буквы, цифры и дефис между словами. Без пробелов.");
+  });
+  const t2 = task(panel, "Задание 2 из 3", "Расставь шаги загрузки по порядку", "Так это выглядит на github.com — без командной строки.");
+  let t3;
+  orderWidget(t2, [
+    {id:"new",label:"New repository"},
+    {id:"name",label:"Ввести имя латиницей"},
+    {id:"pub",label:"Public"},
+    {id:"create",label:"Create repository"},
+    {id:"add",label:"Add file"},
+    {id:"upload",label:"Upload files → перетащить index.html"},
+    {id:"commit",label:"Commit changes"}
+  ], {q:i, solved:S.done[i], ok:"<b>Верно!</b> Чтобы потом обновить сайт — снова Upload files с тем же именем файла → Commit. Старый файл заменится.",
+    hint:w=>({new:" Всё начинается с кнопки New repository.",name:" Сразу после New repository GitHub просит имя.",pub:" Видимость Public выбирают на той же странице, после имени.",create:" Create repository — кнопка внизу страницы создания.",add:" В созданном репозитории сначала нажимают Add file…",upload:" …потом Upload files и перетаскивают index.html.",commit:" Файл сохраняется только после Commit changes."}[w]),
+    onOk: quiz});
+  if(S.done[i]) quiz();
+  function quiz(){
+    if(t3) return;
+    t3 = task(panel, "Задание 3 из 3", "Что НИКОГДА нельзя загружать в публичный репозиторий?", "Отметь всё опасное и нажми «Проверить».");
+    const Q = [{t:"index.html — сам сайт",bad:false},{t:"Ключ API от ChatGPT или Gemini",bad:true},{t:"Пароль от почты или GitHub",bad:true},{t:"Иконка сайта icon.svg",bad:false},{t:"Список учеников с именами и телефонами",bad:true},{t:"README с описанием проекта",bad:false}];
+    const sel = new Set();
+    const p = document.createElement("div"); p.className="pool"; t3.appendChild(p);
+    p.innerHTML = Q.map((q,k)=>`<button type="button" class="chip" data-k="${k}" aria-pressed="false">${esc(q.t)}</button>`).join("");
+    const r = document.createElement("div"); r.className="row"; r.innerHTML=`<button type="button" class="btn blue" data-quiz>Проверить</button>`; t3.appendChild(r);
+    const f = document.createElement("div"); f.className="fb"; t3.appendChild(f);
+    p.addEventListener("click", ev=>{ const b=ev.target.closest("[data-k]"); if(!b) return; const k=+b.dataset.k; sel.has(k)?sel.delete(k):sel.add(k); b.setAttribute("aria-pressed", sel.has(k)); });
+    let ok=false;
+    r.querySelector("button").addEventListener("click", ()=>{
+      const wrongIn = [...sel].filter(k=>!Q[k].bad), missed = Q.map((q,k)=>k).filter(k=>Q[k].bad && !sel.has(k));
+      if(!wrongIn.length && !missed.length){
+        if(!valid(inp.value.trim())){ fb(f,"no","Ответ верный! Осталось исправить имя репозитория вверху — латиница, цифры, дефис."); inp.focus(); return; }
+        fb(f,"ok","<b>Точно.</b> Публичный репозиторий видят все — и боты, которые круглосуточно ищут ключи и пароли. Утёкший ключ API — это чужие траты за твой счёт.");
+        if(!ok){ ok=true; doneBtn(t3, i); }
+        return;
+      }
+      miss(i);
+      fb(f,"no", wrongIn.length ? `<b>«${esc(Q[wrongIn[0]].t)}» загружать можно</b> — в этом нет ничего секретного. Сними отметку.` : `<b>Ты пропустил опасное:</b> «${esc(Q[missed[0]].t)}». Подумай: что будет, если это увидит незнакомец?`);
+    });
+  }
+},
+
+/* 8. VERCEL */
+(panel, i)=>{
+  why(panel, "Vercel берёт index.html из GitHub и превращает его в живую ссылку, которую можно открыть с любого телефона и превратить в QR-код. Бесплатно (план Hobby). Каждый новый Commit на GitHub — новая версия сайта через минуту.");
+  const t1 = task(panel, "Задание 1 из 2", "Расставь шаги публикации по порядку", "Так это выглядит на vercel.com/new.");
+  let t2;
+  orderWidget(t1, [
+    {id:"gh",label:"Continue with GitHub"},
+    {id:"new",label:"Add New…"},
+    {id:"proj",label:"Project"},
+    {id:"imp",label:`Import (напротив ${repoName()})`},
+    {id:"fw",label:"Framework Preset: Other"},
+    {id:"dep",label:"Deploy"}
+  ], {q:i, solved:S.done[i], ok:"<b>Верно!</b> Build Command и Output Directory оставляем пустыми — у нас просто один index.html. Если репозитория нет в списке — Adjust GitHub App Permissions.",
+    hint:w=>({gh:" Сначала нужно войти — через GitHub, так Vercel увидит твои репозитории.",new:" В панели Vercel новое создают через Add New…",proj:" В меню Add New выбирают Project.",imp:" Потом в списке репозиториев — Import напротив своего.",fw:" Перед публикацией выбирают Framework Preset: Other — фреймворка у нас нет.",dep:" Deploy — самый последний шаг."}[w]),
+    onOk: deploy});
+  if(S.done[i]) deploy();
+  function deploy(){
+    if(t2) return;
+    t2 = task(panel, "Задание 2 из 2", "Нажми Deploy", "");
+    t2.insertAdjacentHTML("beforeend", `<pre class="log" aria-live="polite" aria-label="Лог публикации"></pre><div class="row"><button type="button" class="btn" data-deploy>▲ Deploy</button></div>`);
+    const log = t2.querySelector(".log"), b = t2.querySelector("[data-deploy]");
+    const lines = [
+      ["dim","Running build in Washington, D.C., USA (East) – iad1"],
+      ["",`Cloning github.com/tvoy-nik/${repoName()} (Branch: main)`],
+      ["","Cloning completed: 412ms"],
+      ["dim","Framework Preset: Other — сборка не нужна"],
+      ["",`Uploading static files: index.html (${(new Blob([genSite({})]).size/1024).toFixed(1)} KB)`],
+      ["","Deploying outputs..."],
+      ["ok","✓ Deployment completed"],
+      ["ok",`✓ Ready  https://${repoName()}.vercel.app`]
+    ];
+    const paint = k => { log.innerHTML = lines.slice(0,k).map(([c,l])=>`<span class="${c}">${esc(l)}</span>`).join("\n"); };
+    function show(){
+      b.hidden = true;
+      if(!t2.querySelector(".url-card")){
+        t2.insertAdjacentHTML("beforeend", `<div class="url-card"><span class="sim">Симуляция</span><b>🎉 Твой сайт опубликован</b><span class="u">https://${esc(repoName())}.vercel.app</span>
+          <small>Это учебная симуляция — по этой ссылке пока ничего нет. Настоящую публикацию вы сделаете сами по этим же шагам: около 3 минут. Потом: Chrome → «Поделиться» → «QR-код».</small></div>`);
+        doneBtn(t2, i, "Получить последний бейдж");
+      }
+    }
+    b.addEventListener("click", ()=>{
+      b.disabled = true;
+      if(reduce || S.done[i]){ paint(lines.length); show(); return; }
+      let k = 0;
+      const tick = ()=>{ k++; paint(k); if(k<lines.length) setTimeout(tick, 380); else show(); };
+      tick();
+    });
+    if(S.done[i]) b.click();
+  }
+}
+];
+
+/* =====================================================================
+   ФИНАЛ
+   ===================================================================== */
+function renderFinal(panel){
+  const u = USERS[S.user], p = PROBLEMS[S.problem], hp = headPair();
+  panel.innerHTML = `<div class="cert enter">
+    <span class="kicker">Хакатон «Безопасность детей в интернете» · 8 октября 2026</span>
+    <h2>Твой результат: путь от идеи до сайта пройден</h2>
+    <p class="score">${S.xp} XP · ${S.done.filter(Boolean).length} из 8 бейджей</p>
+    <p style="margin:8px 0 0">Проект: <b>«${esc(hp.tj)} / ${esc(hp.ru)}»</b> — пользователь: ${u.ru.toLowerCase()}, проблема: ${p.ru.toLowerCase()}.</p>
+    <div class="medals">${QUESTS.map((q,i)=>`<div><i aria-hidden="true">${S.done[i]?q.icon:"·"}</i>${q.badge}</div>`).join("")}</div>
+  </div>
+  <div class="split" style="margin-top:24px">
+    <div class="phone"><iframe title="Твой сайт"></iframe></div>
+    <div>
+      <h3 style="margin:0 0 6px;font-size:22px">Это настоящий сайт — забирай</h3>
+      <p class="hint-s" style="margin-top:0">Один файл index.html: TJ и RU, 3 экрана, кнопка помощи с номерами 102, 1313, 1919. Его можно сразу загрузить на GitHub и опубликовать на Vercel — по шагам, которые ты только что прошёл.</p>
+      <div class="actions">
+        <button type="button" class="btn" id="dl">⬇ Скачать мой сайт (index.html)</button>
+        <button type="button" class="btn blue" id="cp">Скопировать промпт</button>
+        <a class="btn ghost" href="../guide/">Открыть пошаговый гайд</a>
+        <button type="button" class="btn ghost" id="again">Пройти заново</button>
+      </div>
+      <div class="fb" id="ffb"></div>
+      <h3 style="margin:22px 0 6px">Твой промпт для ChatGPT / Gemini / Claude</h3>
+      <p class="hint-s" style="margin-top:0">Вставь его в чат-ИИ — и получишь свою версию сайта. Если есть скриншоты из Stitch — прикрепи их.</p>
+      <pre class="code" id="pr"></pre>
+      <p class="hint-s" style="margin-top:12px">Перед показом: таджикский текст должен вычитать носитель языка, номера помощи — перепроверить звонком.</p>
+    </div>
+  </div>`;
+  const html = genSite({});
+  panel.querySelector("iframe").srcdoc = html;
+  $("#pr").textContent = finalPrompt();
+  $("#dl").addEventListener("click", ()=>{
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([html], {type:"text/html;charset=utf-8"}));
+    a.download = "index.html"; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    fb($("#ffb"),"ok","<b>Файл index.html скачан.</b> Открой его двойным щелчком в Chrome — он работает без интернета (кроме шрифта).");
+  });
+  $("#cp").addEventListener("click", async ()=>{
+    const txt = finalPrompt();
+    let ok = false;
+    try{ await navigator.clipboard.writeText(txt); ok = true; }catch(e){
+      const ta = document.createElement("textarea"); ta.value = txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+      try{ ok = document.execCommand("copy"); }catch(e2){} ta.remove(); }
+    fb($("#ffb"), ok?"ok":"info", ok ? "<b>Промпт скопирован.</b> Вставь его в ChatGPT, Gemini или Claude." : "Не получилось скопировать автоматически — выдели текст промпта ниже и скопируй вручную.");
+  });
+  $("#again").addEventListener("click", ()=>{ S = fresh(); save(); drawHeader(); render(); });
+}
+
+/* старт */
+if(S.final && !S.done.every(Boolean)) S.final = false;
+if(!S.user || !S.problem){ const keep = S; S = fresh(); if(keep.user) S.user = keep.user; }
+drawHeader();
+render();
+</script>
+</body>
+</html>
